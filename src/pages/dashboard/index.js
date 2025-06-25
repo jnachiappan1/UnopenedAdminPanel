@@ -10,20 +10,20 @@ import Grid from "@mui/material/Grid2";
 const data = [
   {
     stats: "0",
-    title: "Services",
-    type: "services",
+    title: "Active Users",
+    type: "active users",
     link: "/service",
   },
   {
     stats: "0",
-    title: "Inquiries",
-    type: "inquiries",
+    title: "Listings",
+    type: "listings",
     link: "/inquiry",
   },
   {
     stats: "0",
-    title: "Contacts",
-    type: "contacts",
+    title: "Sales",
+    type: "sales",
     link: "/contact",
   },
 ];

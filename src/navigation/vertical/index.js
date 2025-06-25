@@ -9,11 +9,11 @@ const navigation = () => {
       icon: HomeIcon,
       path: "/dashboard",
     },
-    {
-      title:'Banner',
-      icon: PictureInPictureAltOutlinedIcon,
-      path: '/banner'
-    },
+    // {
+    //   title:'Banner',
+    //   icon: PictureInPictureAltOutlinedIcon,
+    //   path: '/banner'
+    // },
   ];
 };
 
