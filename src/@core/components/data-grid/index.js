@@ -155,7 +155,7 @@ const CustomDataGrid = ({
       disableColumnSelector
       disableColumnFilter
       disableSelectionOnClick
-      getRowId={(rows) => rows._id}
+      getRowId={(rows) => rows.id}
       {...overrideConfigs}
       slots={{
         loadingOverlay: CustomLoadingOverlay,

@@ -20,6 +20,13 @@ const ForgotPassword = React.lazy(() => import("./pages/login/forgotpassword"));
 const BanerPage = React.lazy(()=> import("./pages/banner"))
 const Page401 = React.lazy(() => import("./pages/401"));
 const Page404 = React.lazy(() => import("./pages/404"));
+// const Legalcontent = React.lazy(() => import("./pages/legal_content"));
+const TermsandConditionPage = React.lazy(() => import('./pages/terms-and-condition'))
+const PrivacyPolicyPage = React.lazy(() => import('./pages/privacy_policy'))
+const HelpSupporPage = React.lazy(() => import('./pages/help_support'))
+const UsersPage = React.lazy(() => import('./pages/users'))
+const ProductPage = React.lazy(() => import('./pages/product'))
+
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
@@ -88,6 +95,15 @@ function App() {
               <Route path="" element={<HomePage />} />
               <Route path="/dashboard" element={<DashBoardPage />} />
               <Route path="/banner" element={<BanerPage />} />
+              {/* <Route path="/legalcontent" element={<Legalcontent />} /> */}
+              <Route
+                path="/terms-and-conditions"
+                element={<TermsandConditionPage />}
+              />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/help-support" element={<HelpSupporPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/product" element={<ProductPage />} />
             </Route>
           </Route>
 

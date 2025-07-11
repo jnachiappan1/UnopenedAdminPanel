@@ -12,7 +12,7 @@ const data = [
     stats: "0",
     title: "Active Users",
     type: "active users",
-    link: "/service",
+    link: "/users",
   },
   {
     stats: "0",
