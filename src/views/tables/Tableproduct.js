@@ -1,12 +1,12 @@
-import Typography from '@mui/material/Typography'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import CustomDataGrid from 'src/@core/components/data-grid'
-import Chip from '@mui/material/Chip'
-import { styled } from '@mui/material/styles'
-import moment from 'moment'
+import Typography from "@mui/material/Typography";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import CustomDataGrid from "src/@core/components/data-grid";
+import Chip from "@mui/material/Chip";
+import { styled } from "@mui/material/styles";
+import moment from "moment";
 
 function Tableproduct({
   rows,
@@ -17,7 +17,7 @@ function Tableproduct({
   pageSize,
   loading,
   toggleEdit,
-  toggleDelete
+  toggleDelete,
 }) {
   const statusColors = {
     inactive: "#FFB400",
@@ -26,10 +26,10 @@ function Tableproduct({
   };
   const CustomChip = styled(Chip)(({ label }) => ({
     backgroundColor: statusColors[label] || statusColors.default,
-    textTransform: 'capitalize',
-    color: '#fff',
-    width: '100px'
-  }))
+    textTransform: "capitalize",
+    color: "#fff",
+    width: "100px",
+  }));
 
   return (
     <CustomDataGrid
@@ -49,66 +49,68 @@ function Tableproduct({
         //   )
         // },
         {
-          field: 'name',
+          field: "name",
           minWidth: 150,
           sortable: false,
-          headerName: 'Name',
+          headerName: "Name",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.name}>
+            <Typography noWrap variant="body2" title={row.name}>
               {row.name}
             </Typography>
-          )
+          ),
         },
         {
-          field: 'brand',
+          field: "brand",
           minWidth: 150,
           sortable: false,
-          headerName: 'Brand',
+          headerName: "Brand",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.brand}>
+            <Typography noWrap variant="body2" title={row.brand}>
               {row.brand}
             </Typography>
-          )
+          ),
         },
         {
-          field: 'price',
+          field: "price",
           minWidth: 150,
           sortable: false,
-          headerName: 'Price',
+          headerName: "Price",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.price}>
+            <Typography noWrap variant="body2" title={row.price}>
               {row.price}
             </Typography>
-          )
+          ),
         },
         {
-          field: 'msrp',
+          field: "msrp",
           minWidth: 150,
           sortable: false,
-          headerName: 'MSRP',
+          headerName: "MSRP",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.msrp}>
+            <Typography noWrap variant="body2" title={row.msrp}>
               {row.msrp}
             </Typography>
-          )
+          ),
         },
         {
-          field: 'description',
+          field: "description",
           minWidth: 400,
           sortable: false,
-          headerName: 'Description',
+          headerName: "Description",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.description}>
+            <Typography
+              component="div"
+              sx={{ fontSize: "15px", fontWeight: 600 }}
+            >
               <div
-                className='career_____content'
                 dangerouslySetInnerHTML={{
-                  __html: row.description
+                  __html: row.description,
                 }}
               />
             </Typography>
-          )
+          ),
         },
-     
+
         // {
         //   field: 'image',
         //   flex: 0.1,
@@ -122,25 +124,25 @@ function Tableproduct({
         // },
 
         {
-          field: 'updatedAt',
+          field: "updatedAt",
           minWidth: 200,
           flex: 0.5,
           sortable: false,
-          headerName: 'createdAt ',
+          headerName: "createdAt ",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.updatedAt}>
-              {moment(row.updatedAt).format('DD-MM-YYYY HH:MM')}
+            <Typography noWrap variant="body2" title={row.updatedAt}>
+              {moment(row.updatedAt).format("DD-MM-YYYY HH:MM")}
             </Typography>
-          )
+          ),
         },
         {
-          field: 'status',
+          field: "status",
           minWidth: 180,
           sortable: false,
-          headerName: 'Status',
-          renderCell: ({ row }) => <CustomChip label={row.status} />
+          headerName: "Status",
+          renderCell: ({ row }) => <CustomChip label={row.status} />,
         },
- 
+
         {
           field: "Actions",
           flex: 0.1,
@@ -173,7 +175,7 @@ function Tableproduct({
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
     />
-  )
+  );
 }
 
-export default Tableproduct
+export default Tableproduct;
