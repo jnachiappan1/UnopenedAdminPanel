@@ -14,7 +14,7 @@ import { axiosInstance } from 'src/network/adapter'
 import { toastError, toastSuccess } from 'src/utils/utils'
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import draftToHtml from "draftjs-to-html"
-import { EditorState, convertFromRaw, convertToRaw } from "draft-js"
+import { ContentState, EditorState, convertFromRaw, convertToRaw } from "draft-js"
 import { Editor } from "react-draft-wysiwyg"
 import htmlToDraft from 'html-to-draftjs'
 import Grid from '@mui/material/Grid'
@@ -49,10 +49,12 @@ export default function DialogHelpSupport(props) {
       const { contentBlocks, entityMap } = blocksFromHTML
 
       if (contentBlocks && contentBlocks.length > 0) {
-        const contentState = convertFromRaw({
-          blocks: contentBlocks,
-          entityMap: entityMap || {}
-        })
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+      return EditorState.createWithContent(contentState); 
+        // convertFromRaw({
+        //   blocks: contentBlocks,
+        //   entityMap: entityMap || {}
+        // })
         return EditorState.createWithContent(contentState)
       }
       return EditorState.createEmpty()

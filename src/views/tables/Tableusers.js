@@ -7,6 +7,7 @@ import CustomDataGrid from "src/@core/components/data-grid";
 import { MEDIA_URL } from "src/network/endpoints";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
+import { Button } from "@mui/material";
 
 function TableUsers({
   rows,
@@ -18,6 +19,7 @@ function TableUsers({
   loading,
   toggleEdit,
   toggleDelete,
+  onViewDetails,
 }) {
   const statusColors = {
     inactive: "#FFB400",
@@ -89,7 +91,7 @@ function TableUsers({
           minWidth: 180,
           sortable: false,
           headerName: "Status",
-          renderCell: ({ row }) => <CustomChip label={row.status} />,
+          renderCell: ({ row }) => <CustomChip label={row.status} style={{ marginTop: '-25px' }} />,
         },
 
         // {
@@ -128,7 +130,7 @@ function TableUsers({
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px">
+            <Box display="flex" alignItems="center" gap="10px" style={{ marginTop: '-7px' }}>
               <IconButton
                 size="small"
                 color="primary"
@@ -144,6 +146,9 @@ function TableUsers({
               >
                 <DeleteIcon />
               </IconButton>
+              <Button variant="outlined" onClick={() => onViewDetails(row)}>
+                Details
+              </Button>
             </Box>
           ),
         },

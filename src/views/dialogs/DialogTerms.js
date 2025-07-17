@@ -1,90 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import { Typography, Box, Button, FormControl, DialogActions, FormLabel, FormHelperText } from '@mui/material'
-import IconButton from '@mui/material/IconButton'
-import Close from 'mdi-material-ui/Close'
-import * as yup from 'yup'
-import { Controller, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { ApiEndPoints } from 'src/network/endpoints'
-import { LoadingButton } from '@mui/lab'
-import { axiosInstance } from 'src/network/adapter'
-import { toastError, toastSuccess } from 'src/utils/utils'
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import draftToHtml from "draftjs-to-html"
-import { EditorState, convertFromRaw, convertToRaw } from "draft-js"
-import { Editor } from "react-draft-wysiwyg"
-import htmlToDraft from 'html-to-draftjs'
-import Grid from '@mui/material/Grid'
+import React, { useEffect, useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import {
+  Typography,
+  Box,
+  Button,
+  FormControl,
+  DialogActions,
+  FormLabel,
+  FormHelperText,
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Close from "mdi-material-ui/Close";
+import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ApiEndPoints } from "src/network/endpoints";
+import { LoadingButton } from "@mui/lab";
+import { axiosInstance } from "src/network/adapter";
+import { toastError, toastSuccess } from "src/utils/utils";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from "draftjs-to-html";
+import { ContentState, EditorState, convertFromRaw, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import htmlToDraft from "html-to-draftjs";
+import Grid from "@mui/material/Grid";
 
 const validationSchema = yup.object({
-  content: yup.string().required('Content is required')
-})
+  content: yup.string().required("Content is required"),
+});
 
 export default function DialogTerms(props) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [loading, setLoading] = useState(false)
-  const { open, toggle, dataToEdit, onSuccess } = props
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [loading, setLoading] = useState(false);
+  const { open, toggle, dataToEdit, onSuccess } = props;
 
   const {
     reset,
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: {
-      content: dataToEdit?.content || ''
+      content: dataToEdit?.content || "",
     },
     resolver: yupResolver(validationSchema),
-    mode: 'onChange'
-  })
+    mode: "onChange",
+  });
 
   const convertFromHTML = (html) => {
     try {
-      if (!html) return EditorState.createEmpty()
+      if (!html) return EditorState.createEmpty();
 
-      const blocksFromHTML = htmlToDraft(html)
-      const { contentBlocks, entityMap } = blocksFromHTML
+      const blocksFromHTML = htmlToDraft(html);
+      const { contentBlocks, entityMap } = blocksFromHTML;
 
       if (contentBlocks && contentBlocks.length > 0) {
-        const contentState = convertFromRaw({
-          blocks: contentBlocks,
-          entityMap: entityMap || {}
-        })
-        return EditorState.createWithContent(contentState)
+        // const contentState = convertFromRaw({
+        //   blocks: contentBlocks,
+        //   entityMap: entityMap || {}
+        // })
+        // return EditorState.createWithContent(contentState)
+        const contentState = ContentState.createFromBlockArray(
+          contentBlocks,
+          entityMap
+        );
+        return EditorState.createWithContent(contentState);
       }
-      return EditorState.createEmpty()
+      return EditorState.createEmpty();
     } catch (error) {
-      console.error('Error converting HTML to draft:', error)
-      return EditorState.createEmpty()
+      console.error("Error converting HTML to draft:", error);
+      return EditorState.createEmpty();
     }
-  }
+  };
 
   useEffect(() => {
     if (open) {
-      setLoading(false)
+      setLoading(false);
 
-      const contentValue = dataToEdit?.content || ''
+      const contentValue = dataToEdit?.content || "";
       reset({
-        content: contentValue
-      })
+        content: contentValue,
+      });
 
       if (dataToEdit?.content) {
-        setEditorState(convertFromHTML(dataToEdit.content))
+        setEditorState(convertFromHTML(dataToEdit.content));
       } else {
-        setEditorState(EditorState.createEmpty())
+        setEditorState(EditorState.createEmpty());
       }
     }
-  }, [dataToEdit, open, reset])
+  }, [dataToEdit, open, reset]);
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     let payload = {
-      content: data.content
-    }
+      content: data.content,
+    };
 
-    const type = dataToEdit?.type || 'terms_and_conditions'
+    const type = dataToEdit?.type || "terms_and_conditions";
 
     if (!type) {
       console.error("Error: 'type' is not defined in dataToEdit");
@@ -92,37 +105,40 @@ export default function DialogTerms(props) {
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
     axiosInstance
       .patch(ApiEndPoints.LEGAL_CONTENT.edit(type), payload)
-      .then(response => {
-        onSuccess?.()
-        toastSuccess(response.data.message)
-        toggle()
+      .then((response) => {
+        onSuccess?.();
+        toastSuccess(response.data.message);
+        toggle();
       })
-      .catch(error => {
-        toastError(error)
+      .catch((error) => {
+        toastError(error);
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }
+        setLoading(false);
+      });
+  };
 
   return (
-    <Dialog open={open} maxWidth='md' fullWidth>
+    <Dialog open={open} maxWidth="md" fullWidth>
       <DialogTitle>
-        <Typography variant='h6'>Edit Terms & Conditions</Typography>
-        <IconButton onClick={toggle} sx={{ top: 10, right: 10, position: 'absolute', color: 'grey.500' }}>
+        <Typography variant="h6">Edit Terms & Conditions</Typography>
+        <IconButton
+          onClick={toggle}
+          sx={{ top: 10, right: 10, position: "absolute", color: "grey.500" }}
+        >
           <Close />
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ pb: 8, px: { xs: 2, sm: 4 }, pt: { xs: 2, sm: 4 } }}>
-        <form onSubmit={handleSubmit(onSubmit)} id='terms-condition-form'>
+        <form onSubmit={handleSubmit(onSubmit)} id="terms-condition-form">
           <Grid container spacing={3}>
             {/* Content Field */}
             <Grid item xs={12}>
               <FormControl fullWidth error={Boolean(errors.content)}>
-                <FormLabel htmlFor='content'>Content</FormLabel>
+                <FormLabel htmlFor="content">Content</FormLabel>
                 <Controller
                   name="content"
                   control={control}
@@ -130,30 +146,54 @@ export default function DialogTerms(props) {
                     <Editor
                       editorState={editorState}
                       onEditorStateChange={(state) => {
-                        setEditorState(state)
+                        setEditorState(state);
                         try {
-                          const html = draftToHtml(convertToRaw(state.getCurrentContent()))
-                          field.onChange(html)
+                          const html = draftToHtml(
+                            convertToRaw(state.getCurrentContent())
+                          );
+                          field.onChange(html);
                         } catch (error) {
-                          console.error('Error converting draft to HTML:', error)
-                          field.onChange('')
+                          console.error(
+                            "Error converting draft to HTML:",
+                            error
+                          );
+                          field.onChange("");
                         }
                       }}
                       toolbar={{
-                        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
+                        options: [
+                          "inline",
+                          "blockType",
+                          "fontSize",
+                          "list",
+                          "textAlign",
+                          "colorPicker",
+                          "link",
+                          "embedded",
+                          "emoji",
+                          "remove",
+                          "history",
+                        ],
                         inline: {
-                          options: ['bold', 'italic', 'underline', 'strikethrough']
+                          options: [
+                            "bold",
+                            "italic",
+                            "underline",
+                            "strikethrough",
+                          ],
                         },
-                        list: { options: ['unordered', 'ordered'] },
+                        list: { options: ["unordered", "ordered"] },
                         textAlign: {
-                          options: ['left', 'center', 'right', 'justify']
+                          options: ["left", "center", "right", "justify"],
                         },
-                        link: { options: ['link'] }
+                        link: { options: ["link"] },
                       }}
                     />
                   )}
                 />
-                {errors.content && <FormHelperText>{errors.content.message}</FormHelperText>}
+                {errors.content && (
+                  <FormHelperText>{errors.content.message}</FormHelperText>
+                )}
               </FormControl>
             </Grid>
           </Grid>
@@ -161,18 +201,18 @@ export default function DialogTerms(props) {
       </DialogContent>
       <DialogActions>
         <LoadingButton
-          size='large'
-          type='submit'
-          form='terms-condition-form'
-          variant='contained'
+          size="large"
+          type="submit"
+          form="terms-condition-form"
+          variant="contained"
           loading={loading}
         >
           Submit
         </LoadingButton>
-        <Button size='large' variant='outlined' onClick={toggle}>
+        <Button size="large" variant="outlined" onClick={toggle}>
           Cancel
         </Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }

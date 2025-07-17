@@ -140,7 +140,7 @@ function Tableproduct({
           minWidth: 180,
           sortable: false,
           headerName: "Status",
-          renderCell: ({ row }) => <CustomChip label={row.status} />,
+          renderCell: ({ row }) => <CustomChip label={row.status} style={{ marginTop: '-25px' }}  />,
         },
 
         {
@@ -150,7 +150,7 @@ function Tableproduct({
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px">
+            <Box display="flex" alignItems="center" gap="10px" style={{ marginTop: '-7px' }}>
               <IconButton
                 size="small"
                 color="primary"

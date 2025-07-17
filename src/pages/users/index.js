@@ -12,6 +12,7 @@ import { toastError, toastSuccess } from "../../utils/utils";
 import DialogConfirmation from "../../views/dialogs/DialogConfirmation";
 import TableUsers from "src/views/tables/Tableusers";
 import Grid from "@mui/material/Grid2";
+import { useNavigate } from "react-router-dom";
 
 const UsersPage = () => {
   const searchTimeoutRef = useRef();
@@ -28,6 +29,12 @@ const UsersPage = () => {
     useState(false);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [userToDelete, setuserToDelete] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleViewDetails = (user) => {
+    navigate(`/users/${user.id}`);
+  };
 
   const toggleConfirmationDialog = (e, dataToDelete = null) => {
     setConfirmationDialogOpen((prev) => !prev);
@@ -84,7 +91,7 @@ const UsersPage = () => {
       e?.preventDefault();
       setConfirmationDialogLoading(true);
       axiosInstance
-        .delete(ApiEndPoints.USERS.delete(userToDelete.id)) 
+        .delete(ApiEndPoints.USERS.delete(userToDelete.id))
         .then((response) => response.data)
         .then((response) => {
           fetchData({
@@ -153,6 +160,7 @@ const UsersPage = () => {
                 setPageSize={setPageSize}
                 pageSize={pageSize}
                 toggleDelete={toggleConfirmationDialog}
+                onViewDetails={handleViewDetails}
               />
             </CardContent>
           </Card>

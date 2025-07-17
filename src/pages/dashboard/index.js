@@ -30,35 +30,67 @@ const data = [
 function DashBoardPage() {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = React.useState(data);
+  // const fetchData = () => {
+  //   setLoading(true);
+
+  //   axiosInstance
+  //     .get(ApiEndPoints.DASHBOARD.count)
+  //     .then((response) => {
+  //       let myData = response.data;
+  //       console.log("myData", myData);
+  //       // setStats(myData.user_count);
+  //       setProductCount(myData.product_count);
+  //       setStats((prev) =>
+  //         prev.map((p) => ({
+  //           ...p,
+  //           ...(data[`${p.type}`] && { stats: data[`${p.type}`] }),
+  //         }))
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       toastError(error);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
+  
   const fetchData = () => {
-    setLoading(true);
+  setLoading(true);
 
-    axiosInstance
-      .get(ApiEndPoints.DASHBOARD.count)
-      .then((response) => {
-        let data = response.data.data.counts;
-        console.log("data", data);
+  axiosInstance
+    .get(ApiEndPoints.DASHBOARD.count)
+    .then((response) => {
+      const { user_count, product_count } = response.data.data;
 
-        setStats((prev) =>
-          prev.map((p) => ({
-            ...p,
-            ...(data[`${p.type}`] && { stats: data[`${p.type}`] }),
-          }))
-        );
-      })
-      .catch((error) => {
-        toastError(error);
-      })
-      .finally(() => {
-        setLoading(false);
+      const updatedStats = data.map((item) => {
+        if (item.type === "active users") {
+          return { ...item, stats: user_count };
+        } else if (item.type === "listings") {
+          return { ...item, stats: product_count }; 
+        }
+        return item;
       });
-  };
+
+      setStats(updatedStats);
+    })
+    .catch((error) => {
+      toastError(error);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+};
+
+  
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, []);
+  
   if (loading) {
     return <FallbackSpinner />;
   }
+
   return (
     <>
       <Grid container spacing={6} height={100}>

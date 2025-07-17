@@ -79,6 +79,7 @@ const ProductPage = () => {
       setSearch(e.target.value)
     }, 500)
   }
+  
   const onConfirmDelete = useCallback(
     e => {
       e?.preventDefault()

@@ -1,10 +1,11 @@
 // ** Icon imports
 import HomeIcon from "mdi-material-ui/Home";
-import PictureInPictureAltOutlinedIcon from '@mui/icons-material/PictureInPictureAltOutlined';
-import TaskIcon from '@mui/icons-material/Task'
-import PolicyOutlinedIcon from '@mui/icons-material/PolicyOutlined';
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
-
+import PictureInPictureAltOutlinedIcon from "@mui/icons-material/PictureInPictureAltOutlined";
+import TaskIcon from "@mui/icons-material/Task";
+import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
+import PeopleIcon from '@mui/icons-material/People';
+import LockIcon from '@mui/icons-material/Lock';
 
 const navigation = () => {
   return [
@@ -19,32 +20,39 @@ const navigation = () => {
     //   path: '/banner'
     // },
     {
-      title: 'Users',
+      title: "Users",
       icon: TaskIcon,
-      path: '/users'
+      path: "/users",
     },
     {
-      title: 'Product',
+      title: "Product",
       icon: CategoryOutlinedIcon,
-      path: '/product'
+      path: "/product",
     },
     {
-      title: 'Terms & Conditions',
+      title: "Terms & Conditions",
       icon: TaskIcon,
-      path: '/terms-and-conditions'
+      path: "/terms-and-conditions",
     },
     {
-      title: 'Privacy Policy',
+      title: "Privacy Policy",
       icon: PolicyOutlinedIcon,
-      path: '/privacy-policy'
+      path: "/privacy-policy",
     },
     {
-      title: 'Help & Support',
+      title: "Help & Support",
       icon: TaskIcon,
-      path: '/help-support'
+      path: "/help-support",
     },
- 
-
+    {
+      title: "Permission",
+      icon: LockIcon,
+      path: "/permission",
+    },    {
+      title: "Roles",
+      icon: PeopleIcon,
+      path: "/roles",
+    },
   ];
 };
 

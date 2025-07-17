@@ -29,6 +29,7 @@ const TermsandConditionPage = () => {
     axiosInstance
       .get(ApiEndPoints.LEGAL_CONTENT.list("privacy_policy"))
       .then((response) => {
+        console.log(response.data.data.legalContent);
         setTerms(response.data.data.legalContent);
       })
       .catch((error) => {
@@ -79,9 +80,14 @@ const TermsandConditionPage = () => {
                 component="div"
                 sx={{ fontSize: "15px", fontWeight: 600 }}
               >
+                {/* <div
+                  dangerouslySetInnerHTML={{
+                    __html: terms?.legalContent,
+                  }}
+                /> */}
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: terms.content,
+                    __html: terms?.content || "<p>No privacy policy found.</p>",
                   }}
                 />
               </Typography>
