@@ -136,81 +136,81 @@ const Navigation = (props) => {
 
   return (
     <Drawer {...props}>
-      <Box
+      {/* <Box
         sx={{
           ...(afterVerticalNavMenuContentPosition === "fixed"
             ? { flex: 1 }
             : {}),
         }}
+      > */}
+      <VerticalNavHeader {...props} />
+      {beforeVerticalNavMenuContent &&
+      beforeVerticalNavMenuContentPosition === "fixed"
+        ? beforeVerticalNavMenuContent(props)
+        : null}
+      {(beforeVerticalNavMenuContentPosition === "static" ||
+        !beforeVerticalNavMenuContent) && (
+        <StyledBoxForShadow
+          ref={shadowRef}
+          sx={{ background: shadowBgColor() }}
+        />
+      )}
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          // pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
+        }}
       >
-        <VerticalNavHeader {...props} />
-        {beforeVerticalNavMenuContent &&
-        beforeVerticalNavMenuContentPosition === "fixed"
-          ? beforeVerticalNavMenuContent(props)
-          : null}
-        {(beforeVerticalNavMenuContentPosition === "static" ||
-          !beforeVerticalNavMenuContent) && (
-          <StyledBoxForShadow
-            ref={shadowRef}
-            sx={{ background: shadowBgColor() }}
-          />
-        )}
-        <Box
-          sx={{
-            position: "relative",
-            overflow: "hidden",
-            // pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
-          }}
+        <ScrollWrapper
+          containerRef={(ref) => handleInfiniteScroll(ref)}
+          {...(hidden
+            ? {
+                onScroll: (container) => scrollMenu(container),
+                sx: {
+                  height: "100%",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                },
+              }
+            : {
+                options: { wheelPropagation: false },
+                onScrollY: (container) => scrollMenu(container),
+              })}
         >
-          <ScrollWrapper
-            containerRef={(ref) => handleInfiniteScroll(ref)}
-            {...(hidden
-              ? {
-                  onScroll: (container) => scrollMenu(container),
-                  sx: {
-                    height: "100%",
-                    overflowY: "auto",
-                    overflowX: "hidden",
-                  },
-                }
-              : {
-                  options: { wheelPropagation: false },
-                  onScrollY: (container) => scrollMenu(container),
-                })}
-          >
-            {beforeVerticalNavMenuContent &&
-            beforeVerticalNavMenuContentPosition === "static"
-              ? beforeVerticalNavMenuContent(props)
-              : null}
-            {userVerticalNavMenuContent ? (
-              userVerticalNavMenuContent(props)
-            ) : (
-              <List
-                className="nav-items"
-                sx={{
-                  pt: 0,
-                  transition: "padding .25s ease",
-                  "& > :first-of-type": { mt: "0" },
-                  pr: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
-                  pl: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
-                }}
-              >
-                <VerticalNavItems
-                  groupActive={groupActive}
-                  setGroupActive={setGroupActive}
-                  currentActiveGroup={currentActiveGroup}
-                  setCurrentActiveGroup={setCurrentActiveGroup}
-                  {...props}
-                />
-              </List>
-            )}
-            {afterVerticalNavMenuContent &&
-            afterVerticalNavMenuContentPosition === "static"
-              ? afterVerticalNavMenuContent(props)
-              : null}
-          </ScrollWrapper>
-        </Box>
+          {beforeVerticalNavMenuContent &&
+          beforeVerticalNavMenuContentPosition === "static"
+            ? beforeVerticalNavMenuContent(props)
+            : null}
+          {userVerticalNavMenuContent ? (
+            userVerticalNavMenuContent(props)
+          ) : (
+            <List
+              className="nav-items"
+              sx={{
+                pt: 0,
+                transition: "padding .25s ease",
+                "& > :first-of-type": { mt: "0" },
+                pr: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
+                pl: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
+              }}
+            >
+              <VerticalNavItems
+                groupActive={groupActive}
+                setGroupActive={setGroupActive}
+                currentActiveGroup={currentActiveGroup}
+                setCurrentActiveGroup={setCurrentActiveGroup}
+                {...props}
+              />
+            </List>
+          )}
+          {afterVerticalNavMenuContent &&
+          afterVerticalNavMenuContentPosition === "static"
+            ? afterVerticalNavMenuContent(props)
+            : null}
+        </ScrollWrapper>
       </Box>
+      {/* </Box> */}
       {afterVerticalNavMenuContent &&
       afterVerticalNavMenuContentPosition === "fixed"
         ? afterVerticalNavMenuContent(props)
