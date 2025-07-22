@@ -33,6 +33,7 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
+  const [userType, setUserType] = useState("");
 
   // ** Hooks
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const AuthProvider = ({ children }) => {
           .then(async (response) => {
             setLoading(false);
             setUser({ ...response.data.user });
+            setUserType(response.data.data.type);
           })
           .catch(() => {
             localStorage.removeItem(authConfig.storageUserDataKeyName);
@@ -69,12 +71,15 @@ const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const handleLogin = ({ token, user }) => {
+  const handleLogin = ({ token, user, type }) => {
     window.localStorage.setItem(authConfig.storageTokenKeyName, token);
     setUser(user);
+    setUserType(type);
     const redirectUrl = searchParams.get("redirect");
     navigate(redirectUrl || "/");
-    console.log("user", user);
+
+    console.log("Logged in user role:", type);
+
   };
 
   const handleLogout = () => {
@@ -96,6 +101,8 @@ const AuthProvider = ({ children }) => {
     login: handleLogin,
     logout: handleLogout,
     register: handleRegister,
+    userType,
+    setUserType,
   };
 
   return (

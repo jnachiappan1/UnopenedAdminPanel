@@ -71,6 +71,7 @@ const AddEditRolePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [permissionList, setPermissionList] = useState([]);
+  const [permissionsLoaded, setPermissionsLoaded] = useState(false);
 
   const {
     control,
@@ -91,9 +92,6 @@ const AddEditRolePage = () => {
   }, [location.pathname, id]);
 
   useEffect(() => {
-    setPermissionList(location?.state?.permissions || []);
-  }, [location?.state]);
-  useEffect(() => {
     const dataToEdit = location.state?.dataToEdit || {};
 
     if (mode === "edit" && dataToEdit?.name) {
@@ -101,16 +99,62 @@ const AddEditRolePage = () => {
     }
   }, [mode, location.state, reset]);
 
+  // useEffect(() => {
+  //   setPermissionList(location?.state?.permissions || []);
+  // }, [location?.state]);
+
+  useEffect(() => {
+    setPermissionList(location?.state?.permissions || []);
+    setPermissionsLoaded(false); // Reset flag when permissions change
+  }, [location?.state?.permissions]);
+
+  // useEffect(() => {
+  //   const dataToEdit = location.state?.dataToEdit || {};
+
+  //   if (
+  //     mode === "edit" &&
+  //     dataToEdit?.permission &&
+  //     permissionList.length > 0
+  //   ) {
+  //     const updatedList = permissionList.map((perm) => {
+  //       const matched = dataToEdit.permission[perm.permission_id];
+  //       return {
+  //         ...perm,
+  //         read: matched?.read || false,
+  //         write: matched?.write || false,
+  //         add: matched?.add || false,
+  //         remove: matched?.remove || false,
+  //       };
+  //     });
+  //     setPermissionList(updatedList);
+  //   }
+  // }, [mode, location?.state, permissionList?.length]);
+
   useEffect(() => {
     const dataToEdit = location.state?.dataToEdit || {};
 
     if (
       mode === "edit" &&
       dataToEdit?.permission &&
-      permissionList.length > 0
+      permissionList.length > 0 &&
+      !permissionsLoaded 
     ) {
+      console.log("🔍 Applying permissions for edit mode");
+      console.log("dataToEdit.permission:", dataToEdit.permission);
+
       const updatedList = permissionList.map((perm) => {
-        const matched = dataToEdit.permission[perm.permission_id];
+        let matched;
+
+        if (Array.isArray(dataToEdit.permission)) {
+          matched = dataToEdit.permission.find(
+            (p) => p.permission_id === perm.permission_id
+          );
+        } else {
+          matched = dataToEdit.permission[perm.permission_id];
+        }
+
+        console.log(`Permission ${perm.name}:`, matched);
+
         return {
           ...perm,
           read: matched?.read || false,
@@ -119,9 +163,16 @@ const AddEditRolePage = () => {
           remove: matched?.remove || false,
         };
       });
+
       setPermissionList(updatedList);
+      setPermissionsLoaded(true);
     }
-  }, [mode, location?.state, permissionList?.length]);
+  }, [
+    mode,
+    location?.state?.dataToEdit,
+    permissionList.length,
+    permissionsLoaded,
+  ]);
 
   const handleSelectAll = (event) => {
     const checked = event.target.checked;
@@ -183,7 +234,7 @@ const AddEditRolePage = () => {
 
     const payload = {
       name: data.name,
-      permission: permissionsArray, 
+      permission: permissionsArray,
     };
 
     setLoading(true);
@@ -197,7 +248,7 @@ const AddEditRolePage = () => {
       .then((response) => response.data)
       .then((response) => {
         toastSuccess(response.message);
-        navigate("/roles"); 
+        navigate("/roles");
       })
       .catch((error) => {
         toastError(error);

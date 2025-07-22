@@ -19,7 +19,7 @@ import CogOutline from "mdi-material-ui/CogOutline";
 import LogoutVariant from "mdi-material-ui/LogoutVariant";
 
 // ** Context
-import { useAuth } from "src/hooks/useAuth";
+import { useAuth, user } from "src/hooks/useAuth";
 
 // ** Styled Components
 const BadgeContentSpan = styled("span")(({ theme }) => ({
@@ -39,7 +39,8 @@ const UserDropdown = (props) => {
 
   // ** Hooks
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // ** Vars
   const { direction } = settings;
@@ -132,12 +133,22 @@ const UserDropdown = (props) => {
                 flexDirection: "column",
               }}
             >
-              <Typography sx={{ fontWeight: 600 }}>Admin</Typography>
+              {/* <Typography sx={{ fontWeight: 600 }}>Admin</Typography>
               <Typography
                 variant="body2"
                 sx={{ fontSize: "0.8rem", color: "text.disabled" }}
               >
                 Admin
+              </Typography> */}
+              <Typography sx={{ fontWeight: 600 }}>
+                {user?.admin_role?.name || "Admin"}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontSize: "0.8rem", color: "text.disabled" }}
+              >
+                {user?.email || ""}
+                {console.log(user)}
               </Typography>
             </Box>
           </Box>

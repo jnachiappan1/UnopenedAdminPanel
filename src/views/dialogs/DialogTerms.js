@@ -27,8 +27,18 @@ import { Editor } from "react-draft-wysiwyg";
 import htmlToDraft from "html-to-draftjs";
 import Grid from "@mui/material/Grid";
 
+// const validationSchema = yup.object({
+//   content: yup.string().required("Content is required"),
+// });
+
 const validationSchema = yup.object({
-  content: yup.string().required("Content is required"),
+  content: yup
+    .string()
+    .test("not-empty", "Content is required", value => {
+      if (!value) return false;
+      const stripped = value.replace(/<[^>]*>?/gm, "").trim();
+      return stripped.length > 0;
+    })
 });
 
 export default function DialogTerms(props) {

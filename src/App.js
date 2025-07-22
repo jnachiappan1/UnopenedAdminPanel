@@ -10,10 +10,9 @@ import AclGuard from "./@core/components/auth/AclGuard";
 import GuestGuard from "./@core/components/auth/GuestGuard";
 import { defaultACLObj } from "./configs/acl";
 import AuthLayout from "./layouts/AuthLayout";
-import RolesPage from "./pages/RoleManagement/Roles";
 import Permission from "./pages/RoleManagement/Permissions";
 import AddEditRolePage from "./pages/RoleManagement/Roles/AddEditRole";
-import UserDetailPage from "./pages/users/details";
+// import UserDetailPage from "./pages/users/details";
 // import Clientspage from "./pages/clients/index";
 
 
@@ -24,12 +23,20 @@ const ForgotPassword = React.lazy(() => import("./pages/login/forgotpassword"));
 const BanerPage = React.lazy(()=> import("./pages/banner"))
 const Page401 = React.lazy(() => import("./pages/401"));
 const Page404 = React.lazy(() => import("./pages/404"));
+
+const PermissionsPage = React.lazy(() => import('./pages/RoleManagement/Permissions'))
 // const Legalcontent = React.lazy(() => import("./pages/legal_content"));
 const TermsandConditionPage = React.lazy(() => import('./pages/terms-and-condition'))
 const PrivacyPolicyPage = React.lazy(() => import('./pages/privacy_policy'))
 const HelpSupporPage = React.lazy(() => import('./pages/help_support'))
 const UsersPage = React.lazy(() => import('./pages/users'))
 const ProductPage = React.lazy(() => import('./pages/product'))
+const SubAdminPage = React.lazy(() => import('./pages/RoleManagement/SubAdmin'))
+const RolesPage = React.lazy(() => import('./pages/RoleManagement/Roles'))
+// const UserDetailPage = React.lazy(() => import('./pages/users/userDetail'))
+const UserDetailPage = React.lazy(() => import('./pages/users/details'))
+
+
 
 
 const Guard = ({ children, authGuard, guestGuard }) => {
@@ -113,6 +120,7 @@ function App() {
               <Route path='/roles/edit/:id' element={<AddEditRolePage />} />
               <Route path='/roles/add' element={<AddEditRolePage />} />
               <Route path="/users/:id" element={<UserDetailPage />} />
+              <Route path='/sub-admin' element={<SubAdminPage />} />
 
               
             </Route>

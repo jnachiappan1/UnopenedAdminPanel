@@ -18,7 +18,8 @@ const data = [
     stats: "0",
     title: "Listings",
     type: "listings",
-    link: "/inquiry",
+    // link: "/inquiry",
+    link:"/product"
   },
   {
     stats: "0",

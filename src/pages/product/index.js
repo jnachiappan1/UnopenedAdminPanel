@@ -48,8 +48,7 @@ const ProductPage = () => {
       limit: pageSize,
       search: search
     }
-    axiosInstance
-      .get(ApiEndPoints.PRODUCT.list, { params })
+    axiosInstance.get(ApiEndPoints.PRODUCT.list, { params })
       .then(response => {
         setCareerData(response.data.data.product)
         setTotalCount(response.data.data.totalCount)

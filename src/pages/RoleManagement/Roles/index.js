@@ -161,19 +161,19 @@ const RolesPage = () => {
             </Typography>
           }
           action={
-            <Button variant='contained' onClick={togglecareerFormDialog}>
-              Add Category
-            </Button>
-            // <Button
-            //   variant="contained"
-            //   onClick={() =>
-            //     navigate("/roles/add", {
-            //       state: { permissions: permissionList },
-            //     })
-            //   }
-            // >
-            //   Add Role
+            // <Button variant='contained' onClick={togglecareerFormDialog}>
+            //   Add Category
             // </Button>
+            <Button
+              variant="contained"
+              onClick={() =>
+                navigate("/roles/add", {
+                  state: { permissions: permissionList },
+                })
+              }
+            >
+              Add Role
+            </Button>
           }
         />
         <Grid size={12}>

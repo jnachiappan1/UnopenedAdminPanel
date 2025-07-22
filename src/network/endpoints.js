@@ -24,7 +24,7 @@ export const ApiEndPoints = {
   },
   USERS: {
     list: `${API_BASE_URL}api/v1/admin/user-list`,
-    getById:(id) =>`${API_BASE_URL}api/v1/admin/user-list/${id}`,
+    getById: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
   },
   PRODUCT: {
@@ -46,5 +46,11 @@ export const ApiEndPoints = {
     create: `${API_BASE_URL}api/v1/admin/permission`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/permission/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/permission/${id}`,
+  },
+  SUB_ADMIN: {
+    list: `${API_BASE_URL}api/v1/admin/sub-admin`,
+    create: `${API_BASE_URL}api/v1/admin/sub-admin`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/sub-admin/${id}`,
+    delete:(id)=>`${API_BASE_URL}api/v1/admin/sub-admin/${id}`
   },
 };

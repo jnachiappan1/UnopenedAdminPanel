@@ -4,10 +4,12 @@ import PictureInPictureAltOutlinedIcon from "@mui/icons-material/PictureInPictur
 import TaskIcon from "@mui/icons-material/Task";
 import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-import PeopleIcon from '@mui/icons-material/People';
-import LockIcon from '@mui/icons-material/Lock';
+import PeopleIcon from "@mui/icons-material/People";
+import LockIcon from "@mui/icons-material/Lock";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 
-const navigation = () => {
+const navigation = (userType = "admin") => {
   return [
     {
       title: "Dashboard",
@@ -44,14 +46,30 @@ const navigation = () => {
       icon: TaskIcon,
       path: "/help-support",
     },
+    // Dropdown
     {
-      title: "Permission",
-      icon: LockIcon,
-      path: "/permission",
-    },    {
-      title: "Roles",
-      icon: PeopleIcon,
-      path: "/roles",
+      sectionTitle: "User Management",
+    },
+    {
+      title: "Sub Admin Management",
+      icon: AdminPanelSettingsOutlinedIcon,
+      children: [
+        {
+          title: "Permission",
+          icon: LockIcon,
+          path: "/permission",
+        },
+        {
+          title: "Roles",
+          icon: PeopleIcon,
+          path: "/roles",
+        },
+        {
+          title: 'Sub Admin',
+          icon: PersonOutlineOutlinedIcon,
+          path: '/sub-admin'
+        }
+      ],
     },
   ];
 };
