@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Logo from "src/@core/components/logo";
 
-
 // ** Styled Components
 const MenuHeaderWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -22,7 +21,7 @@ const StyledLink = styled("div")({
   display: "flex",
   alignItems: "center",
   textDecoration: "none",
-  paddingBlock: "20px",
+  // paddingBlock: "20px",
 });
 
 const VerticalNavHeader = (props) => {

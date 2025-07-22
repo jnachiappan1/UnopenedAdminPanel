@@ -159,7 +159,7 @@ const Navigation = (props) => {
           sx={{
             position: "relative",
             overflow: "hidden",
-            pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
+            // pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
           }}
         >
           <ScrollWrapper

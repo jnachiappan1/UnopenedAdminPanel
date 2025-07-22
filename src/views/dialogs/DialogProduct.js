@@ -12,6 +12,7 @@ import {
   FormHelperText,
   FormLabel,
   IconButton,
+  MenuItem,
   Radio,
   RadioGroup,
   TextField,
@@ -51,17 +52,17 @@ import Grid from "@mui/material/Grid2";
 //   });
 
 const validationSchema = yup.object().shape({
-  name: yup
-    .string()
-    .trim()
-    .required("Title is required.")
-    .max(55, "Title must not exceed 55 characters")
-    .test(
-      "no-only-digits",
-      "Only digits are not allowed.",
-      (value) => !/^\d+$/.test(value)
-    ),
-  description: yup.string().trim().required("Description is required."),
+  // name: yup
+  //   .string()
+  //   .trim()
+  //   .required("Title is required.")
+  //   .max(55, "Title must not exceed 55 characters")
+  //   .test(
+  //     "no-only-digits",
+  //     "Only digits are not allowed.",
+  //     (value) => !/^\d+$/.test(value)
+  //   ),
+  // description: yup.string().trim().required("Description is required."),
   // small_description: yup
   //   .string()
   //   .trim()
@@ -103,12 +104,13 @@ const Dialogproducts = (props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
-      brand:"",
+      // name: "",
+      // brand:"",
       // small_description: "",
-      description: "",
+      // description: "",
       // bannerImage: [],
       // bannerMobileImage: [],
+      status: "",
     },
     resolver: yupResolver(validationSchema),
     mode: "onChange",
@@ -118,45 +120,41 @@ const Dialogproducts = (props) => {
     if (open) {
       setLoading(false);
       reset({
-        name: dataToEdit?.name || "",
-        brand: dataToEdit?.brand || "",
-
-        // small_description: dataToEdit?.small_description || "",
-        // bannerImage: dataToEdit?.bannerImage || null,
-        // bannerMobileImage: dataToEdit?.bannerMobileImage || null,
-        description: dataToEdit?.description || "",
+        // name: dataToEdit?.name || "",
+        // brand: dataToEdit?.brand || "",
+        // description: dataToEdit?.description || "",
+        status: dataToEdit?.status || "",
       });
-      if (dataToEdit?.description) {
-        const contentBlock = htmlToDraft(dataToEdit.description);
-        if (contentBlock) {
-          const contentState = ContentState.createFromBlockArray(
-            contentBlock.contentBlocks
-          );
-          setEditorState(EditorState.createWithContent(contentState));
-        }
-      } else {
-        setEditorState(EditorState.createEmpty());
-      }
+      // if (dataToEdit?.description) {
+      //   const contentBlock = htmlToDraft(dataToEdit.description);
+      //   if (contentBlock) {
+      //     const contentState = ContentState.createFromBlockArray(
+      //       contentBlock.contentBlocks
+      //     );
+      //     setEditorState(EditorState.createWithContent(contentState));
+      //   }
+      // } else {
+      //   setEditorState(EditorState.createEmpty());
+      // }
     } else {
-      setEditorState(EditorState.createEmpty());
+      // setEditorState(EditorState.createEmpty());
     }
   }, [mode, dataToEdit, open, reset]);
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
-
     const payload = new FormData();
-    payload.append("name", data.name);
+    // payload.append("name", data.name);
     // payload.append("small_description", data.small_description);
     // payload.append("bannerImage", data.bannerImage);
     // payload.append("bannerMobileImage", data.bannerMobileImage);
-    payload.append("description", data.description);
+    // payload.append("description", data.description);
+    payload.append("status", data.status);
 
     setLoading(true);
     let apiInstance = null;
 
     if (mode === "edit") {
-      apiInstance = axiosInstance.put(
+      apiInstance = axiosInstance.patch(
         ApiEndPoints.PRODUCT.edit(dataToEdit.id),
         payload,
         {
@@ -193,7 +191,7 @@ const Dialogproducts = (props) => {
   };
 
   return (
-    <Dialog open={open} onClose={toggle} fullWidth maxWidth="lg" scroll="paper">
+    <Dialog open={open} onClose={toggle} fullWidth maxWidth="sm" scroll="paper">
       <DialogTitle
         sx={{
           display: "flex",
@@ -202,7 +200,7 @@ const Dialogproducts = (props) => {
         }}
       >
         <Typography variant="fm-h6" textTransform={"capitalize"}>
-          {mode === "add" ? "Add News & Article" : "Edit Product"}
+          Update Status
         </Typography>
         <IconButton
           aria-label="close"
@@ -218,13 +216,9 @@ const Dialogproducts = (props) => {
         <form id="product-form" onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={4}>
             {/* Title Field */}
-            <Grid size={{ xs: 12 }}>
+            {/* <Grid size={{ xs: 12 }}>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <FormLabel
-                  required
-                  htmlFor="name"
-                  error={Boolean(errors.name)}
-                >
+                <FormLabel required htmlFor="name" error={Boolean(errors.name)}>
                   Name
                 </FormLabel>
                 <Controller
@@ -279,7 +273,7 @@ const Dialogproducts = (props) => {
                   </FormHelperText>
                 )}
               </FormControl>
-            </Grid>
+            </Grid> */}
 
             {/* Small Description Field */}
             {/* <Grid size={{ xs: 12 }}>
@@ -379,7 +373,7 @@ const Dialogproducts = (props) => {
               </FormControl>
             </Grid> */}
 
-            <Grid size={12}>
+            {/* <Grid size={12}>
               <FormControl fullWidth>
                 <FormLabel
                   required
@@ -447,27 +441,42 @@ const Dialogproducts = (props) => {
                   </FormHelperText>
                 )}
               </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <FormLabel htmlFor='status' error={Boolean(errors.status)}>
-                    Status
-                  </FormLabel>
-                  <Controller
-                    name='status'
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <RadioGroup row name='status' onChange={onChange} value={value}>
-                        <FormControlLabel value={'active'} control={<Radio />} label='Active' />
-                        <FormControlLabel value={'inactive'} control={<Radio />} label='Inactive' />
-                      </RadioGroup>
-                    )}
-                  />
-                  {errors.status && (
-                    <FormHelperText sx={{ color: 'error.main' }}>{errors.status.message}</FormHelperText>
+            </Grid> */}
+            <Grid size={{ xs: 12 }}>
+              <FormControl fullWidth>
+                <FormLabel htmlFor="status" error={Boolean(errors.status)}>
+                  Status
+                </FormLabel>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      select
+                      fullWidth
+                      id="status"
+                      name="status"
+                      value={value}
+                      onChange={onChange}
+                      error={Boolean(errors.status)}
+                      defaultValue={" "}
+                    >
+                      <MenuItem value=" " disabled>
+                        Select Status
+                      </MenuItem>
+                      <MenuItem value="approved">Approve</MenuItem>
+                      <MenuItem value="pending">Pending</MenuItem>
+                      <MenuItem value="rejected">Reject</MenuItem>
+                    </TextField>
                   )}
-                </FormControl>
-              </Grid>
+                />
+                {errors.status && (
+                  <FormHelperText sx={{ color: "error.main" }}>
+                    {errors.status.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
           </Grid>
         </form>
       </DialogContent>
@@ -481,17 +490,7 @@ const Dialogproducts = (props) => {
         >
           Submit
         </LoadingButton>
-        <Button
-          variant="outlined"
-          onClick={toggle}
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-              borderColor: "inherit",
-              color: "#31AD52",
-            },
-          }}
-        >
+        <Button variant="outlined" onClick={toggle}>
           Cancel
         </Button>
       </DialogActions>

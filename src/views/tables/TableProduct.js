@@ -7,10 +7,8 @@ import CustomDataGrid from "src/@core/components/data-grid";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import moment from "moment";
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Tableproduct({
   rows,
@@ -24,9 +22,11 @@ function Tableproduct({
   toggleDelete,
 }) {
   const statusColors = {
-    inactive: "#FFB400",
-    active: "#66bb6a",
-    pending: "#FF5722",
+    approved: "#4CAF50", // green
+    pending: "#FFB400", // amber
+    rejected: "#F44336", // red
+    // Optionally, add a default color
+    default: "#BDBDBD",
   };
   const CustomChip = styled(Chip)(({ label }) => ({
     backgroundColor: statusColors[label] || statusColors.default,
@@ -34,7 +34,7 @@ function Tableproduct({
     color: "#fff",
     width: "100px",
   }));
-
+  const navigate = useNavigate();
   return (
     <CustomDataGrid
       loading={loading}
@@ -132,7 +132,7 @@ function Tableproduct({
           minWidth: 200,
           flex: 0.5,
           sortable: false,
-          headerName: "createdAt ",
+          headerName: "Created At ",
           renderCell: ({ row }) => (
             <Typography noWrap variant="body2" title={row.updatedAt}>
               {moment(row.updatedAt).format("DD-MM-YYYY HH:MM")}
@@ -144,16 +144,16 @@ function Tableproduct({
           minWidth: 180,
           sortable: false,
           headerName: "Status",
-          renderCell: ({ row }) => <CustomChip label={row.status} style={{ marginTop: '-25px' }}  />,
+          renderCell: ({ row }) => <CustomChip label={row.status} />,
         },
         {
           field: "Actions",
           flex: 0.1,
-          minWidth: 170,
+          minWidth: 250,
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px" style={{ marginTop: '-7px' }}>
+            <Box display="flex" alignItems="center" gap="10px">
               <IconButton
                 size="small"
                 color="primary"
@@ -169,6 +169,15 @@ function Tableproduct({
               >
                 <DeleteIcon />
               </IconButton>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() =>
+                  navigate(`/product/${row.id}`, { state: { product: row } })
+                }
+              >
+                Product Details
+              </Button>
             </Box>
           ),
         },

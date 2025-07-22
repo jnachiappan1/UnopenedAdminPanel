@@ -17,7 +17,6 @@ function TableUsers({
   setPageSize,
   pageSize,
   loading,
-  toggleEdit,
   toggleDelete,
   onViewDetails,
 }) {
@@ -91,54 +90,16 @@ function TableUsers({
           minWidth: 180,
           sortable: false,
           headerName: "Status",
-          renderCell: ({ row }) => <CustomChip label={row.status} style={{ marginTop: '-25px' }} />,
+          renderCell: ({ row }) => <CustomChip label={row.status} />,
         },
-
-        // {
-        //   field: "email",
-        //   flex: 0.3,
-        //   minWidth: 150,
-        //   sortable: false,
-        //   headerName: "Banner Image",
-        //   renderCell: ({ row }) => (
-        //     <img
-        //       alt=""
-        //       src={`${MEDIA_URL}${row.bannerImage}`}
-        //       style={{ height: "30px", width: "50px" }}
-        //     />
-        //   ),
-        // },
-        // {
-        //   field: "bannerMobileImage",
-        //   flex: 0.3,
-        //   minWidth: 150,
-        //   sortable: false,
-        //   headerName: "Mobile Banner Image",
-        //   renderCell: ({ row }) => (
-        //     <img
-        //       alt=""
-        //       src={`${MEDIA_URL}${row.bannerMobileImage}`}
-        //       style={{ height: "30px", width: "50px" }}
-        //     />
-        //   ),
-        // },
-
         {
           field: "Actions",
           flex: 0.1,
-          minWidth: 170,
+          minWidth: 200,
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px" style={{ marginTop: '-7px' }}>
-              <IconButton
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={(e) => toggleEdit(e, "edit", row)}
-              >
-                {/* <EditIcon /> */}
-              </IconButton>
+            <Box display="flex" alignItems="center" gap="15px">
               <IconButton
                 size="small"
                 color="primary"
@@ -146,8 +107,12 @@ function TableUsers({
               >
                 <DeleteIcon />
               </IconButton>
-              <Button variant="outlined" onClick={() => onViewDetails(row)}>
-                Details
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => onViewDetails(row)}
+              >
+                User Details
               </Button>
             </Box>
           ),

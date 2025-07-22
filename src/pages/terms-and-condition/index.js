@@ -6,11 +6,10 @@ import Translations from "src/layouts/components/Translations";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "src/network/adapter";
 import { ApiEndPoints } from "src/network/endpoints";
-import toast from "react-hot-toast";
-import DialogTerms from "../../views/dialogs/DialogTerms";
 import FallbackSpinner from "src/@core/components/spinner";
 import { toastError } from "src/utils/utils";
 import Grid from "@mui/material/Grid2";
+import DialogLegalContent from "src/views/dialogs/DialogLegalContent";
 
 const TermsandConditionPage = () => {
   const [loading, setLoading] = useState(false);
@@ -96,10 +95,13 @@ const TermsandConditionPage = () => {
           </Card>
         </Grid>
       </Grid>
-      <DialogTerms
+      <DialogLegalContent
         open={openTermsAndConditionDialog}
         toggle={toggleTermsAndConditionDialog}
-        dataToEdit={termsAndConditionDataToEdit}
+        dataToEdit={{
+          type: "terms_and_conditions",
+          content: termsAndConditionDataToEdit,
+        }}
         onSuccess={fetchData}
       />
     </>

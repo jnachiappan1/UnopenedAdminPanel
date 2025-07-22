@@ -51,6 +51,6 @@ export const ApiEndPoints = {
     list: `${API_BASE_URL}api/v1/admin/sub-admin`,
     create: `${API_BASE_URL}api/v1/admin/sub-admin`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/sub-admin/${id}`,
-    delete:(id)=>`${API_BASE_URL}api/v1/admin/sub-admin/${id}`
+    delete: (id) => `${API_BASE_URL}api/v1/admin/sub-admin/${id}`,
   },
 };

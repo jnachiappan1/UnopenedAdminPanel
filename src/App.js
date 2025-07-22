@@ -10,34 +10,38 @@ import AclGuard from "./@core/components/auth/AclGuard";
 import GuestGuard from "./@core/components/auth/GuestGuard";
 import { defaultACLObj } from "./configs/acl";
 import AuthLayout from "./layouts/AuthLayout";
-import Permission from "./pages/RoleManagement/Permissions";
 import AddEditRolePage from "./pages/RoleManagement/Roles/AddEditRole";
 // import UserDetailPage from "./pages/users/details";
 // import Clientspage from "./pages/clients/index";
-
 
 const HomePage = React.lazy(() => import("./pages/home"));
 const DashBoardPage = React.lazy(() => import("./pages/dashboard"));
 const LoginPage = React.lazy(() => import("./pages/login"));
 const ForgotPassword = React.lazy(() => import("./pages/login/forgotpassword"));
-const BanerPage = React.lazy(()=> import("./pages/banner"))
+const BanerPage = React.lazy(() => import("./pages/banner"));
 const Page401 = React.lazy(() => import("./pages/401"));
 const Page404 = React.lazy(() => import("./pages/404"));
 
-const PermissionsPage = React.lazy(() => import('./pages/RoleManagement/Permissions'))
+const Permission = React.lazy(() =>
+  import("./pages/RoleManagement/Permissions")
+);
 // const Legalcontent = React.lazy(() => import("./pages/legal_content"));
-const TermsandConditionPage = React.lazy(() => import('./pages/terms-and-condition'))
-const PrivacyPolicyPage = React.lazy(() => import('./pages/privacy_policy'))
-const HelpSupporPage = React.lazy(() => import('./pages/help_support'))
-const UsersPage = React.lazy(() => import('./pages/users'))
-const ProductPage = React.lazy(() => import('./pages/product'))
-const SubAdminPage = React.lazy(() => import('./pages/RoleManagement/SubAdmin'))
-const RolesPage = React.lazy(() => import('./pages/RoleManagement/Roles'))
+const TermsandConditionPage = React.lazy(() =>
+  import("./pages/terms-and-condition")
+);
+const PrivacyPolicyPage = React.lazy(() => import("./pages/privacy_policy"));
+const HelpSupporPage = React.lazy(() => import("./pages/help_support"));
+const UsersPage = React.lazy(() => import("./pages/users"));
+const ProductPage = React.lazy(() => import("./pages/product"));
+const ProductDetailPage = React.lazy(() =>
+  import("./pages/product/ProductDetailPage")
+);
+const SubAdminPage = React.lazy(() =>
+  import("./pages/RoleManagement/SubAdmin")
+);
+const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 // const UserDetailPage = React.lazy(() => import('./pages/users/userDetail'))
-const UserDetailPage = React.lazy(() => import('./pages/users/details'))
-
-
-
+const UserDetailPage = React.lazy(() => import("./pages/users/details"));
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
@@ -115,14 +119,13 @@ function App() {
               <Route path="/help-support" element={<HelpSupporPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/product" element={<ProductPage />} />
-              <Route path="/permission" element={<Permission/>} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/permission" element={<Permission />} />
               <Route path="/roles" element={<RolesPage />} />
-              <Route path='/roles/edit/:id' element={<AddEditRolePage />} />
-              <Route path='/roles/add' element={<AddEditRolePage />} />
+              <Route path="/roles/edit/:id" element={<AddEditRolePage />} />
+              <Route path="/roles/add" element={<AddEditRolePage />} />
               <Route path="/users/:id" element={<UserDetailPage />} />
-              <Route path='/sub-admin' element={<SubAdminPage />} />
-
-              
+              <Route path="/sub-admin" element={<SubAdminPage />} />
             </Route>
           </Route>
 

@@ -161,7 +161,13 @@ const CustomDataGrid = ({
         loadingOverlay: CustomLoadingOverlay,
         noRowsOverlay: CustomNoRowsOverlay,
       }}
-      sx={{ "--DataGrid-overlayHeight": "500px" }}
+      sx={{
+        "--DataGrid-overlayHeight": "500px",
+        "& .MuiDataGrid-cell": {
+          display: "flex",
+          alignItems: "center",
+        },
+      }}
       onCellClick={({ field, row }) =>
         handleCellClick && handleCellClick({ field, row })
       }

@@ -66,7 +66,7 @@ function TablePermission({
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px" style={{ marginTop: "-7px" }} >
+            <Box display="flex" alignItems="center" gap="10px">
               <IconButton
                 size="small"
                 color="primary"

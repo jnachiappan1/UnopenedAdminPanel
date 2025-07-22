@@ -137,7 +137,7 @@ const AddEditRolePage = () => {
       mode === "edit" &&
       dataToEdit?.permission &&
       permissionList.length > 0 &&
-      !permissionsLoaded 
+      !permissionsLoaded
     ) {
       console.log("🔍 Applying permissions for edit mode");
       console.log("dataToEdit.permission:", dataToEdit.permission);
@@ -413,7 +413,6 @@ const AddEditRolePage = () => {
                               sx={{
                                 "& .MuiFormControlLabel-label": {
                                   marginLeft: "8px",
-                                  // color: '#344054',
                                   textTransform: "capitalize",
                                   fontSize: "14px",
                                 },
@@ -435,7 +434,6 @@ const AddEditRolePage = () => {
             variant="outlined"
             color="secondary"
             onClick={() => navigate(-1)}
-            sx={{ borderRadius: "8px" }}
           >
             Cancel
           </Button>
@@ -444,7 +442,6 @@ const AddEditRolePage = () => {
             form="role-management-form"
             variant="contained"
             loading={loading}
-            sx={{ borderRadius: "8px" }}
           >
             {mode === "add" ? "Add" : "Save Changes"}
           </LoadingButton>

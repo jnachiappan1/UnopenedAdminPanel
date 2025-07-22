@@ -10,84 +10,47 @@ import Grid from "@mui/material/Grid2";
 const data = [
   {
     stats: "0",
-    title: "Active Users",
-    type: "active users",
+    title: "Users",
+    type: "user_count",
     link: "/users",
   },
   {
     stats: "0",
-    title: "Listings",
-    type: "listings",
-    // link: "/inquiry",
-    link:"/product"
-  },
-  {
-    stats: "0",
-    title: "Sales",
-    type: "sales",
-    link: "/contact",
+    title: "Products",
+    type: "product_count",
+    link: "/product",
   },
 ];
 function DashBoardPage() {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = React.useState(data);
-  // const fetchData = () => {
-  //   setLoading(true);
 
-  //   axiosInstance
-  //     .get(ApiEndPoints.DASHBOARD.count)
-  //     .then((response) => {
-  //       let myData = response.data;
-  //       console.log("myData", myData);
-  //       // setStats(myData.user_count);
-  //       setProductCount(myData.product_count);
-  //       setStats((prev) =>
-  //         prev.map((p) => ({
-  //           ...p,
-  //           ...(data[`${p.type}`] && { stats: data[`${p.type}`] }),
-  //         }))
-  //       );
-  //     })
-  //     .catch((error) => {
-  //       toastError(error);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
-  
   const fetchData = () => {
-  setLoading(true);
+    setLoading(true);
 
-  axiosInstance
-    .get(ApiEndPoints.DASHBOARD.count)
-    .then((response) => {
-      const { user_count, product_count } = response.data.data;
-
-      const updatedStats = data.map((item) => {
-        if (item.type === "active users") {
-          return { ...item, stats: user_count };
-        } else if (item.type === "listings") {
-          return { ...item, stats: product_count }; 
-        }
-        return item;
+    axiosInstance
+      .get(ApiEndPoints.DASHBOARD.count)
+      .then((response) => {
+        let data = response.data.data;
+        setStats((prev) =>
+          prev.map((p) => ({
+            ...p,
+            ...(data[`${p.type}`] && { stats: data[`${p.type}`] }),
+          }))
+        );
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
+  };
 
-      setStats(updatedStats);
-    })
-    .catch((error) => {
-      toastError(error);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-};
-
-  
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   if (loading) {
     return <FallbackSpinner />;
   }

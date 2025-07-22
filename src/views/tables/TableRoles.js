@@ -55,9 +55,7 @@ const TableRoles = ({
           flex: 0.5,
           sortable: false,
           headerName: "Status",
-          renderCell: ({ row }) => (
-            <CustomChip label={row.status} style={{ marginTop: "-30px" }} />
-          ),
+          renderCell: ({ row }) => <CustomChip label={row.status} />,
         },
         {
           field: "Actions",
@@ -66,12 +64,7 @@ const TableRoles = ({
           sortable: false,
           headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box
-              display="flex"
-              alignItems="center"
-              gap="10px"
-              style={{ marginTop: "-7px" }}
-            >
+            <Box display="flex" alignItems="center" gap="10px">
               <IconButton
                 size="small"
                 color="primary"

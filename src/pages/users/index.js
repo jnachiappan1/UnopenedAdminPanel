@@ -10,7 +10,7 @@ import { ApiEndPoints } from "../../network/endpoints";
 import { DefaultPaginationSettings } from "../../constants/general.const";
 import { toastError, toastSuccess } from "../../utils/utils";
 import DialogConfirmation from "../../views/dialogs/DialogConfirmation";
-import TableUsers from "src/views/tables/Tableusers";
+import TableUsers from "src/views/tables/TableUsers";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 

@@ -9,10 +9,6 @@ import {
   Chip,
   Divider,
   IconButton,
-  Stack,
-  Container,
-  Button,
-  Grid,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -20,10 +16,6 @@ import {
   Email,
   Phone,
   LocationOn,
-  CalendarToday,
-  Security,
-  Visibility,
-  VisibilityOff,
   Public,
   VerifiedUser,
   Tag,
@@ -33,13 +25,12 @@ import { axiosInstance } from "../../../network/adapter";
 import { ApiEndPoints } from "../../../network/endpoints";
 import { toastError } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
-
+import Grid from "@mui/material/Grid2";
 const UserDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     axiosInstance
@@ -109,9 +100,10 @@ const UserDetailPage = () => {
   );
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", p: 3 }}>
-      <Box sx={{ mb: 3 , display:"flex" , alignItems:"center" , gap:"10px" }}>
+    <Box sx={{ p: 2 }}>
+      <Box sx={{ mb: 5, display: "flex", alignItems: "center", gap: "10px" }}>
         <IconButton
+          size="small"
           sx={{
             border: "2px solid",
             borderColor: "primary.main",
@@ -124,29 +116,25 @@ const UserDetailPage = () => {
         </IconButton>
         <Typography varient="h6">User Details</Typography>
       </Box>
-      <Container maxWidth="sm">
-        {/* Header */}
 
-        {/* Main Card */}
-        <Card elevation={1}>
-          <CardContent sx={{ p: 4 }}>
-            {/* User Profile Section */}
-            <Box sx={{ textAlign: "center", mb: 4 }}>
-              <Avatar
-                sx={{
-                  width: 80,
-                  height: 80,
-                  bgcolor: "grey.300",
-                  color: "grey.600",
-                  fontSize: "2rem",
-                  fontWeight: 600,
-                  mx: "auto",
-                  mb: 2,
-                }}
-              >
-                {getInitials(userData.full_name)}
-              </Avatar>
-
+      <Card elevation={1}>
+        <CardContent sx={{ p: 4 }}>
+          {/* User Profile Section */}
+          <Box sx={{ mb: 4, display: "flex", alignItems: "center", gap: 2 }}>
+            <Avatar
+              sx={{
+                width: 80,
+                height: 80,
+                bgcolor: "grey.300",
+                color: "grey.600",
+                fontSize: "2rem",
+                fontWeight: 600,
+                mb: 2,
+              }}
+            >
+              {getInitials(userData.full_name)}
+            </Avatar>
+            <Box>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
                 {userData.full_name}
               </Typography>
@@ -158,135 +146,93 @@ const UserDetailPage = () => {
                 sx={{ textTransform: "capitalize" }}
               />
             </Box>
+          </Box>
 
-            <Divider sx={{ mb: 3 }} />
+          <Divider sx={{ mb: 3 }} />
 
-            {/* Details Section */}
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-              Details
-            </Typography>
+          {/* Details Section */}
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+            Details
+          </Typography>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Tag />}
-                  label="User ID"
-                  value={userData.id}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Person />}
-                  label="Full Name"
-                  value="prince12123"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Email />}
-                  label="Email"
-                  value={userData.email}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Phone />}
-                  label="Phone"
-                  value={`${userData.country_code} ${userData.phone_number}`}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<LocationOn />}
-                  label="Address"
-                  value={userData.address}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<LocationOn />}
-                  label="City, State"
-                  value={`${userData.city}, ${userData.state}`}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Public />}
-                  label="Country"
-                  value={userData.country}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<LocationOn />}
-                  label="Pincode"
-                  value={userData.pincode}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<Person />}
-                  label="Gender"
-                  value={userData.gender}
-                  isChip={true}
-                  chipColor="default"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DetailItem
-                  icon={<VerifiedUser />}
-                  label="Account Verified"
-                  value={userData.verify_account ? "Verified" : "Not Verified"}
-                  isChip={true}
-                  chipColor={userData.verify_account ? "success" : "error"}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                {/* Password Field Full Width */}
-                <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
-                  <Box sx={{ mr: 2, mt: 0.5, color: "text.secondary" }}>
-                    <Security />
-                  </Box>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 0.5 }}
-                    >
-                      Password
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          wordBreak: "break-all",
-                          fontFamily: "monospace",
-                          mr: 1,
-                          flex: 1,
-                        }}
-                      >
-                        {showPassword ? userData.password : "•".repeat(30)}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => setShowPassword(!showPassword)}
-                        sx={{ color: "text.secondary" }}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem icon={<Tag />} label="User ID" value={userData.id} />
             </Grid>
-          </CardContent>
-        </Card>
-      </Container>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Person />}
+                label="Full Name"
+                value="prince12123"
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Email />}
+                label="Email"
+                value={userData.email}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Phone />}
+                label="Phone"
+                value={`${userData.country_code} ${userData.phone_number}`}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LocationOn />}
+                label="Address"
+                value={userData.address}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LocationOn />}
+                label="City, State"
+                value={`${userData.city}, ${userData.state}`}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Public />}
+                label="Country"
+                value={userData.country}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LocationOn />}
+                label="Pincode"
+                value={userData.pincode}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Person />}
+                label="Gender"
+                value={userData.gender}
+                isChip={true}
+                chipColor="default"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<VerifiedUser />}
+                label="Account Verified"
+                value={userData.verify_account ? "Verified" : "Not Verified"}
+                isChip={true}
+                chipColor={userData.verify_account ? "success" : "error"}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

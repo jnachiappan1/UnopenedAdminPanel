@@ -1,10 +1,10 @@
-import Typography from '@mui/material/Typography'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import CustomDataGrid from 'src/@core/components/data-grid'
-import moment from 'moment'
+import Typography from "@mui/material/Typography";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import CustomDataGrid from "src/@core/components/data-grid";
+import moment from "moment";
 
 const TableSubAdmin = ({
   rows,
@@ -15,7 +15,7 @@ const TableSubAdmin = ({
   pageSize,
   loading,
   toggleEdit,
-  toggleDelete
+  toggleDelete,
 }) => {
   return (
     <CustomDataGrid
@@ -24,42 +24,51 @@ const TableSubAdmin = ({
       rows={rows}
       columns={[
         {
-          field: 'name',
+          field: "name",
           minWidth: 300,
           flex: 1,
           sortable: false,
-          headerName: 'Name',
+          headerName: "Name",
           renderCell: ({ row }) => (
-            <Typography noWrap variant='body2' title={row.name}>
+            <Typography noWrap variant="body2" title={row.name}>
               {row.name}
             </Typography>
-          )
+          ),
         },
 
         {
-          field: 'Actions',
+          field: "Actions",
           flex: 0,
           minWidth: 150,
           sortable: false,
-          headerName: 'Actions',
+          headerName: "Actions",
           renderCell: ({ row }) => (
-            <Box display='flex' alignItems='center' gap='10px' style={{ marginTop: "-7px" }}>
-              <IconButton size='small' color='primary' variant='outlined' onClick={e => toggleEdit(e, 'edit', row)}>
+            <Box display="flex" alignItems="center" gap="10px">
+              <IconButton
+                size="small"
+                color="primary"
+                variant="outlined"
+                onClick={(e) => toggleEdit(e, "edit", row)}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton size='small' color='primary' onClick={e => toggleDelete(e, row)}>
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={(e) => toggleDelete(e, row)}
+              >
                 <DeleteIcon />
               </IconButton>
             </Box>
-          )
-        }
+          ),
+        },
       ]}
       currentPage={currentPage}
       pageSize={pageSize}
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
     />
-  )
-}
+  );
+};
 
-export default TableSubAdmin
+export default TableSubAdmin;
