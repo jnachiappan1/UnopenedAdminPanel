@@ -7,9 +7,9 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import PeopleIcon from "@mui/icons-material/People";
 import LockIcon from "@mui/icons-material/Lock";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
-const navigation = (userType = "admin") => {
+const navigation = () => {
   return [
     {
       title: "Dashboard",
@@ -65,10 +65,10 @@ const navigation = (userType = "admin") => {
           path: "/roles",
         },
         {
-          title: 'Sub Admin',
+          title: "Sub Admin",
           icon: PersonOutlineOutlinedIcon,
-          path: '/sub-admin'
-        }
+          path: "/sub-admin",
+        },
       ],
     },
   ];

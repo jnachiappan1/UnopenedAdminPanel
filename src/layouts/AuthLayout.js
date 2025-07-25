@@ -15,7 +15,7 @@ import Logo from "src/@core/components/logo";
 const RightWrapper = styled(Box)(({ theme }) => ({
   margin: "auto",
   [theme.breakpoints.up("md")]: {
-    maxWidth: 550,
+    maxWidth: 750,
   },
 }));
 

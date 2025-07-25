@@ -19,6 +19,7 @@ function TableUsers({
   loading,
   toggleDelete,
   onViewDetails,
+  canDelete
 }) {
   const statusColors = {
     inactive: "#FFB400",
@@ -100,13 +101,14 @@ function TableUsers({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="15px">
-              <IconButton
+              {canDelete && <IconButton
                 size="small"
                 color="primary"
                 onClick={(e) => toggleDelete(e, row)}
               >
                 <DeleteIcon />
-              </IconButton>
+              </IconButton>}
+             
               <Button
                 variant="outlined"
                 size="small"

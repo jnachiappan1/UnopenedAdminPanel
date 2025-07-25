@@ -19,10 +19,13 @@ import HorizontalAppBarContent from "./components/horizontal/AppBarContent";
 // ** Hook Import
 import { useSettings } from "src/@core/hooks/useSettings";
 import AfterVerticalNavMenuContent from "./components/vertical/AfterVerticalNavMenuContent";
+import { useAuth } from "src/hooks/useAuth";
+import { getAccessibleNavItems } from "src/utils/permissions";
 
 const UserLayout = ({ children }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings();
+  const { user, permissionsList, userType, permissionsWithNames } = useAuth();
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -34,6 +37,11 @@ const UserLayout = ({ children }) => {
    */
   const hidden = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
+  const filteredNavItems = getAccessibleNavItems(
+    VerticalNavItems(),
+    userType,
+    permissionsWithNames
+  );
   return (
     <Layout
       hidden={hidden}
@@ -57,7 +65,8 @@ const UserLayout = ({ children }) => {
           }
         : {
             // ** Navigation Items
-            verticalNavItems: VerticalNavItems(),
+            // verticalNavItems: VerticalNavItems(),
+            verticalNavItems: filteredNavItems,
             // afterVerticalNavMenuContent: AfterVerticalNavMenuContent, //for logout btn at end
 
             // Uncomment the below line when using server-side menu in vertical layout and comment the above line

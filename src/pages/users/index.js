@@ -13,6 +13,8 @@ import DialogConfirmation from "../../views/dialogs/DialogConfirmation";
 import TableUsers from "src/views/tables/TableUsers";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
+import { getPermissionNames, hasPermission } from "src/utils/permissions";
+import { useAuth } from "src/hooks/useAuth";
 
 const UsersPage = () => {
   const searchTimeoutRef = useRef();
@@ -31,7 +33,10 @@ const UsersPage = () => {
   const [userToDelete, setuserToDelete] = useState(null);
 
   const navigate = useNavigate();
+  const { permissionsWithNames } = useAuth();
 
+  const canDelete = hasPermission(permissionsWithNames, 'Users', 'remove');
+  console.log("canDelete", canDelete);
   const handleViewDetails = (user) => {
     navigate(`/users/${user.id}`);
   };
@@ -161,6 +166,7 @@ const UsersPage = () => {
                 pageSize={pageSize}
                 toggleDelete={toggleConfirmationDialog}
                 onViewDetails={handleViewDetails}
+                canDelete={canDelete}
               />
             </CardContent>
           </Card>

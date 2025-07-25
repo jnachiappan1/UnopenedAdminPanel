@@ -23,7 +23,7 @@ const validationSchema = yup.object().shape({
   otp: yup
     .string()
     .required("OTP is required")
-    .matches(/^\d{4}$/, "OTP must be a 4-digit number"),
+    .matches(/^\d{6}$/, "OTP must be a 4-digit number"),
 });
 
 function OtpForm({ onSuccess, email, token }) {
@@ -40,7 +40,7 @@ function OtpForm({ onSuccess, email, token }) {
         ApiEndPoints.AUTH.verifyotp,
         {
           otp: data.otp,
-          email: email,
+          // email: email,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -58,7 +58,7 @@ function OtpForm({ onSuccess, email, token }) {
   const handleResendOtp = async () => {
     try {
       const response = await axiosInstance.post(
-        ApiEndPoints.AUTH.resendotp,
+        ApiEndPoints.AUTH.resendotp("admin_password"),
         {
           email: email,
         },
@@ -82,7 +82,7 @@ function OtpForm({ onSuccess, email, token }) {
           Verify Your OTP
         </Typography>
         <Typography variant="subtitle1">
-          Please Enter 4 digit code sent to {otp}
+          Please Enter 6 digit code sent to {otp}
         </Typography>
         <Typography variant="body2" mb={7}>
           {email}
@@ -99,7 +99,7 @@ function OtpForm({ onSuccess, email, token }) {
                   field.onChange(value); // Update react-hook-form state
                   setOtp(value); // Update local otp state
                 }}
-                numInputs={4}
+                numInputs={6}
                 renderSeparator={<span style={{ margin: "0 3px" }}></span>}
                 renderInput={(props) => (
                   <input

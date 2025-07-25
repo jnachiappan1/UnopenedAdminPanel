@@ -9,7 +9,7 @@ export const ApiEndPoints = {
     forgot: `${API_BASE_URL}api/v1/admin/auth/forgot/password`,
     verifyotp: `${API_BASE_URL}api/v1/admin/auth/verify/otp`,
     reset: `${API_BASE_URL}api/v1/admin/auth/reset/password`,
-    resendotp: `${API_BASE_URL}api/v1/admin/auth/resend/otp`,
+    resendotp: (type) => `${API_BASE_URL}api/v1/admin/auth/resend/otp/${type}`,
   },
   DASHBOARD: {
     count: `${API_BASE_URL}api/v1/admin/dashboard/count`,

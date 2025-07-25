@@ -20,6 +20,8 @@ function Tableproduct({
   loading,
   toggleEdit,
   toggleDelete,
+  canEdit,
+  canDelete
 }) {
   const statusColors = {
     approved: "#4CAF50", // green
@@ -154,21 +156,25 @@ function Tableproduct({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              <IconButton
+              {canEdit &&  <IconButton
                 size="small"
                 color="primary"
                 variant="outlined"
                 onClick={(e) => toggleEdit(e, "edit", row)}
               >
                 <EditIcon />
-              </IconButton>
+              </IconButton>}
+             {
+              canDelete && 
               <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => toggleDelete(e, row)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              size="small"
+              color="primary"
+              onClick={(e) => toggleDelete(e, row)}
+            >
+              <DeleteIcon />
+            </IconButton>
+             }
+            
               <Button
                 size="small"
                 variant="outlined"

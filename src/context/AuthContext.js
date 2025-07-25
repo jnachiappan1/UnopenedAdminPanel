@@ -1,5 +1,5 @@
 // ** React Imports
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo } from "react";
 
 // ** Next Import
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,6 +11,8 @@ import axios from "axios";
 import authConfig from "../configs/auth";
 import FallbackSpinner from "src/@core/components/spinner";
 import { ApiEndPoints } from "src/network/endpoints";
+import { toastError } from "src/utils/utils";
+import { getPermissionNames } from "src/utils/permissions";
 
 // ** Defaults
 const defaultProvider = {
@@ -23,6 +25,11 @@ const defaultProvider = {
   logout: () => Promise.resolve(),
   setIsInitialized: () => Boolean,
   register: () => Promise.resolve(),
+  userType: null,
+  setUserType: () => null,
+  permissionsList: [],
+  setPermissionsList: () => [],
+  permissionsWithNames: [],
 };
 const AuthContext = createContext(defaultProvider);
 
@@ -33,7 +40,15 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState(defaultProvider.userType);
+  const [permissionsList, setPermissionsList] = useState(
+    defaultProvider.permissionsList
+  );
+
+  // Calculate permissionsWithNames whenever user or permissionsList changes
+  const permissionsWithNames = useMemo(() => {
+    return getPermissionNames(user?.admin_role?.permission, permissionsList);
+  }, [user?.admin_role?.permission, permissionsList]);
 
   // ** Hooks
   const navigate = useNavigate();
@@ -55,8 +70,11 @@ const AuthProvider = ({ children }) => {
           })
           .then(async (response) => {
             setLoading(false);
-            setUser({ ...response.data.user });
+            setUser({ ...response?.data?.data?.user });
             setUserType(response.data.data.type);
+            if (response.data.data.type === "sub_admin") {
+              fetchPermissions();
+            }
           })
           .catch(() => {
             localStorage.removeItem(authConfig.storageUserDataKeyName);
@@ -77,9 +95,9 @@ const AuthProvider = ({ children }) => {
     setUserType(type);
     const redirectUrl = searchParams.get("redirect");
     navigate(redirectUrl || "/");
-
-    console.log("Logged in user role:", type);
-
+    if (type === "sub_admin") {
+      fetchPermissions();
+    }
   };
 
   const handleLogout = () => {
@@ -88,7 +106,21 @@ const AuthProvider = ({ children }) => {
     window.localStorage.removeItem(authConfig.storageTokenKeyName);
     navigate("/login");
   };
-
+  const fetchPermissions = async () => {
+    try {
+      const response = await axios.get(ApiEndPoints.PERMISSION.list, {
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem(
+            authConfig.storageTokenKeyName
+          )}`,
+        },
+      });
+      setPermissionsList(response.data.data.permission); // <-- set directly here
+    } catch (error) {
+      toastError(error);
+      setPermissionsList([]); // fallback
+    }
+  };
   const handleRegister = () => {};
 
   const values = {
@@ -103,6 +135,9 @@ const AuthProvider = ({ children }) => {
     register: handleRegister,
     userType,
     setUserType,
+    permissionsList,
+    setPermissionsList,
+    permissionsWithNames,
   };
 
   return (

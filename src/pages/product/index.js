@@ -13,8 +13,11 @@ import Tableproduct from "src/views/tables/TableProduct";
 import Grid from "@mui/material/Grid2";
 import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
 import Dialogproducts from "src/views/dialogs/DialogProduct";
+import { hasPermission } from "src/utils/permissions";
+import { useAuth } from "src/hooks/useAuth";
 
 const ProductPage = () => {
+  const { permissionsWithNames } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [careerData, setCareerData] = useState([]);
@@ -43,7 +46,8 @@ const ProductPage = () => {
     setConfirmationDialogOpen((prev) => !prev);
     setcareerToDelete(dataToDelete);
   };
-
+  const canEdit = hasPermission(permissionsWithNames, 'Product', 'write');
+  const canDelete = hasPermission(permissionsWithNames, 'Product', 'remove');
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -135,10 +139,9 @@ const ProductPage = () => {
                 display: "flex",
                 flexWrap: "wrap",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "end",
               }}
             >
-              <Box></Box>
               <Box
                 sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}
               >
@@ -162,6 +165,8 @@ const ProductPage = () => {
                 pageSize={pageSize}
                 toggleEdit={togglecareerFormDialog}
                 toggleDelete={toggleConfirmationDialog}
+                canEdit={canEdit}
+                canDelete={canDelete}
               />
             </Box>
           </Card>

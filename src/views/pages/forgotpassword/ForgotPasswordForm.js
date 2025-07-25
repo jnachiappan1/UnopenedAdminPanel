@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Box,
   Button,
   FormControl,
   IconButton,
@@ -78,6 +79,7 @@ function ForgotPasswordForm({ onSuccess }) {
 
   return (
     <>
+      {" "}
       <form onSubmit={handleSubmit(handleSetOtp)}>
         <Typography variant="h5" color={"neutral.90"}>
           Forgot Password
@@ -98,6 +100,7 @@ function ForgotPasswordForm({ onSuccess }) {
             onChange={(e) => {
               setUserEmail(e.target.value);
             }}
+            placeholder="Enter Email Address"
             error={error}
             helperText={error ? "Email Address is required" : ""}
           />
@@ -115,7 +118,6 @@ function ForgotPasswordForm({ onSuccess }) {
           <Translations text="Send OTP" />
         </LoadingButton>
       </form>
-
       <Link to="/login" style={{ textDecoration: "none" }}>
         <Typography variant="body2" sx={{ ...BackToLoginStyle }}>
           <IconButton color="inherit" size="small">
