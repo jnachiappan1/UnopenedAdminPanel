@@ -21,6 +21,7 @@ import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import { getPermissionNames, hasPermission } from "src/utils/permissions";
 import { useAuth } from "src/hooks/useAuth";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const UsersPage = () => {
   const { permissionsWithNames, userType } = useAuth();
@@ -41,8 +42,7 @@ const UsersPage = () => {
 
   const navigate = useNavigate();
 
-  const canDelete = hasPermission(permissionsWithNames, "Users", "remove");
-  console.log("canDelete", canDelete);
+  // Remove the old permission checking variable since we'll use PermissionGuard
   const handleViewDetails = (user) => {
     navigate(`/users/${user.id}`);
   };
@@ -187,7 +187,6 @@ const UsersPage = () => {
                 pageSize={pageSize}
                 toggleDelete={toggleConfirmationDialog}
                 onViewDetails={handleViewDetails}
-                canDelete={canDelete}
                 userType={userType}
               />
             </CardContent>

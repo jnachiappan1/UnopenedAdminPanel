@@ -40,9 +40,6 @@ const DefaultPalette = (mode, skin, themeColor) => {
 
   return {
     customColors: {
-      // dark: darkColor,
-      // main: mainColor,
-      // light: lightColor,
       darkBg: "#28243D",
       lightBg: "#F4F5FA",
       primaryGradient: primaryGradient(),
@@ -55,16 +52,15 @@ const DefaultPalette = (mode, skin, themeColor) => {
     },
     mode: mode,
     primary: {
-      light: "#65bb63",
-      //main: "#3fab3c",
+      light: "#5abd74",
       main: "#31AD52",
-      dark: "#2c772a",
+      dark: "#227939",
       contrastText: "#FFF",
     },
     secondary: {
-      light: "#023c56",
-      main: "#03577B",
-      dark: "#023c56",
+      light: "##5abd74",
+      main: "#31AD52",
+      dark: "#227939",
       contrastText: "#FFF",
     },
     success: {

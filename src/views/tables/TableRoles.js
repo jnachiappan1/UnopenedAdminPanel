@@ -7,6 +7,7 @@ import CustomDataGrid from "src/@core/components/data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { Chip, styled } from "@mui/material";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const TableRoles = ({
   rows,
@@ -18,8 +19,6 @@ const TableRoles = ({
   loading,
   toggleDelete,
   permissionList,
-  canEdit,
-  canDelete,
   userType,
 }) => {
   const navigate = useNavigate();
@@ -67,7 +66,7 @@ const TableRoles = ({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              {(canEdit || userType === "admin") && (
+              <PermissionGuard permissionName="roles" action="write">
                 <IconButton
                   size="small"
                   color="primary"
@@ -80,8 +79,8 @@ const TableRoles = ({
                 >
                   <EditIcon />
                 </IconButton>
-              )}
-              {(canDelete || userType === "admin") && (
+              </PermissionGuard>
+              <PermissionGuard permissionName="roles" action="remove">
                 <IconButton
                   size="small"
                   variant="outlined"
@@ -90,7 +89,7 @@ const TableRoles = ({
                 >
                   <DeleteIcon />
                 </IconButton>
-              )}
+              </PermissionGuard>
             </Box>
           ),
         },

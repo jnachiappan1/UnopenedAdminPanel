@@ -21,6 +21,7 @@ import TableSubAdmin from "../../../views/tables/TableSubAdmin";
 import Grid from "@mui/material/Grid2";
 import { useAuth } from "src/hooks/useAuth";
 import { hasPermission } from "src/utils/permissions";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const SubAdminPage = () => {
   const { permissionsWithNames, userType } = useAuth();
@@ -57,9 +58,7 @@ const SubAdminPage = () => {
     setConfirmationDialogOpen((prev) => !prev);
     setDataToDelete(dataToDelete);
   };
-  const canEdit = hasPermission(permissionsWithNames, "SubAdmin", "write");
-  const canDelete = hasPermission(permissionsWithNames, "SubAdmin", "remove");
-  const canAdd = hasPermission(permissionsWithNames, "SubAdmin", "add");
+  // Remove the old permission checking variables since we'll use PermissionGuard
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -158,11 +157,11 @@ const SubAdminPage = () => {
               </Typography>
             }
             action={
-              (canAdd || userType === "admin") && (
+              <PermissionGuard permissionName="sub admin" action="add">
                 <Button variant="contained" onClick={toggleDialog}>
                   Add Sub Admin
                 </Button>
-              )
+              </PermissionGuard>
             }
           />
         </Grid>
@@ -220,8 +219,6 @@ const SubAdminPage = () => {
                 pageSize={pageSize}
                 toggleDelete={toggleConfirmationDialog}
                 toggleEdit={toggleDialog}
-                canEdit={canEdit}
-                canDelete={canDelete}
                 userType={userType}
               />
             </CardContent>

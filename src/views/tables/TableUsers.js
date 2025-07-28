@@ -8,6 +8,7 @@ import { MEDIA_URL } from "src/network/endpoints";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import { Button } from "@mui/material";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 function TableUsers({
   rows,
@@ -19,7 +20,6 @@ function TableUsers({
   loading,
   toggleDelete,
   onViewDetails,
-  canDelete,
   userType,
 }) {
   const statusColors = {
@@ -102,7 +102,7 @@ function TableUsers({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="15px">
-              {(canDelete || userType === "admin") && (
+              <PermissionGuard permissionName="users" action="remove">
                 <IconButton
                   size="small"
                   color="primary"
@@ -110,7 +110,7 @@ function TableUsers({
                 >
                   <DeleteIcon />
                 </IconButton>
-              )}
+              </PermissionGuard>
 
               <Button
                 variant="outlined"

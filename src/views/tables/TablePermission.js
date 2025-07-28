@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import CustomDataGrid from "src/@core/components/data-grid";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 function TablePermission({
   rows,
@@ -17,8 +18,6 @@ function TablePermission({
   loading,
   toggleEdit,
   toggleDelete,
-  canEdit,
-  canDelete,
   userType,
 }) {
   return (
@@ -46,7 +45,7 @@ function TablePermission({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              {(canEdit || userType === "admin") && (
+              <PermissionGuard permissionName="permission" action="write">
                 <IconButton
                   size="small"
                   color="primary"
@@ -55,8 +54,8 @@ function TablePermission({
                 >
                   <EditIcon />
                 </IconButton>
-              )}
-              {(canDelete || userType === "admin") && (
+              </PermissionGuard>
+              <PermissionGuard permissionName="permission" action="remove">
                 <IconButton
                   size="small"
                   color="primary"
@@ -64,7 +63,7 @@ function TablePermission({
                 >
                   <DeleteIcon />
                 </IconButton>
-              )}
+              </PermissionGuard>
             </Box>
           ),
         },

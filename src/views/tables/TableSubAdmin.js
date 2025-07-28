@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import CustomDataGrid from "src/@core/components/data-grid";
 import moment from "moment";
 import { Chip, styled } from "@mui/material";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const TableSubAdmin = ({
   rows,
@@ -17,8 +18,6 @@ const TableSubAdmin = ({
   loading,
   toggleEdit,
   toggleDelete,
-  canEdit,
-  canDelete,
   userType,
 }) => {
   const statusColors = {
@@ -88,7 +87,7 @@ const TableSubAdmin = ({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              {(canEdit || userType === "admin") && (
+              <PermissionGuard permissionName="sub admin" action="write">
                 <IconButton
                   size="small"
                   color="primary"
@@ -97,8 +96,8 @@ const TableSubAdmin = ({
                 >
                   <EditIcon />
                 </IconButton>
-              )}
-              {(canDelete || userType === "admin") && (
+              </PermissionGuard>
+              <PermissionGuard permissionName="sub admin" action="remove">
                 <IconButton
                   size="small"
                   color="primary"
@@ -106,7 +105,7 @@ const TableSubAdmin = ({
                 >
                   <DeleteIcon />
                 </IconButton>
-              )}
+              </PermissionGuard>
             </Box>
           ),
         },

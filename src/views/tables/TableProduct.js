@@ -9,6 +9,7 @@ import { styled } from "@mui/material/styles";
 import moment from "moment";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 function Tableproduct({
   rows,
@@ -20,8 +21,6 @@ function Tableproduct({
   loading,
   toggleEdit,
   toggleDelete,
-  canEdit,
-  canDelete,
   userType,
 }) {
   const statusColors = {
@@ -136,7 +135,7 @@ function Tableproduct({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              {(canEdit || userType === "admin") && (
+              <PermissionGuard permissionName="product" action="write">
                 <IconButton
                   size="small"
                   color="primary"
@@ -145,8 +144,8 @@ function Tableproduct({
                 >
                   <EditIcon />
                 </IconButton>
-              )}
-              {(canDelete || userType === "admin") && (
+              </PermissionGuard>
+              <PermissionGuard permissionName="product" action="remove">
                 <IconButton
                   size="small"
                   color="primary"
@@ -154,7 +153,7 @@ function Tableproduct({
                 >
                   <DeleteIcon />
                 </IconButton>
-              )}
+              </PermissionGuard>
 
               <Button
                 size="small"

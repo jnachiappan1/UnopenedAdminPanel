@@ -15,6 +15,7 @@ import TablePermission from "src/views/tables/TablePermission";
 import Dialogpermission from "src/views/dialogs/DialogPermission";
 import { useAuth } from "src/hooks/useAuth";
 import { hasPermission } from "src/utils/permissions";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const PermissionsPage = () => {
   const { permissionsWithNames, userType } = useAuth();
@@ -47,9 +48,7 @@ const PermissionsPage = () => {
     setcareerToDelete(dataToDelete);
   };
 
-  const canEdit = hasPermission(permissionsWithNames, "Permission", "write");
-  const canDelete = hasPermission(permissionsWithNames, "Permission", "remove");
-  const canAdd = hasPermission(permissionsWithNames, "Permission", "add");
+  // Remove the old permission checking variables since we'll use PermissionGuard
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -128,14 +127,14 @@ const PermissionsPage = () => {
             </Typography>
           }
           action={
-            (canAdd || userType === "admin") && (
+            <PermissionGuard permissionName="permission" action="add">
               <Button
                 variant="contained"
                 onClick={(e) => togglecareerFormDialog(e, "add")}
               >
                 Add Permission
               </Button>
-            )
+            </PermissionGuard>
           }
         />
         <Grid size={12}>
@@ -173,8 +172,6 @@ const PermissionsPage = () => {
                 pageSize={pageSize}
                 toggleEdit={togglecareerFormDialog}
                 toggleDelete={toggleConfirmationDialog}
-                canEdit={canEdit}
-                canDelete={canDelete}
                 userType={userType}
               />
             </Box>

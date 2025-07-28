@@ -23,6 +23,9 @@ const Button = (theme) => {
         },
         outlined: {
           padding: `${theme.spacing(1.625, 5.25)}`,
+          "&:hover": {
+            background: theme.palette.primary.main,
+          },
         },
         sizeSmall: {
           padding: `${theme.spacing(1, 2.25)}`,

@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid2";
 import DialogLegalContent from "src/views/dialogs/DialogLegalContent";
 import { useAuth } from "src/hooks/useAuth";
 import { hasPermission } from "src/utils/permissions";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const PrivacyPolicyPage = () => {
   const { permissionsWithNames, userType } = useAuth();
@@ -26,7 +27,7 @@ const PrivacyPolicyPage = () => {
     setOpenTermsAndConditionDialog((prev) => !prev);
     setTermsAndConditionDataToEdit(dataToEdit);
   };
-  const canEdit = hasPermission(permissionsWithNames, "PrivacyPolicy", "write");
+  // Remove the old permission checking variable since we'll use PermissionGuard
 
   const fetchData = () => {
     setLoading(true);
@@ -61,14 +62,14 @@ const PrivacyPolicyPage = () => {
             </Typography>
           }
           action={
-            (canEdit || userType === "admin") && (
+            <PermissionGuard permissionName="privacy policy" action="write">
               <Button
                 variant="contained"
                 onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
               >
                 Edit Privacy Policy
               </Button>
-            )
+            </PermissionGuard>
           }
         />
         <Grid size={12}>

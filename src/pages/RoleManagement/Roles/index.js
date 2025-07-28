@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import TableRoles from "src/views/tables/TableRoles";
 import { hasPermission } from "src/utils/permissions";
 import { useAuth } from "src/hooks/useAuth";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const RolesPage = () => {
   const { permissionsWithNames, userType } = useAuth();
@@ -40,9 +41,7 @@ const RolesPage = () => {
     setConfirmationDialogOpen((prev) => !prev);
     setDataToDelete(dataToDelete);
   };
-  const canEdit = hasPermission(permissionsWithNames, "Role", "write");
-  const canDelete = hasPermission(permissionsWithNames, "Role", "remove");
-  const canAdd = hasPermission(permissionsWithNames, "Role", "add");
+  // Remove the old permission checking variables since we'll use PermissionGuard
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -151,7 +150,7 @@ const RolesPage = () => {
             </Typography>
           }
           action={
-            (canAdd || userType === "admin") && (
+            <PermissionGuard permissionName="roles" action="add">
               <Button
                 variant="contained"
                 onClick={() =>
@@ -162,7 +161,7 @@ const RolesPage = () => {
               >
                 Add Role
               </Button>
-            )
+            </PermissionGuard>
           }
         />
         <Grid size={12}>
@@ -222,8 +221,6 @@ const RolesPage = () => {
                 toggleDelete={toggleConfirmationDialog}
                 toggleEdit={fetchPermissionsData}
                 permissionList={permissionList}
-                canEdit={canEdit}
-                canDelete={canDelete}
                 userType={userType}
               />
             </Box>
