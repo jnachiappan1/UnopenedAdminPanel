@@ -33,13 +33,13 @@ const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
 const ProductDetailPage = React.lazy(() =>
-  import("./pages/product/ProductDetailPage")
+  import("./pages/product/productDetailPage")
 );
 const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
-const UserDetailPage = React.lazy(() => import("./pages/users/details"));
+const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {

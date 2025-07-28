@@ -29,30 +29,6 @@ const navigation = () => {
       path: "/product",
     },
     {
-      sectionTitle: "Content Management",
-    },
-    {
-      title: "Content Management",
-      icon: PublicIcon,
-      children: [
-        {
-          title: "Terms & Conditions",
-          icon: TaskOutlinedIcon,
-          path: "/terms-and-conditions",
-        },
-        {
-          title: "Privacy Policy",
-          icon: PolicyOutlinedIcon,
-          path: "/privacy-policy",
-        },
-        {
-          title: "Help & Support",
-          icon: HelpCenterOutlinedIcon,
-          path: "/help-support",
-        },
-      ],
-    },
-    {
       sectionTitle: "User Management",
     },
     {
@@ -73,6 +49,30 @@ const navigation = () => {
           title: "Sub Admin",
           icon: PersonOutlineOutlinedIcon,
           path: "/sub-admin",
+        },
+      ],
+    },
+    {
+      sectionTitle: "Content Management",
+    },
+    {
+      title: "Content Management",
+      icon: PublicIcon,
+      children: [
+        {
+          title: "Terms & Conditions",
+          icon: TaskOutlinedIcon,
+          path: "/terms-and-conditions",
+        },
+        {
+          title: "Privacy Policy",
+          icon: PolicyOutlinedIcon,
+          path: "/privacy-policy",
+        },
+        {
+          title: "Help & Support",
+          icon: HelpCenterOutlinedIcon,
+          path: "/help-support",
         },
       ],
     },

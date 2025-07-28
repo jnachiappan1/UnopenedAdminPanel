@@ -19,10 +19,9 @@ import {
   Public,
   VerifiedUser,
   Tag,
-  Badge,
 } from "@mui/icons-material";
-import { axiosInstance } from "../../../network/adapter";
-import { ApiEndPoints } from "../../../network/endpoints";
+import { axiosInstance } from "../../network/adapter";
+import { ApiEndPoints } from "../../network/endpoints";
 import { toastError } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
 import Grid from "@mui/material/Grid2";
@@ -41,7 +40,6 @@ const UserDetailPage = () => {
     axiosInstance
       .get(ApiEndPoints.USERS.getById(id))
       .then((response) => {
-        console.log(response.data.data);
         setUserData(response.data.data.user);
       })
       .catch((error) => {

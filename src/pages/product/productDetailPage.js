@@ -46,8 +46,6 @@ const ProductDetailPage = () => {
     axiosInstance
       .get(ApiEndPoints.PRODUCT.getById(id))
       .then((response) => {
-        console.log(response.data.data);
-        // Extract the first product from the array since getById returns an array
         setProductData(response.data.data.product[0]);
       })
       .catch((error) => {
