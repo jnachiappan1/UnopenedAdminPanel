@@ -11,6 +11,7 @@ import GuestGuard from "./@core/components/auth/GuestGuard";
 import { defaultACLObj } from "./configs/acl";
 import AuthLayout from "./layouts/AuthLayout";
 import AddEditRolePage from "./pages/RoleManagement/Roles/AddEditRole";
+import ProtectedRoute from "./views/common/auth/ProtectedRoute";
 
 const HomePage = React.lazy(() => import("./pages/home"));
 const DashBoardPage = React.lazy(() => import("./pages/dashboard"));
@@ -108,19 +109,100 @@ function App() {
               <Route path="/dashboard" element={<DashBoardPage />} />
               <Route
                 path="/terms-and-conditions"
-                element={<TermsAndConditionPage />}
+                element={
+                  <ProtectedRoute>
+                    <TermsAndConditionPage />
+                  </ProtectedRoute>
+                }
               />
-              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-              <Route path="/help-support" element={<HelpSupporPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/product" element={<ProductPage />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
-              <Route path="/permission" element={<Permission />} />
-              <Route path="/roles" element={<RolesPage />} />
-              <Route path="/roles/edit/:id" element={<AddEditRolePage />} />
-              <Route path="/roles/add" element={<AddEditRolePage />} />
-              <Route path="/users/:id" element={<UserDetailPage />} />
-              <Route path="/sub-admin" element={<SubAdminPage />} />
+              <Route
+                path="/privacy-policy"
+                element={
+                  <ProtectedRoute>
+                    <PrivacyPolicyPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/help-support"
+                element={
+                  <ProtectedRoute>
+                    <HelpSupporPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute>
+                    <UsersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/product"
+                element={
+                  <ProtectedRoute>
+                    <ProductPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/product/:id"
+                element={
+                  <ProtectedRoute>
+                    <ProductDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/permission"
+                element={
+                  <ProtectedRoute>
+                    <Permission />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/roles"
+                element={
+                  <ProtectedRoute>
+                    <RolesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/roles/edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <AddEditRolePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/roles/add"
+                element={
+                  <ProtectedRoute>
+                    <AddEditRolePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users/:id"
+                element={
+                  <ProtectedRoute>
+                    <UserDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sub-admin"
+                element={
+                  <ProtectedRoute>
+                    <SubAdminPage />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Route>
 
