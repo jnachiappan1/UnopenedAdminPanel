@@ -10,8 +10,11 @@ import FallbackSpinner from "src/@core/components/spinner";
 import { toastError } from "src/utils/utils";
 import Grid from "@mui/material/Grid2";
 import DialogLegalContent from "src/views/dialogs/DialogLegalContent";
+import { useAuth } from "src/hooks/useAuth";
+import { hasPermission } from "src/utils/permissions";
 
-const TermsandConditionPage = () => {
+const PrivacyPolicyPage = () => {
+  const { permissionsWithNames, userType } = useAuth();
   const [loading, setLoading] = useState(false);
   const [terms, setTerms] = useState([]);
   const [openTermsAndConditionDialog, setOpenTermsAndConditionDialog] =
@@ -23,6 +26,8 @@ const TermsandConditionPage = () => {
     setOpenTermsAndConditionDialog((prev) => !prev);
     setTermsAndConditionDataToEdit(dataToEdit);
   };
+  const canEdit = hasPermission(permissionsWithNames, "PrivacyPolicy", "write");
+
   const fetchData = () => {
     setLoading(true);
     axiosInstance
@@ -56,12 +61,14 @@ const TermsandConditionPage = () => {
             </Typography>
           }
           action={
-            <Button
-              variant="contained"
-              onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
-            >
-              Edit Privacy Policy
-            </Button>
+            (canEdit || userType === "admin") && (
+              <Button
+                variant="contained"
+                onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
+              >
+                Edit Privacy Policy
+              </Button>
+            )
           }
         />
         <Grid size={12}>
@@ -107,4 +114,4 @@ const TermsandConditionPage = () => {
   );
 };
 
-export default TermsandConditionPage;
+export default PrivacyPolicyPage;

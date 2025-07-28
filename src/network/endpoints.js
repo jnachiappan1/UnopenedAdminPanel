@@ -14,10 +14,6 @@ export const ApiEndPoints = {
   DASHBOARD: {
     count: `${API_BASE_URL}api/v1/admin/dashboard/count`,
   },
-  BANNER: {
-    list: `${API_BASE_URL}api/admin/banner`,
-    edit: (id) => `${API_BASE_URL}api/admin/banner/${id}`,
-  },
   LEGAL_CONTENT: {
     list: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,
     edit: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,
@@ -29,6 +25,7 @@ export const ApiEndPoints = {
   },
   PRODUCT: {
     list: `${API_BASE_URL}api/v1/admin/product`,
+    getById: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
   },

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, MenuItem, Select, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -11,18 +11,16 @@ import { DefaultPaginationSettings } from "src/constants/general.const";
 import { toastError, toastSuccess } from "src/utils/utils";
 import Grid from "@mui/material/Grid2";
 import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
-// import Tableproduct from "src/views/tables/Tableproduct";
-// import Dialogproducts from "src/views/dialogs/Dialogproduct";
-// import TablePermission from "src/views/tables/TablePermission";
-// import Dialogpermission from "src/views/dialogs/DialogPermission";
 import { useNavigate } from "react-router-dom";
 import TableRoles from "src/views/tables/TableRoles";
+import { hasPermission } from "src/utils/permissions";
+import { useAuth } from "src/hooks/useAuth";
 
 const RolesPage = () => {
+  const { permissionsWithNames, userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
-  const [careerData, setCareerData] = useState([]);
   const [roles, setRoles] = useState([]);
   const [search, setSearch] = useState("");
   const [totalCount, setTotalCount] = useState(0);
@@ -30,29 +28,21 @@ const RolesPage = () => {
   const [pageSize, setPageSize] = useState(
     DefaultPaginationSettings.ROWS_PER_PAGE
   );
-  const [careerFormDialogOpen, setCareerFormDialogOpen] = useState(false);
-  const [careerFormDialogMode, setCareerFormDialogMode] = useState("add");
-  const [careerToEdit, setCareerToEdit] = useState(null);
   const [permissionList, setPermissionList] = useState([]);
   const [dataToDelete, setDataToDelete] = useState(null);
-
-  const togglecareerFormDialog = (e, mode = "add", careerToEdit = null) => {
-    setCareerFormDialogOpen((prev) => !prev);
-    setCareerFormDialogMode(mode);
-    setCareerToEdit(careerToEdit);
-  };
 
   const [confirmationDialogLoading, setConfirmationDialogLoading] =
     useState(false);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [careerToDelete, setcareerToDelete] = useState(null);
   const navigate = useNavigate();
 
   const toggleConfirmationDialog = (e, dataToDelete = null) => {
     setConfirmationDialogOpen((prev) => !prev);
-    setDataToDelete(dataToDelete); 
+    setDataToDelete(dataToDelete);
   };
-
+  const canEdit = hasPermission(permissionsWithNames, "Role", "write");
+  const canDelete = hasPermission(permissionsWithNames, "Role", "remove");
+  const canAdd = hasPermission(permissionsWithNames, "Role", "add");
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -161,19 +151,18 @@ const RolesPage = () => {
             </Typography>
           }
           action={
-            // <Button variant='contained' onClick={togglecareerFormDialog}>
-            //   Add Category
-            // </Button>
-            <Button
-              variant="contained"
-              onClick={() =>
-                navigate("/roles/add", {
-                  state: { permissions: permissionList },
-                })
-              }
-            >
-              Add Role
-            </Button>
+            (canAdd || userType === "admin") && (
+              <Button
+                variant="contained"
+                onClick={() =>
+                  navigate("/roles/add", {
+                    state: { permissions: permissionList },
+                  })
+                }
+              >
+                Add Role
+              </Button>
+            )
           }
         />
         <Grid size={12}>
@@ -185,13 +174,33 @@ const RolesPage = () => {
                 display: "flex",
                 flexWrap: "wrap",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "end",
               }}
             >
-              <Box></Box>
               <Box
-                sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
               >
+                <Select
+                  size="small"
+                  defaultValue={" "}
+                  sx={{ bgcolor: "#F7FBFF" }}
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    setStatus(selectedValue === "All" ? "" : selectedValue);
+                  }}
+                >
+                  <MenuItem disabled value={" "}>
+                    <em>Status</em>
+                  </MenuItem>
+                  <MenuItem value={"All"}>All</MenuItem>
+                  <MenuItem value={"active"}>Active</MenuItem>
+                  <MenuItem value={"inactive"}>Inactive</MenuItem>
+                </Select>
                 <TextField
                   type="search"
                   size="small"
@@ -213,6 +222,9 @@ const RolesPage = () => {
                 toggleDelete={toggleConfirmationDialog}
                 toggleEdit={fetchPermissionsData}
                 permissionList={permissionList}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                userType={userType}
               />
             </Box>
           </Card>

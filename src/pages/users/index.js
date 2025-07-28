@@ -1,5 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Button, CardContent, Typography } from "@mui/material";
+import {
+  Button,
+  CardContent,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -17,11 +23,12 @@ import { getPermissionNames, hasPermission } from "src/utils/permissions";
 import { useAuth } from "src/hooks/useAuth";
 
 const UsersPage = () => {
+  const { permissionsWithNames, userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const [userData, setuserData] = useState([]);
   const [search, setSearch] = useState("");
-  const [status] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(
@@ -33,9 +40,8 @@ const UsersPage = () => {
   const [userToDelete, setuserToDelete] = useState(null);
 
   const navigate = useNavigate();
-  const { permissionsWithNames } = useAuth();
 
-  const canDelete = hasPermission(permissionsWithNames, 'Users', 'remove');
+  const canDelete = hasPermission(permissionsWithNames, "Users", "remove");
   console.log("canDelete", canDelete);
   const handleViewDetails = (user) => {
     navigate(`/users/${user.id}`);
@@ -85,7 +91,6 @@ const UsersPage = () => {
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
-
     searchTimeoutRef.current = setTimeout(() => {
       setSearch(e.target.value);
     }, 500);
@@ -146,6 +151,22 @@ const UsersPage = () => {
                     gap: 4,
                   }}
                 >
+                  <Select
+                    size="small"
+                    defaultValue={" "}
+                    sx={{ bgcolor: "#F7FBFF" }}
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+                      setStatus(selectedValue === "All" ? "" : selectedValue);
+                    }}
+                  >
+                    <MenuItem disabled value={" "}>
+                      <em>Status</em>
+                    </MenuItem>
+                    <MenuItem value={"All"}>All</MenuItem>
+                    <MenuItem value={"active"}>Active</MenuItem>
+                    <MenuItem value={"inactive"}>Inactive</MenuItem>
+                  </Select>
                   <TextField
                     type="search"
                     size="small"
@@ -167,6 +188,7 @@ const UsersPage = () => {
                 toggleDelete={toggleConfirmationDialog}
                 onViewDetails={handleViewDetails}
                 canDelete={canDelete}
+                userType={userType}
               />
             </CardContent>
           </Card>

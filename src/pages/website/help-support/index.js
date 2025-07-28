@@ -10,8 +10,11 @@ import FallbackSpinner from "src/@core/components/spinner";
 import { toastError } from "src/utils/utils";
 import Grid from "@mui/material/Grid2";
 import DialogLegalContent from "src/views/dialogs/DialogLegalContent";
+import { useAuth } from "src/hooks/useAuth";
+import { hasPermission } from "src/utils/permissions";
 
-const TermsandConditionPage = () => {
+const HelpSupportPage = () => {
+  const { permissionsWithNames, userType } = useAuth();
   const [loading, setLoading] = useState(false);
   const [terms, setTerms] = useState([]);
   const [openTermsAndConditionDialog, setOpenTermsAndConditionDialog] =
@@ -23,12 +26,13 @@ const TermsandConditionPage = () => {
     setOpenTermsAndConditionDialog((prev) => !prev);
     setTermsAndConditionDataToEdit(dataToEdit);
   };
+  const canEdit = hasPermission(permissionsWithNames, "HelpSupport", "write");
+
   const fetchData = () => {
     setLoading(true);
     axiosInstance
-      .get(ApiEndPoints.LEGAL_CONTENT.list("terms_and_conditions"))
+      .get(ApiEndPoints.LEGAL_CONTENT.list("help_support"))
       .then((response) => {
-        console.log(response.data.data.legalContent);
         setTerms(response.data.data.legalContent);
       })
       .catch((error) => {
@@ -52,16 +56,18 @@ const TermsandConditionPage = () => {
         <PageHeader
           title={
             <Typography variant="h5">
-              <Translations text="Terms & Condition" />
+              <Translations text="Help & Support" />
             </Typography>
           }
           action={
-            <Button
-              variant="contained"
-              onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
-            >
-              Edit Terms & Condition
-            </Button>
+            (canEdit || userType === "admin") && (
+              <Button
+                variant="contained"
+                onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
+              >
+                Edit Help & Support
+              </Button>
+            )
           }
         />
         <Grid size={12}>
@@ -79,15 +85,9 @@ const TermsandConditionPage = () => {
                 component="div"
                 sx={{ fontSize: "15px", fontWeight: 600 }}
               >
-                {/* <div
-                  dangerouslySetInnerHTML={{
-                    __html: terms?.legalContent,
-                  }}
-                /> */}
-
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: terms?.content || "<p>No content available</p>",
+                    __html: terms.content,
                   }}
                 />
               </Typography>
@@ -99,7 +99,7 @@ const TermsandConditionPage = () => {
         open={openTermsAndConditionDialog}
         toggle={toggleTermsAndConditionDialog}
         dataToEdit={{
-          type: "terms_and_conditions",
+          type: "help_support",
           content: termsAndConditionDataToEdit,
         }}
         onSuccess={fetchData}
@@ -108,4 +108,4 @@ const TermsandConditionPage = () => {
   );
 };
 
-export default TermsandConditionPage;
+export default HelpSupportPage;

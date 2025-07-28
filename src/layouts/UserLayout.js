@@ -25,7 +25,7 @@ import { getAccessibleNavItems } from "src/utils/permissions";
 const UserLayout = ({ children }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings();
-  const { user, permissionsList, userType, permissionsWithNames } = useAuth();
+  const { userType, permissionsWithNames } = useAuth();
 
   /**
    *  The below variable will hide the current layout menu at given screen size.

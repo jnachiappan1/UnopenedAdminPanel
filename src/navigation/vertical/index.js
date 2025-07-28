@@ -8,6 +8,10 @@ import PeopleIcon from "@mui/icons-material/People";
 import LockIcon from "@mui/icons-material/Lock";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import PublicIcon from "@mui/icons-material/Public";
+import HelpCenterOutlinedIcon from "@mui/icons-material/HelpCenterOutlined";
+import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 
 const navigation = () => {
   return [
@@ -16,14 +20,9 @@ const navigation = () => {
       icon: HomeIcon,
       path: "/dashboard",
     },
-    // {
-    //   title:'Banner',
-    //   icon: PictureInPictureAltOutlinedIcon,
-    //   path: '/banner'
-    // },
     {
       title: "Users",
-      icon: TaskIcon,
+      icon: GroupOutlinedIcon,
       path: "/users",
     },
     {
@@ -32,21 +31,29 @@ const navigation = () => {
       path: "/product",
     },
     {
-      title: "Terms & Conditions",
-      icon: TaskIcon,
-      path: "/terms-and-conditions",
+      sectionTitle: "Content Management",
     },
     {
-      title: "Privacy Policy",
-      icon: PolicyOutlinedIcon,
-      path: "/privacy-policy",
+      title: "Content Management",
+      icon: PublicIcon,
+      children: [
+        {
+          title: "Terms & Conditions",
+          icon: TaskOutlinedIcon,
+          path: "/terms-and-conditions",
+        },
+        {
+          title: "Privacy Policy",
+          icon: PolicyOutlinedIcon,
+          path: "/privacy-policy",
+        },
+        {
+          title: "Help & Support",
+          icon: HelpCenterOutlinedIcon,
+          path: "/help-support",
+        },
+      ],
     },
-    {
-      title: "Help & Support",
-      icon: TaskIcon,
-      path: "/help-support",
-    },
-    // Dropdown
     {
       sectionTitle: "User Management",
     },

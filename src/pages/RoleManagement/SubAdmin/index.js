@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   CardContent,
-  Grid,
   MenuItem,
   Select,
   TextField,
@@ -18,10 +17,14 @@ import { DefaultPaginationSettings } from "src/constants/general.const";
 import { toastError, toastSuccess } from "src/utils/utils";
 import DialogConfirmation from "../../../views/dialogs/DialogConfirmation";
 import DialogSubAdmin from "../../../views/dialogs/DialogSubAdmin";
-// import TableSubAdmin from 'src/views/tables/TableSubAdmin'
 import TableSubAdmin from "../../../views/tables/TableSubAdmin";
+import Grid from "@mui/material/Grid2";
+import { useAuth } from "src/hooks/useAuth";
+import { hasPermission } from "src/utils/permissions";
 
 const SubAdminPage = () => {
+  const { permissionsWithNames, userType } = useAuth();
+
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -54,7 +57,9 @@ const SubAdminPage = () => {
     setConfirmationDialogOpen((prev) => !prev);
     setDataToDelete(dataToDelete);
   };
-
+  const canEdit = hasPermission(permissionsWithNames, "SubAdmin", "write");
+  const canDelete = hasPermission(permissionsWithNames, "SubAdmin", "remove");
+  const canAdd = hasPermission(permissionsWithNames, "SubAdmin", "add");
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -145,7 +150,7 @@ const SubAdminPage = () => {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PageHeader
             title={
               <Typography variant="h5">
@@ -153,13 +158,15 @@ const SubAdminPage = () => {
               </Typography>
             }
             action={
-              <Button variant="contained" onClick={toggleDialog}>
-                Add Sub Admin
-              </Button>
+              (canAdd || userType === "admin") && (
+                <Button variant="contained" onClick={toggleDialog}>
+                  Add Sub Admin
+                </Button>
+              )
             }
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card>
             <CardContent>
               <Box
@@ -178,6 +185,22 @@ const SubAdminPage = () => {
                     gap: 5,
                   }}
                 >
+                  <Select
+                    size="small"
+                    defaultValue={" "}
+                    sx={{ bgcolor: "#F7FBFF" }}
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+                      setStatus(selectedValue === "All" ? "" : selectedValue);
+                    }}
+                  >
+                    <MenuItem disabled value={" "}>
+                      <em>Status</em>
+                    </MenuItem>
+                    <MenuItem value={"All"}>All</MenuItem>
+                    <MenuItem value={"active"}>Active</MenuItem>
+                    <MenuItem value={"inactive"}>Inactive</MenuItem>
+                  </Select>
                   <TextField
                     type="search"
                     size="small"
@@ -197,6 +220,9 @@ const SubAdminPage = () => {
                 pageSize={pageSize}
                 toggleDelete={toggleConfirmationDialog}
                 toggleEdit={toggleDialog}
+                canEdit={canEdit}
+                canDelete={canDelete}
+                userType={userType}
               />
             </CardContent>
           </Card>

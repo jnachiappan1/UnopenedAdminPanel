@@ -19,16 +19,17 @@ function TableUsers({
   loading,
   toggleDelete,
   onViewDetails,
-  canDelete
+  canDelete,
+  userType,
 }) {
   const statusColors = {
-    inactive: "#FFB400",
-    active: "#66bb6a",
+    inactive: "#8a8d931e",
+    active: "#56ca001e",
   };
   const CustomChip = styled(Chip)(({ label }) => ({
     backgroundColor: statusColors[label] || statusColors.default,
     textTransform: "capitalize",
-    color: "#fff",
+    color: label === "active" ? "#45a200" : "#898b90",
     width: "100px",
   }));
 
@@ -101,14 +102,16 @@ function TableUsers({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="15px">
-              {canDelete && <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => toggleDelete(e, row)}
-              >
-                <DeleteIcon />
-              </IconButton>}
-             
+              {(canDelete || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => toggleDelete(e, row)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+
               <Button
                 variant="outlined"
                 size="small"

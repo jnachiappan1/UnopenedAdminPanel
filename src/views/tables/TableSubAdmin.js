@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import CustomDataGrid from "src/@core/components/data-grid";
 import moment from "moment";
+import { Chip, styled } from "@mui/material";
 
 const TableSubAdmin = ({
   rows,
@@ -16,7 +17,20 @@ const TableSubAdmin = ({
   loading,
   toggleEdit,
   toggleDelete,
+  canEdit,
+  canDelete,
+  userType,
 }) => {
+  const statusColors = {
+    inactive: "#8a8d931e",
+    active: "#56ca001e",
+  };
+  const CustomChip = styled(Chip)(({ label }) => ({
+    backgroundColor: statusColors[label] || statusColors.default,
+    textTransform: "capitalize",
+    color: label === "active" ? "#45a200" : "#898b90",
+    width: "100px",
+  }));
   return (
     <CustomDataGrid
       loading={loading}
@@ -25,7 +39,7 @@ const TableSubAdmin = ({
       columns={[
         {
           field: "name",
-          minWidth: 300,
+          minWidth: 250,
           flex: 1,
           sortable: false,
           headerName: "Name",
@@ -35,7 +49,37 @@ const TableSubAdmin = ({
             </Typography>
           ),
         },
-
+        {
+          field: "email",
+          minWidth: 300,
+          flex: 1,
+          sortable: false,
+          headerName: "Email",
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.email}>
+              {row.email}
+            </Typography>
+          ),
+        },
+        {
+          field: "roleName",
+          minWidth: 300,
+          flex: 1,
+          sortable: false,
+          headerName: "Role Name",
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.admin_role?.name}>
+              {row.admin_role?.name}
+            </Typography>
+          ),
+        },
+        {
+          field: "status",
+          minWidth: 180,
+          sortable: false,
+          headerName: "Status",
+          renderCell: ({ row }) => <CustomChip label={row.status} />,
+        },
         {
           field: "Actions",
           flex: 0,
@@ -44,21 +88,25 @@ const TableSubAdmin = ({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              <IconButton
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={(e) => toggleEdit(e, "edit", row)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => toggleDelete(e, row)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              {(canEdit || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  onClick={(e) => toggleEdit(e, "edit", row)}
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
+              {(canDelete || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => toggleDelete(e, row)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
             </Box>
           ),
         },

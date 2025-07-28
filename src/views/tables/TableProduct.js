@@ -21,21 +21,24 @@ function Tableproduct({
   toggleEdit,
   toggleDelete,
   canEdit,
-  canDelete
+  canDelete,
+  userType,
 }) {
   const statusColors = {
     approved: "#4CAF50", // green
     pending: "#FFB400", // amber
     rejected: "#F44336", // red
-    // Optionally, add a default color
-    default: "#BDBDBD",
+    default: "#BDBDBD", // fallback grey
   };
+
   const CustomChip = styled(Chip)(({ label }) => ({
-    backgroundColor: statusColors[label] || statusColors.default,
+    backgroundColor: `${statusColors[label] || statusColors.default}1e`, // light tint
     textTransform: "capitalize",
-    color: "#fff",
+    color: statusColors[label] || statusColors.default,
     width: "100px",
+    fontWeight: 500,
   }));
+
   const navigate = useNavigate();
   return (
     <CustomDataGrid
@@ -43,17 +46,6 @@ function Tableproduct({
       rowCount={totalCount}
       rows={rows}
       columns={[
-        // {
-        //   field: '_id',
-        //   minWidth: 150,
-        //   sortable: false,
-        //   headerName: '_id',
-        //   renderCell: ({ row }) => (
-        //     <Typography noWrap variant='body2' title={row.author}>
-        //       {row.author}
-        //     </Typography>
-        //   )
-        // },
         {
           field: "name",
           minWidth: 150,
@@ -117,18 +109,6 @@ function Tableproduct({
           ),
         },
 
-        // {
-        //   field: 'image',
-        //   flex: 0.1,
-        //   minWidth: 150,
-        //   sortable: false,
-        //   headerName: 'Image',
-        //   renderCell: ({ row }) => (
-        //     // <img alt='' src={`${MEDIA_URL}${row.image}`} style={{ height: '30px', width: '50px' }} />
-        //     <img alt='' src={row.image} style={{ height: '30px', width: '50px' }} />
-        //   )
-        // },
-
         {
           field: "updatedAt",
           minWidth: 200,
@@ -156,31 +136,30 @@ function Tableproduct({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              {canEdit &&  <IconButton
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={(e) => toggleEdit(e, "edit", row)}
-              >
-                <EditIcon />
-              </IconButton>}
-             {
-              canDelete && 
-              <IconButton
-              size="small"
-              color="primary"
-              onClick={(e) => toggleDelete(e, row)}
-            >
-              <DeleteIcon />
-            </IconButton>
-             }
-            
+              {(canEdit || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  onClick={(e) => toggleEdit(e, "edit", row)}
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
+              {(canDelete || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => toggleDelete(e, row)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+
               <Button
                 size="small"
                 variant="outlined"
-                onClick={() =>
-                  navigate(`/product/${row.id}`, { state: { product: row } })
-                }
+                onClick={() => navigate(`/product/${row.id}`)}
               >
                 Product Details
               </Button>

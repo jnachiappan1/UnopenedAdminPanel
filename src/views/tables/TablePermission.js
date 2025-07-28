@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import CustomDataGrid from "src/@core/components/data-grid";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
-import moment from "moment";
 
 function TablePermission({
   rows,
@@ -18,36 +17,16 @@ function TablePermission({
   loading,
   toggleEdit,
   toggleDelete,
+  canEdit,
+  canDelete,
+  userType,
 }) {
-  const statusColors = {
-    inactive: "#FFB400",
-    active: "#66bb6a",
-    pending: "#FF5722",
-  };
-  const CustomChip = styled(Chip)(({ label }) => ({
-    backgroundColor: statusColors[label] || statusColors.default,
-    textTransform: "capitalize",
-    color: "#fff",
-    width: "100px",
-  }));
-
   return (
     <CustomDataGrid
       loading={loading}
       rowCount={totalCount}
       rows={rows}
       columns={[
-        // {
-        //   field: '_id',
-        //   minWidth: 150,
-        //   sortable: false,
-        //   headerName: '_id',
-        //   renderCell: ({ row }) => (
-        //     <Typography noWrap variant='body2' title={row.author}>
-        //       {row.author}
-        //     </Typography>
-        //   )
-        // },
         {
           field: "permissions",
           headerName: "Permissions",
@@ -67,21 +46,25 @@ function TablePermission({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              <IconButton
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={(e) => toggleEdit(e, "edit", row)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => toggleDelete(e, row)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              {(canEdit || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  onClick={(e) => toggleEdit(e, "edit", row)}
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
+              {(canDelete || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => toggleDelete(e, row)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
             </Box>
           ),
         },

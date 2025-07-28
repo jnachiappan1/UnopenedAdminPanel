@@ -32,6 +32,11 @@ const UserDetailPage = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Helper function to format chip text
+  const formatChipText = (text) => {
+    return text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
   useEffect(() => {
     axiosInstance
       .get(ApiEndPoints.USERS.getById(id))
@@ -53,19 +58,6 @@ const UserDetailPage = () => {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-
-  const formatDate = (dateString) =>
-    new Date(dateString).toLocaleString("en-IN", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-  const handleBack = () => {
-    navigate(-1);
-  };
 
   if (loading) return <FallbackSpinner />;
   if (!userData) return <Typography>No user found.</Typography>;
@@ -91,7 +83,10 @@ const UserDetailPage = () => {
             variant="outlined"
           />
         ) : (
-          <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+          <Typography
+            variant="body1"
+            sx={{ wordBreak: "break-all", textTransform: "capitalize" }}
+          >
             {value}
           </Typography>
         )}
@@ -107,8 +102,6 @@ const UserDetailPage = () => {
           sx={{
             border: "2px solid",
             borderColor: "primary.main",
-            // p: 0.5,
-            // mb: 2,
           }}
           onClick={() => navigate(-1)}
         >
@@ -140,10 +133,9 @@ const UserDetailPage = () => {
               </Typography>
 
               <Chip
-                label={userData.status}
+                label={formatChipText(userData.status)}
                 color={userData.status === "active" ? "success" : "error"}
                 size="small"
-                sx={{ textTransform: "capitalize" }}
               />
             </Box>
           </Box>
@@ -163,7 +155,7 @@ const UserDetailPage = () => {
               <DetailItem
                 icon={<Person />}
                 label="Full Name"
-                value="prince12123"
+                value={userData.full_name}
               />
             </Grid>
 
@@ -216,7 +208,7 @@ const UserDetailPage = () => {
               <DetailItem
                 icon={<Person />}
                 label="Gender"
-                value={userData.gender}
+                value={formatChipText(userData.gender)}
                 isChip={true}
                 chipColor="default"
               />

@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Card,
@@ -8,6 +8,7 @@ import {
   Chip,
   Divider,
   IconButton,
+  Avatar,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -21,16 +22,41 @@ import {
   Update,
   CalendarToday,
   Verified,
+  Person,
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
+import { axiosInstance } from "../../network/adapter";
+import { ApiEndPoints } from "../../network/endpoints";
+import { toastError } from "src/utils/utils";
+import FallbackSpinner from "src/@core/components/spinner";
 
 const ProductDetailPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const productData = location?.state?.product || null;
+  const [productData, setProductData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!productData) return <Typography>No product found.</Typography>;
+  // Helper function to format chip text
+  const formatChipText = (text) => {
+    return text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
+  useEffect(() => {
+    axiosInstance
+      .get(ApiEndPoints.PRODUCT.getById(id))
+      .then((response) => {
+        console.log(response.data.data);
+        // Extract the first product from the array since getById returns an array
+        setProductData(response.data.data.product[0]);
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [id]);
 
   const DetailItem = ({
     icon,
@@ -53,13 +79,19 @@ const ProductDetailPage = () => {
             variant="outlined"
           />
         ) : (
-          <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+          <Typography
+            variant="body1"
+            sx={{ wordBreak: "break-all", textTransform: "capitalize" }}
+          >
             {value}
           </Typography>
         )}
       </Box>
     </Box>
   );
+
+  if (loading) return <FallbackSpinner />;
+  if (!productData) return <Typography>No product found.</Typography>;
 
   return (
     <Box sx={{ p: 2 }}>
@@ -80,26 +112,48 @@ const ProductDetailPage = () => {
       <Card elevation={1}>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 600, mb: 1, textTransform: "capitalize" }}
+            >
               {productData.name}
             </Typography>
             <Chip
-              label={productData.status}
+              label={formatChipText(productData.status)}
               color={productData.status === "approved" ? "success" : "warning"}
               size="small"
-              sx={{ textTransform: "capitalize", mr: 1 }}
+              sx={{ mr: 1 }}
             />
             <Chip
-              label={productData.product_status}
+              label={formatChipText(productData.product_status)}
               color={
                 productData.product_status === "in_review" ? "info" : "default"
               }
               size="small"
-              sx={{ textTransform: "capitalize" }}
             />
           </Box>
 
-          <Divider sx={{ mb: 3 }} />
+          {/* Product Images Section */}
+          {productData.product_image &&
+            productData.product_image.length > 0 && (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Product Images
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+                  {productData.product_image.map((image, index) => (
+                    <Avatar
+                      key={image.id}
+                      src={image.image}
+                      alt={`Product Image ${index + 1}`}
+                      sx={{ width: 100, height: 100 }}
+                      variant="rounded"
+                    />
+                  ))}
+                </Box>
+                <Divider sx={{ mb: 3 }} />
+              </>
+            )}
 
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
             Details
@@ -122,23 +176,33 @@ const ProductDetailPage = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
+                icon={<Person />}
+                label="User ID"
+                value={productData.user_id}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
                 icon={<Category />}
-                label="Category ID"
-                value={productData.category_id}
+                label="Category"
+                value={
+                  productData.product_category?.name ||
+                  `Category ID: ${productData.category_id}`
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<AttachMoney />}
                 label="MSRP"
-                value={productData.msrp}
+                value={`$${productData.msrp}`}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<AttachMoney />}
                 label="Price"
-                value={productData.price}
+                value={`$${productData.price}`}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -159,7 +223,7 @@ const ProductDetailPage = () => {
               <DetailItem
                 icon={<CheckCircle />}
                 label="Status"
-                value={productData.status}
+                value={formatChipText(productData.status)}
                 isChip={true}
                 chipColor={
                   productData.status === "approved" ? "success" : "warning"
@@ -170,7 +234,7 @@ const ProductDetailPage = () => {
               <DetailItem
                 icon={<Verified />}
                 label="Product Status"
-                value={productData.product_status}
+                value={formatChipText(productData.product_status)}
                 isChip={true}
                 chipColor={
                   productData.product_status === "in_review"

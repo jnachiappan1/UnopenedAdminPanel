@@ -11,26 +11,24 @@ import GuestGuard from "./@core/components/auth/GuestGuard";
 import { defaultACLObj } from "./configs/acl";
 import AuthLayout from "./layouts/AuthLayout";
 import AddEditRolePage from "./pages/RoleManagement/Roles/AddEditRole";
-// import UserDetailPage from "./pages/users/details";
-// import Clientspage from "./pages/clients/index";
 
 const HomePage = React.lazy(() => import("./pages/home"));
 const DashBoardPage = React.lazy(() => import("./pages/dashboard"));
 const LoginPage = React.lazy(() => import("./pages/login"));
 const ForgotPassword = React.lazy(() => import("./pages/login/forgotpassword"));
-const BanerPage = React.lazy(() => import("./pages/banner"));
 const Page401 = React.lazy(() => import("./pages/401"));
 const Page404 = React.lazy(() => import("./pages/404"));
 
 const Permission = React.lazy(() =>
   import("./pages/RoleManagement/Permissions")
 );
-// const Legalcontent = React.lazy(() => import("./pages/legal_content"));
-const TermsandConditionPage = React.lazy(() =>
-  import("./pages/terms-and-condition")
+const TermsAndConditionPage = React.lazy(() =>
+  import("./pages/website/terms-and-condition")
 );
-const PrivacyPolicyPage = React.lazy(() => import("./pages/privacy_policy"));
-const HelpSupporPage = React.lazy(() => import("./pages/help_support"));
+const PrivacyPolicyPage = React.lazy(() =>
+  import("./pages/website/privacy-policy")
+);
+const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
 const ProductDetailPage = React.lazy(() =>
@@ -40,7 +38,6 @@ const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
-// const UserDetailPage = React.lazy(() => import('./pages/users/userDetail'))
 const UserDetailPage = React.lazy(() => import("./pages/users/details"));
 
 const Guard = ({ children, authGuard, guestGuard }) => {
@@ -109,11 +106,9 @@ function App() {
             >
               <Route path="" element={<HomePage />} />
               <Route path="/dashboard" element={<DashBoardPage />} />
-              <Route path="/banner" element={<BanerPage />} />
-              {/* <Route path="/legalcontent" element={<Legalcontent />} /> */}
               <Route
                 path="/terms-and-conditions"
-                element={<TermsandConditionPage />}
+                element={<TermsAndConditionPage />}
               />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/help-support" element={<HelpSupporPage />} />

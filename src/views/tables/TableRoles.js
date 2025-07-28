@@ -16,9 +16,11 @@ const TableRoles = ({
   setPageSize,
   pageSize,
   loading,
-  toggleEdit,
   toggleDelete,
   permissionList,
+  canEdit,
+  canDelete,
+  userType,
 }) => {
   const navigate = useNavigate();
   const statusColors = {
@@ -65,25 +67,30 @@ const TableRoles = ({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              <IconButton
-                size="small"
-                color="primary"
-                variant="outlined"
-                onClick={() =>
-                  navigate(`/roles/edit/${row.id}`, {
-                    state: { dataToEdit: row, permissions: permissionList },
-                  })
-                }
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => toggleDelete(e, row)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              {(canEdit || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  onClick={() =>
+                    navigate(`/roles/edit/${row.id}`, {
+                      state: { dataToEdit: row, permissions: permissionList },
+                    })
+                  }
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
+              {(canDelete || userType === "admin") && (
+                <IconButton
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  onClick={(e) => toggleDelete(e, row)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
             </Box>
           ),
         },

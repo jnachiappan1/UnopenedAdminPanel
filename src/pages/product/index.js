@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, MenuItem, Select, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -17,11 +17,12 @@ import { hasPermission } from "src/utils/permissions";
 import { useAuth } from "src/hooks/useAuth";
 
 const ProductPage = () => {
-  const { permissionsWithNames } = useAuth();
+  const { permissionsWithNames, userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [careerData, setCareerData] = useState([]);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(
@@ -46,8 +47,8 @@ const ProductPage = () => {
     setConfirmationDialogOpen((prev) => !prev);
     setcareerToDelete(dataToDelete);
   };
-  const canEdit = hasPermission(permissionsWithNames, 'Product', 'write');
-  const canDelete = hasPermission(permissionsWithNames, 'Product', 'remove');
+  const canEdit = hasPermission(permissionsWithNames, "Product", "write");
+  const canDelete = hasPermission(permissionsWithNames, "Product", "remove");
   const fetchData = ({
     currentPage,
     pageSize = DefaultPaginationSettings.ROWS_PER_PAGE,
@@ -58,6 +59,7 @@ const ProductPage = () => {
       page: currentPage,
       limit: pageSize,
       search: search,
+      status: status,
     };
     axiosInstance
       .get(ApiEndPoints.PRODUCT.list, { params })
@@ -78,8 +80,9 @@ const ProductPage = () => {
       currentPage: currentPage,
       pageSize: pageSize,
       search: search,
+      status: status,
     });
-  }, [currentPage, pageSize, search]);
+  }, [currentPage, pageSize, search, status]);
 
   const handleSearchChange = (e) => {
     if (searchTimeoutRef.current) {
@@ -115,6 +118,9 @@ const ProductPage = () => {
     },
     [careerToDelete, currentPage, pageSize]
   );
+  useEffect(() => {
+    console.log("status", status);
+  }, [status]);
   return (
     <>
       <Grid container spacing={4} className="match-height">
@@ -124,11 +130,6 @@ const ProductPage = () => {
               <Translations text="Product" />
             </Typography>
           }
-          // action={
-          //   <Button variant='contained' onClick={togglecareerFormDialog}>
-          //     Add Category
-          //   </Button>
-          // }
         />
         <Grid size={12}>
           <Card>
@@ -143,8 +144,30 @@ const ProductPage = () => {
               }}
             >
               <Box
-                sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
               >
+                <Select
+                  size="small"
+                  defaultValue={" "}
+                  sx={{ bgcolor: "#F7FBFF" }}
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    setStatus(selectedValue === "All" ? "" : selectedValue);
+                  }}
+                >
+                  <MenuItem disabled value={" "}>
+                    <em>Status</em>
+                  </MenuItem>
+                  <MenuItem value={"All"}>All</MenuItem>
+                  <MenuItem value={"approved"}>Approved</MenuItem>
+                  <MenuItem value={"pending"}>Pending</MenuItem>
+                  <MenuItem value={"rejected"}>Rejected</MenuItem>
+                </Select>
                 <TextField
                   type="search"
                   size="small"
@@ -167,6 +190,7 @@ const ProductPage = () => {
                 toggleDelete={toggleConfirmationDialog}
                 canEdit={canEdit}
                 canDelete={canDelete}
+                userType={userType}
               />
             </Box>
           </Card>
