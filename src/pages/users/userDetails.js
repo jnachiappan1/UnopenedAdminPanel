@@ -122,6 +122,7 @@ const UserDetailPage = () => {
                 fontWeight: 600,
                 mb: 2,
               }}
+              src={userData?.profile_picture || ""}
             >
               {getInitials(userData.full_name)}
             </Avatar>

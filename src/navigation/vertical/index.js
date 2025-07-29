@@ -10,6 +10,8 @@ import HelpCenterOutlinedIcon from "@mui/icons-material/HelpCenterOutlined";
 import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const navigation = () => {
   return [
@@ -25,8 +27,18 @@ const navigation = () => {
     },
     {
       title: "Product",
-      icon: CategoryOutlinedIcon,
+      icon: Inventory2Icon,
       path: "/product",
+    },
+    {
+      title: "Product Price",
+      icon: CurrencyRupeeOutlinedIcon,
+      path: "/product-price",
+    },
+    {
+      title: "Category",
+      icon: CategoryOutlinedIcon,
+      path: "/category",
     },
     {
       sectionTitle: "User Management",

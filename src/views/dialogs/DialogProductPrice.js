@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -21,12 +20,13 @@ import { axiosInstance } from "../../network/adapter";
 import { ApiEndPoints } from "../../network/endpoints";
 import * as yup from "yup";
 import { toastError, toastSuccess } from "../../utils/utils";
+import { CleaveNumberInput } from "src/@core/components/cleave-components";
 
 const validationSchema = yup.object().shape({
-  name: yup.string().trim().required("Permission name is required."),
+  price: yup.string().required("Price is required."),
 });
 
-const Dialogpermission = (props) => {
+const DialogProductPrice = (props) => {
   const { mode, open, toggle, dataToEdit, onSuccess } = props;
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +37,7 @@ const Dialogpermission = (props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
+      price: "",
     },
     resolver: yupResolver(validationSchema),
     mode: "onChange",
@@ -47,26 +47,20 @@ const Dialogpermission = (props) => {
     if (open) {
       setLoading(false);
       reset({
-        name: dataToEdit?.name || "",
+        price: dataToEdit?.price || "",
       });
     }
   }, [mode, dataToEdit, open, reset]);
 
   const onSubmit = (data) => {
     const payload = {
-      name: data.name,
+      price: data.price,
     };
     setLoading(true);
-
-    let apiInstance = null;
-    if (mode === "edit") {
-      apiInstance = axiosInstance.patch(
-        ApiEndPoints.PERMISSION.edit(dataToEdit.id),
-        payload
-      );
-    } else {
-      apiInstance = axiosInstance.post(ApiEndPoints.PERMISSION.create, payload);
-    }
+    const apiInstance = axiosInstance.patch(
+      ApiEndPoints.PRODUCT_PRICE.edit(dataToEdit?.id),
+      payload
+    );
 
     apiInstance
       .then((response) => response.data)
@@ -93,7 +87,7 @@ const Dialogpermission = (props) => {
         }}
       >
         <Typography variant="fm-h6" textTransform={"capitalize"}>
-          {mode === "add" ? "Add Permission" : "Edit Permission"}
+          Update Price
         </Typography>
         <IconButton
           aria-label="close"
@@ -106,29 +100,46 @@ const Dialogpermission = (props) => {
       <DialogContent
         sx={{ pb: 8, px: { xs: 8, sm: 15 }, pt: { xs: 8, sm: 12.5 } }}
       >
-        <form id="product-form" onSubmit={handleSubmit(onSubmit)}>
+        <form id="product-price-form" onSubmit={handleSubmit(onSubmit)}>
           <FormControl fullWidth>
-            <FormLabel required htmlFor="name" error={Boolean(errors.name)}>
-              Permission
+            <FormLabel htmlFor="price" error={Boolean(errors.price)}>
+              Price
             </FormLabel>
             <Controller
-              name="name"
+              name="price"
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  placeholder="Enter Permission"
-                  multiline
+                  placeholder="Enter Price"
                   autoFocus
                   onChange={onChange}
-                  id="name"
+                  id="price"
                   value={value}
-                  error={Boolean(errors.name)}
+                  error={Boolean(errors.price)}
+                  slots={{
+                    input: CleaveNumberInput, // Custom input component
+                  }}
+                  slotProps={{
+                    input: {
+                      style: {
+                        width: "100%", // Ensures full width
+                        height: "100%", // Matches MUI input height
+                        padding: "18px 14px", // Matches MUI default padding
+                        fontSize: "16px", // Adjust font size
+                        border: "1px solid #0000003b", // Prevents unwanted border changes
+                        outline: "none", // Removes focus outline
+                        background: "transparent", // Matches MUI's default look
+                        borderRadius: "10px",
+                        color: "#3a3541de",
+                      },
+                    },
+                  }}
                 />
               )}
             />
-            {errors.name && (
+            {errors.price && (
               <FormHelperText sx={{ color: "error.main" }}>
-                {errors.name.message}
+                {errors.price.message}
               </FormHelperText>
             )}
           </FormControl>
@@ -138,11 +149,11 @@ const Dialogpermission = (props) => {
         <LoadingButton
           size="large"
           type="submit"
-          form="product-form"
+          form="product-price-form"
           variant="contained"
           loading={loading}
         >
-          Submit
+          Update Price
         </LoadingButton>
         <Button
           variant="outlined"
@@ -162,4 +173,4 @@ const Dialogpermission = (props) => {
   );
 };
 
-export default Dialogpermission;
+export default DialogProductPrice;

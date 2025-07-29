@@ -23,12 +23,7 @@ export const ApiEndPoints = {
     getById: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
   },
-  PRODUCT: {
-    list: `${API_BASE_URL}api/v1/admin/product`,
-    getById: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
-    edit: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
-    delete: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
-  },
+
   ROLE: {
     list: `${API_BASE_URL}api/v1/admin/role`,
     getById: (id) => `${API_BASE_URL}api/v1/admin/role/${id}`,
@@ -49,5 +44,21 @@ export const ApiEndPoints = {
     create: `${API_BASE_URL}api/v1/admin/sub-admin`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/sub-admin/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/sub-admin/${id}`,
+  },
+  PRODUCT: {
+    list: `${API_BASE_URL}api/v1/admin/product`,
+    getById: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
+    delete: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
+  },
+  PRODUCT_PRICE: {
+    list: `${API_BASE_URL}api/v1/admin/product-price`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/product-price/${id}`,
+  },
+  CATEGORY: {
+    list: `${API_BASE_URL}api/v1/admin/category`,
+    create: `${API_BASE_URL}api/v1/admin/category`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/category/${id}`,
+    delete: (id) => `${API_BASE_URL}api/v1/admin/category/${id}`,
   },
 };

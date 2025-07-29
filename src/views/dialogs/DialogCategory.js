@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -23,10 +22,10 @@ import * as yup from "yup";
 import { toastError, toastSuccess } from "../../utils/utils";
 
 const validationSchema = yup.object().shape({
-  name: yup.string().trim().required("Permission name is required."),
+  name: yup.string().trim().required("Category Name is required."),
 });
 
-const Dialogpermission = (props) => {
+const DialogCategory = (props) => {
   const { mode, open, toggle, dataToEdit, onSuccess } = props;
   const [loading, setLoading] = useState(false);
 
@@ -61,11 +60,11 @@ const Dialogpermission = (props) => {
     let apiInstance = null;
     if (mode === "edit") {
       apiInstance = axiosInstance.patch(
-        ApiEndPoints.PERMISSION.edit(dataToEdit.id),
+        ApiEndPoints.CATEGORY.edit(dataToEdit.id),
         payload
       );
     } else {
-      apiInstance = axiosInstance.post(ApiEndPoints.PERMISSION.create, payload);
+      apiInstance = axiosInstance.post(ApiEndPoints.CATEGORY.create, payload);
     }
 
     apiInstance
@@ -93,7 +92,7 @@ const Dialogpermission = (props) => {
         }}
       >
         <Typography variant="fm-h6" textTransform={"capitalize"}>
-          {mode === "add" ? "Add Permission" : "Edit Permission"}
+          {mode === "add" ? "Add Category" : "Edit Category"}
         </Typography>
         <IconButton
           aria-label="close"
@@ -106,17 +105,17 @@ const Dialogpermission = (props) => {
       <DialogContent
         sx={{ pb: 8, px: { xs: 8, sm: 15 }, pt: { xs: 8, sm: 12.5 } }}
       >
-        <form id="product-form" onSubmit={handleSubmit(onSubmit)}>
+        <form id="category-form" onSubmit={handleSubmit(onSubmit)}>
           <FormControl fullWidth>
             <FormLabel required htmlFor="name" error={Boolean(errors.name)}>
-              Permission
+              Category
             </FormLabel>
             <Controller
               name="name"
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  placeholder="Enter Permission"
+                  placeholder="Enter Category"
                   multiline
                   autoFocus
                   onChange={onChange}
@@ -138,7 +137,7 @@ const Dialogpermission = (props) => {
         <LoadingButton
           size="large"
           type="submit"
-          form="product-form"
+          form="category-form"
           variant="contained"
           loading={loading}
         >
@@ -162,4 +161,4 @@ const Dialogpermission = (props) => {
   );
 };
 
-export default Dialogpermission;
+export default DialogCategory;

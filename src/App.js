@@ -32,6 +32,7 @@ const PrivacyPolicyPage = React.lazy(() =>
 const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
+const ProductPricePage = React.lazy(() => import("./pages/product-price"));
 const ProductDetailPage = React.lazy(() =>
   import("./pages/product/productDetailPage")
 );
@@ -40,6 +41,7 @@ const SubAdminPage = React.lazy(() =>
 );
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
+const CategoryPage = React.lazy(() => import("./pages/category"));
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
@@ -148,6 +150,14 @@ function App() {
                 }
               />
               <Route
+                path="/product-price"
+                element={
+                  <ProtectedRoute>
+                    <ProductPricePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/product/:id"
                 element={
                   <ProtectedRoute>
@@ -200,6 +210,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SubAdminPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/category"
+                element={
+                  <ProtectedRoute>
+                    <CategoryPage />
                   </ProtectedRoute>
                 }
               />

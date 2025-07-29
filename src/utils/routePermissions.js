@@ -13,6 +13,9 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "product",
     relatedRoutes: ["/product/:id"],
   },
+  "/category": {
+    pattern: "category",
+  },
   "/permission": {
     pattern: "permission",
     relatedRoutes: [],
@@ -25,7 +28,7 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "sub admin",
     relatedRoutes: [],
   },
-  
+
   "/terms-and-conditions": {
     pattern: "terms and conditions",
     relatedRoutes: [],
@@ -40,12 +43,7 @@ export const ROUTE_PERMISSION_MAP = {
   },
 };
 
-export const PUBLIC_AUTHENTICATED_ROUTES = [
-  "/401",
-  "/404",
-  "/",
-  "/dashboard",
-];
+export const PUBLIC_AUTHENTICATED_ROUTES = ["/401", "/404", "/", "/dashboard"];
 
 /**
  * Check if user has access to the given route based on permissions
@@ -175,4 +173,4 @@ export const getRoutePermission = (path, permissions) => {
   }
 
   return null;
-}; 
+};
