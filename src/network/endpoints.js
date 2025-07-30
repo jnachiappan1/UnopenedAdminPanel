@@ -1,5 +1,5 @@
 export const API_BASE_URL = "http://45.248.33.161:5019/";
-export const MEDIA_URL = "https://nmp-storage.s3.ap-south-1.amazonaws.com";
+export const MEDIA_URL = "http://45.248.33.161:5019/uploads/";
 // export const API_BASE_URL = "http://192.168.29.37:3030/";
 
 export const ApiEndPoints = {

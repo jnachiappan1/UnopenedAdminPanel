@@ -21,7 +21,7 @@ import {
   Tag,
 } from "@mui/icons-material";
 import { axiosInstance } from "../../network/adapter";
-import { ApiEndPoints } from "../../network/endpoints";
+import { ApiEndPoints, MEDIA_URL } from "../../network/endpoints";
 import { toastError } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
 import Grid from "@mui/material/Grid2";
@@ -122,7 +122,7 @@ const UserDetailPage = () => {
                 fontWeight: 600,
                 mb: 2,
               }}
-              src={userData?.profile_picture || ""}
+              src={`${MEDIA_URL}${userData?.profile_picture}` || ""}
             >
               {getInitials(userData.full_name)}
             </Avatar>

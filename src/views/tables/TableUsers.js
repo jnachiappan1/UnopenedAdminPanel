@@ -20,7 +20,6 @@ function TableUsers({
   loading,
   toggleDelete,
   onViewDetails,
-  userType,
 }) {
   const statusColors = {
     inactive: "#8a8d931e",

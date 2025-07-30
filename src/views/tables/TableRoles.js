@@ -19,7 +19,6 @@ const TableRoles = ({
   loading,
   toggleDelete,
   permissionList,
-  userType,
 }) => {
   const navigate = useNavigate();
   const statusColors = {

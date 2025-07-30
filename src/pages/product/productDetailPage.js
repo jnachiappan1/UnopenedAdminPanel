@@ -27,7 +27,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
 import { axiosInstance } from "../../network/adapter";
-import { ApiEndPoints } from "../../network/endpoints";
+import { ApiEndPoints, MEDIA_URL } from "../../network/endpoints";
 import { toastError } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
 
@@ -139,10 +139,10 @@ const ProductDetailPage = () => {
                   Product Images
                 </Typography>
                 <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
-                  {productData.product_image.map((image, index) => (
+                  {productData?.product_image.map((image, index) => (
                     <Avatar
                       key={image.id}
-                      src={image.image}
+                      src={`${MEDIA_URL}${image.image}`}
                       alt={`Product Image ${index + 1}`}
                       sx={{ width: 100, height: 100 }}
                       variant="rounded"
