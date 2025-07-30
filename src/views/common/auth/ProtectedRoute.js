@@ -6,10 +6,16 @@ import {
   isPublicRoute,
   getAccessibleRoutes
 } from "src/utils/routePermissions";
+import FallbackSpinner from "src/@core/components/spinner";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, userType, permissionsWithNames } = useAuth();
+  const { user, userType, permissionsWithNames, loading, permissionsLoading } = useAuth();
   const location = useLocation();
+
+  // Show loading spinner while auth or permissions are being loaded
+  if (loading || permissionsLoading) {
+    return <FallbackSpinner />;
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />;

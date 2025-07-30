@@ -25,7 +25,7 @@ import { getAccessibleNavItems } from "src/utils/permissions";
 const UserLayout = ({ children }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings();
-  const { userType, permissionsWithNames } = useAuth();
+  const { userType, permissionsWithNames, permissionsLoading } = useAuth();
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -37,11 +37,15 @@ const UserLayout = ({ children }) => {
    */
   const hidden = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
+  // If permissions are loading, use empty array to prevent navigation issues
+  const permissionsToUse = permissionsLoading ? [] : permissionsWithNames;
+
   const filteredNavItems = getAccessibleNavItems(
     VerticalNavItems(),
     userType,
-    permissionsWithNames
+    permissionsToUse
   );
+  
   return (
     <Layout
       hidden={hidden}

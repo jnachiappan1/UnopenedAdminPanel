@@ -30,6 +30,8 @@ const defaultProvider = {
   permissionsList: [],
   setPermissionsList: () => [],
   permissionsWithNames: [],
+  permissionsLoading: false,
+  setPermissionsLoading: () => Boolean,
 };
 const AuthContext = createContext(defaultProvider);
 
@@ -43,6 +45,9 @@ const AuthProvider = ({ children }) => {
   const [userType, setUserType] = useState(defaultProvider.userType);
   const [permissionsList, setPermissionsList] = useState(
     defaultProvider.permissionsList
+  );
+  const [permissionsLoading, setPermissionsLoading] = useState(
+    defaultProvider.permissionsLoading
   );
 
   // Calculate permissionsWithNames whenever user or permissionsList changes
@@ -106,8 +111,10 @@ const AuthProvider = ({ children }) => {
     window.localStorage.removeItem(authConfig.storageTokenKeyName);
     navigate("/login");
   };
+  
   const fetchPermissions = async () => {
     try {
+      setPermissionsLoading(true);
       const response = await axios.get(ApiEndPoints.PERMISSION.list, {
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem(
@@ -115,12 +122,15 @@ const AuthProvider = ({ children }) => {
           )}`,
         },
       });
-      setPermissionsList(response.data.data.permission); // <-- set directly here
+      setPermissionsList(response.data.data.permission);
     } catch (error) {
       toastError(error);
       setPermissionsList([]); // fallback
+    } finally {
+      setPermissionsLoading(false);
     }
   };
+  
   const handleRegister = () => {};
 
   const values = {
@@ -138,6 +148,8 @@ const AuthProvider = ({ children }) => {
     permissionsList,
     setPermissionsList,
     permissionsWithNames,
+    permissionsLoading,
+    setPermissionsLoading,
   };
 
   return (

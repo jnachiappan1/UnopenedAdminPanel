@@ -16,7 +16,7 @@ const PermissionGuard = ({
   action = "read",
   fallback = null,
 }) => {
-  const { user, userType, permissionsWithNames } = useAuth();
+  const { user, userType, permissionsWithNames, permissionsLoading } = useAuth();
 
   // If user is admin, always allow
   if (userType === "admin") {
@@ -25,6 +25,11 @@ const PermissionGuard = ({
 
   // If no user, don't render anything
   if (!user) {
+    return fallback;
+  }
+
+  // If permissions are still loading, show fallback to prevent unauthorized access
+  if (permissionsLoading) {
     return fallback;
   }
 
