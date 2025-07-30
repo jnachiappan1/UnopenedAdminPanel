@@ -53,7 +53,7 @@ const ProductPricePage = () => {
                 variant="contained"
                 onClick={(e) => togglePriceFormDialog(e, "edit", priceData)}
               >
-                ₹ Update Price
+                Update Price
               </Button>
             </PermissionGuard>
           }
@@ -96,7 +96,7 @@ const ProductPricePage = () => {
                       fontWeight="bold"
                       color="primary.main"
                     >
-                      ₹{priceData.price || "0.00"}
+                      {priceData.price || "0.00"}%
                     </Typography>
                   </Box>
                   <Chip
