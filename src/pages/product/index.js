@@ -123,7 +123,7 @@ const ProductPage = () => {
   }, [status]);
   return (
     <>
-      <Grid container spacing={4} className="match-height">
+      <Grid container spacing={4}>
         <PageHeader
           title={
             <Typography variant="h5">

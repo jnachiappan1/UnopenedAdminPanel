@@ -14,11 +14,10 @@ import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
 import TablePermission from "src/views/tables/TablePermission";
 import Dialogpermission from "src/views/dialogs/DialogPermission";
 import { useAuth } from "src/hooks/useAuth";
-import { hasPermission } from "src/utils/permissions";
 import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const PermissionsPage = () => {
-  const { permissionsWithNames, userType } = useAuth();
+  const { userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [careerData, setCareerData] = useState([]);
@@ -119,7 +118,7 @@ const PermissionsPage = () => {
   );
   return (
     <>
-      <Grid container spacing={4} className="match-height">
+      <Grid container spacing={4}>
         <PageHeader
           title={
             <Typography variant="h5">

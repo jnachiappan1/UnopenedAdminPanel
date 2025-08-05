@@ -30,6 +30,7 @@ const PrivacyPolicyPage = React.lazy(() =>
   import("./pages/website/privacy-policy")
 );
 const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
+const ContactUsPage = React.lazy(() => import("./pages/contact-us"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
@@ -130,6 +131,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <HelpSupporPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contact-us"
+                element={
+                  <ProtectedRoute>
+                    <ContactUsPage />
                   </ProtectedRoute>
                 }
               />

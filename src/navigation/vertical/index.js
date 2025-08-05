@@ -12,6 +12,7 @@ import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
+import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 const navigation = () => {
   return [
@@ -85,6 +86,11 @@ const navigation = () => {
           title: "Help & Support",
           icon: HelpCenterOutlinedIcon,
           path: "/help-support",
+        },
+        {
+          title: "Contact Us",
+          icon: ContactSupportIcon,
+          path: "/contact-us",
         },
       ],
     },

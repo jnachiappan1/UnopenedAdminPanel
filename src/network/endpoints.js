@@ -18,12 +18,15 @@ export const ApiEndPoints = {
     list: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,
     edit: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,
   },
+  CONTACT_US: {
+    list: `${API_BASE_URL}api/v1/admin/contact-us`,
+    respond: (id) => `${API_BASE_URL}api/v1/admin/contact-us/${id}`,
+  },
   USERS: {
     list: `${API_BASE_URL}api/v1/admin/user-list`,
     getById: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/user-list/${id}`,
   },
-
   ROLE: {
     list: `${API_BASE_URL}api/v1/admin/role`,
     getById: (id) => `${API_BASE_URL}api/v1/admin/role/${id}`,

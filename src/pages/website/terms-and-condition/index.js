@@ -54,7 +54,7 @@ const TermsAndConditionPage = () => {
   }
   return (
     <>
-      <Grid container spacing={4} className="match-height">
+      <Grid container spacing={4}>
         <PageHeader
           title={
             <Typography variant="h5">
@@ -62,7 +62,10 @@ const TermsAndConditionPage = () => {
             </Typography>
           }
           action={
-            <PermissionGuard permissionName="terms and conditions" action="write">
+            <PermissionGuard
+              permissionName="terms and conditions"
+              action="write"
+            >
               <Button
                 variant="contained"
                 onClick={(e) => toggleTermsAndConditionDialog(e, terms)}
