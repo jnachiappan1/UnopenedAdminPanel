@@ -24,13 +24,46 @@ function TableContactUs({
       rows={rows}
       columns={[
         {
-          field: "question",
-          headerName: "Questions",
+          field: "full_name",
+          headerName: "Full Name",
+          minWidth: 180,
+          flex: 1,
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.full_name}>
+              {row.full_name}
+            </Typography>
+          ),
+        },
+        {
+          field: "phone_number",
+          headerName: "Phone Number",
+          minWidth: 180,
+          flex: 1,
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.phone_number}>
+              {`${row.country_code}${row.phone_number}`}
+            </Typography>
+          ),
+        },
+        {
+          field: "email",
+          headerName: "Email",
           minWidth: 250,
           flex: 1,
           renderCell: ({ row }) => (
-            <Typography noWrap variant="body2" title={row.question}>
-              {row.question}
+            <Typography noWrap variant="body2" title={row.email}>
+              {row.email}
+            </Typography>
+          ),
+        },
+        {
+          field: "message",
+          headerName: "Message",
+          minWidth: 300,
+          flex: 1,
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.message}>
+              {row.message}
             </Typography>
           ),
         },
