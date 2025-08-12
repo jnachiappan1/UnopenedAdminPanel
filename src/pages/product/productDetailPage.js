@@ -23,6 +23,12 @@ import {
   CalendarToday,
   Verified,
   Person,
+  Straighten,
+  LineWeight,
+  AccountBalance,
+  Payment,
+  LocationOn,
+  ShoppingCart,
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
@@ -205,6 +211,20 @@ const ProductDetailPage = () => {
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
+                icon={<AccountBalance />}
+                label="Platform Fee"
+                value={`$${productData.platform_fee}`}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Payment />}
+                label="Seller Final Price"
+                value={`$${productData.seller_final_price}`}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
                 icon={<QrCode />}
                 label="Barcode"
                 value={productData.barcode}
@@ -215,6 +235,20 @@ const ProductDetailPage = () => {
                 icon={<Notes />}
                 label="Description"
                 value={productData.description}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Straighten />}
+                label="Dimensions"
+                value={productData.dimensions}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LineWeight />}
+                label="Weight"
+                value={productData.weight}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -239,6 +273,24 @@ const ProductDetailPage = () => {
                     ? "info"
                     : "default"
                 }
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Verified />}
+                label="Product Activity Status"
+                value={productData.product_activity_status || "-"}
+                isChip={!!productData.product_activity_status}
+                chipColor="default"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Payment />}
+                label="Payment Completed"
+                value={productData.is_payment_completed ? "Yes" : "No"}
+                isChip={true}
+                chipColor={productData.is_payment_completed ? "success" : "warning"}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>

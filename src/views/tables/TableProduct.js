@@ -47,7 +47,7 @@ function Tableproduct({
       columns={[
         {
           field: "name",
-          minWidth: 150,
+          minWidth: 250,
           sortable: false,
           headerName: "Name",
           renderCell: ({ row }) => (
@@ -89,25 +89,6 @@ function Tableproduct({
             </Typography>
           ),
         },
-        {
-          field: "description",
-          minWidth: 400,
-          sortable: false,
-          headerName: "Description",
-          renderCell: ({ row }) => (
-            <Typography
-              component="div"
-              sx={{ fontSize: "15px", fontWeight: 600 }}
-            >
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: row.description,
-                }}
-              />
-            </Typography>
-          ),
-        },
-
         {
           field: "updatedAt",
           minWidth: 200,
