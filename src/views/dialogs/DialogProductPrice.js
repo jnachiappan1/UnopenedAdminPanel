@@ -27,7 +27,15 @@ const validationSchema = yup.object().shape({
 });
 
 const DialogProductPrice = (props) => {
-  const { mode, open, toggle, dataToEdit, onSuccess } = props;
+  const {
+    mode,
+    open,
+    toggle,
+    dataToEdit,
+    onSuccess,
+    editEndpoint,
+    valueKey = "price",
+  } = props;
   const [loading, setLoading] = useState(false);
 
   const {
@@ -47,18 +55,18 @@ const DialogProductPrice = (props) => {
     if (open) {
       setLoading(false);
       reset({
-        price: dataToEdit?.price || "",
+        price: (dataToEdit && dataToEdit[valueKey]) || "",
       });
     }
-  }, [mode, dataToEdit, open, reset]);
+  }, [mode, dataToEdit, open, reset, valueKey]);
 
   const onSubmit = (data) => {
     const payload = {
-      price: data.price,
+      [valueKey]: data.price,
     };
     setLoading(true);
     const apiInstance = axiosInstance.patch(
-      ApiEndPoints.PRODUCT_PRICE.edit(dataToEdit?.id),
+      (editEndpoint || ApiEndPoints.PRODUCT_PRICE.edit)(dataToEdit?.id),
       payload
     );
 

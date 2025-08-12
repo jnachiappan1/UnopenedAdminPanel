@@ -58,6 +58,10 @@ export const ApiEndPoints = {
     list: `${API_BASE_URL}api/v1/admin/product-price`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/product-price/${id}`,
   },
+  PRODUCT_PRICE_CHARGES: {
+    list: `${API_BASE_URL}api/v1/admin/product-price-charge`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/product-price-charge/${id}`,
+  },
   CATEGORY: {
     list: `${API_BASE_URL}api/v1/admin/category`,
     create: `${API_BASE_URL}api/v1/admin/category`,

@@ -13,6 +13,7 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
+import PriceChangeOutlinedIcon from "@mui/icons-material/PriceChangeOutlined";
 
 const navigation = () => {
   return [
@@ -35,6 +36,11 @@ const navigation = () => {
       title: "Product Price",
       icon: CurrencyRupeeOutlinedIcon,
       path: "/product-price",
+    },
+    {
+      title: "Product Price Charges",
+      icon: PriceChangeOutlinedIcon,
+      path: "/product-price-charges",
     },
     {
       title: "Category",

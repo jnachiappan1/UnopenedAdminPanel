@@ -34,6 +34,7 @@ const ContactUsPage = React.lazy(() => import("./pages/contact-us"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
+const ProductPriceChargesPage = React.lazy(() => import("./pages/product-price-charges"));
 const ProductDetailPage = React.lazy(() =>
   import("./pages/product/productDetailPage")
 );
@@ -163,6 +164,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProductPricePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/product-price-charges"
+                element={
+                  <ProtectedRoute>
+                    <ProductPriceChargesPage />
                   </ProtectedRoute>
                 }
               />
