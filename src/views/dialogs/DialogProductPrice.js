@@ -33,10 +33,20 @@ const DialogProductPrice = (props) => {
     toggle,
     dataToEdit,
     onSuccess,
-    editEndpoint,
     valueKey = "price",
   } = props;
   const [loading, setLoading] = useState(false);
+
+  // Determine endpoint based on valueKey
+  const getEndpoint = () => {
+    switch (valueKey) {
+      case "price_charge":
+        return ApiEndPoints.PRODUCT_PRICE_CHARGES.edit;
+      case "price":
+      default:
+        return ApiEndPoints.PRODUCT_PRICE.edit;
+    }
+  };
 
   const {
     control,
@@ -66,7 +76,7 @@ const DialogProductPrice = (props) => {
     };
     setLoading(true);
     const apiInstance = axiosInstance.patch(
-      (editEndpoint || ApiEndPoints.PRODUCT_PRICE.edit)(dataToEdit?.id),
+      getEndpoint()(dataToEdit?.id),
       payload
     );
 
@@ -95,7 +105,7 @@ const DialogProductPrice = (props) => {
         }}
       >
         <Typography variant="fm-h6" textTransform={"capitalize"}>
-          Update Price
+          Update {valueKey === "price_charge" ? "Platform Charges" : "Price"}
         </Typography>
         <IconButton
           aria-label="close"
@@ -111,14 +121,14 @@ const DialogProductPrice = (props) => {
         <form id="product-price-form" onSubmit={handleSubmit(onSubmit)}>
           <FormControl fullWidth>
             <FormLabel htmlFor="price" error={Boolean(errors.price)}>
-              Price
+              {valueKey === "price_charge" ? "Platform Charges" : "Price"}
             </FormLabel>
             <Controller
               name="price"
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  placeholder="Enter Price"
+                  placeholder={`Enter ${valueKey === "price_charge" ? "Platform Charges" : "Price"}`}
                   autoFocus
                   onChange={onChange}
                   id="price"
@@ -161,7 +171,7 @@ const DialogProductPrice = (props) => {
           variant="contained"
           loading={loading}
         >
-          Update Price
+          Update {valueKey === "price_charge" ? "Platform Charges" : "Price"}
         </LoadingButton>
         <Button
           variant="outlined"

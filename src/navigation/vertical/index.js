@@ -33,15 +33,15 @@ const navigation = () => {
       path: "/product",
     },
     {
-      title: "Product Price",
+      title: "Product Price Management",
       icon: CurrencyRupeeOutlinedIcon,
-      path: "/product-price",
+      path: "/product-price-management",
     },
-    {
-      title: "Product Price Charges",
-      icon: PriceChangeOutlinedIcon,
-      path: "/product-price-charges",
-    },
+    // {
+    //   title: "Product Price Charges",
+    //   icon: PriceChangeOutlinedIcon,
+    //   path: "/product-price-management-charges",
+    // },
     {
       title: "Category",
       icon: CategoryOutlinedIcon,

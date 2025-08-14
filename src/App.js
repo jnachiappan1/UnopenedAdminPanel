@@ -33,11 +33,10 @@ const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
 const ContactUsPage = React.lazy(() => import("./pages/contact-us"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
-const ProductPricePage = React.lazy(() => import("./pages/product-price"));
-const ProductPriceChargesPage = React.lazy(() => import("./pages/product-price-charges"));
 const ProductDetailPage = React.lazy(() =>
   import("./pages/product/productDetailPage")
 );
+const ProductPricePage = React.lazy(() => import("./pages/product-price"));
 const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
@@ -160,21 +159,21 @@ function App() {
                 }
               />
               <Route
-                path="/product-price"
+                path="/product-price-management"
                 element={
                   <ProtectedRoute>
                     <ProductPricePage />
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/product-price-charges"
+              {/* <Route
+                path="/product-price-management-charges"
                 element={
                   <ProtectedRoute>
                     <ProductPriceChargesPage />
                   </ProtectedRoute>
                 }
-              />
+              /> */}
               <Route
                 path="/product/:id"
                 element={
