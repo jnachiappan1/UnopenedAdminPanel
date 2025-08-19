@@ -13,7 +13,7 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
-import PriceChangeOutlinedIcon from "@mui/icons-material/PriceChangeOutlined";
+import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
 const navigation = () => {
   return [
@@ -37,11 +37,11 @@ const navigation = () => {
       icon: CurrencyRupeeOutlinedIcon,
       path: "/product-price-management",
     },
-    // {
-    //   title: "Product Price Charges",
-    //   icon: PriceChangeOutlinedIcon,
-    //   path: "/product-price-management-charges",
-    // },
+    {
+      title: "Coupon",
+      icon: LocalOfferOutlinedIcon,
+      path: "/coupon",
+    },
     {
       title: "Category",
       icon: CategoryOutlinedIcon,

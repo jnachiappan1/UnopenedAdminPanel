@@ -37,6 +37,7 @@ const ProductDetailPage = React.lazy(() =>
   import("./pages/product/productDetailPage")
 );
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
+const CouponPage = React.lazy(() => import("./pages/coupon"));
 const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
@@ -166,14 +167,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* <Route
-                path="/product-price-management-charges"
+              <Route
+                path="/coupon"
                 element={
                   <ProtectedRoute>
-                    <ProductPriceChargesPage />
+                    <CouponPage />
                   </ProtectedRoute>
                 }
-              /> */}
+              />
               <Route
                 path="/product/:id"
                 element={

@@ -19,12 +19,10 @@ import DialogConfirmation from "../../views/dialogs/DialogConfirmation";
 import TableUsers from "src/views/tables/TableUsers";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
-import { getPermissionNames, hasPermission } from "src/utils/permissions";
 import { useAuth } from "src/hooks/useAuth";
-import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const UsersPage = () => {
-  const { permissionsWithNames, userType } = useAuth();
+  const { userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");

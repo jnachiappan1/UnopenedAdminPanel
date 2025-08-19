@@ -143,17 +143,7 @@ const DialogCategory = (props) => {
         >
           Submit
         </LoadingButton>
-        <Button
-          variant="outlined"
-          onClick={toggle}
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-              borderColor: "inherit",
-              color: "#31AD52",
-            },
-          }}
-        >
+        <Button variant="outlined" onClick={toggle}>
           Cancel
         </Button>
       </DialogActions>

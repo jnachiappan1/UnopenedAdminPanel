@@ -21,7 +21,6 @@ function Tableproduct({
   loading,
   toggleEdit,
   toggleDelete,
-  userType,
 }) {
   const statusColors = {
     approved: "#4CAF50", // green
@@ -116,16 +115,13 @@ function Tableproduct({
           headerName: "Actions",
           renderCell: ({ row }) => (
             <Box display="flex" alignItems="center" gap="10px">
-              <PermissionGuard permissionName="product" action="write">
-                <IconButton
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                  onClick={(e) => toggleEdit(e, "edit", row)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </PermissionGuard>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => navigate(`/product/${row.id}`)}
+              >
+                View & Update
+              </Button>
               <PermissionGuard permissionName="product" action="remove">
                 <IconButton
                   size="small"
@@ -135,14 +131,6 @@ function Tableproduct({
                   <DeleteIcon />
                 </IconButton>
               </PermissionGuard>
-
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => navigate(`/product/${row.id}`)}
-              >
-                Product Details
-              </Button>
             </Box>
           ),
         },

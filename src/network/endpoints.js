@@ -60,13 +60,19 @@ export const ApiEndPoints = {
   },
   PRODUCT_PRICE_CHARGES: {
     list: `${API_BASE_URL}api/v1/admin/product-price-charge`,
-    edit: (id) =>
-      `${API_BASE_URL}api/v1/admin/product-price-charge/${id}`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/product-price-charge/${id}`,
   },
   CATEGORY: {
     list: `${API_BASE_URL}api/v1/admin/category`,
     create: `${API_BASE_URL}api/v1/admin/category`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/category/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/category/${id}`,
+  },
+  COUPON: {
+    list: `${API_BASE_URL}api/v1/admin/coupon/all`,
+    getById: (id) => `${API_BASE_URL}api/v1/admin/coupon/${id}`,
+    create: `${API_BASE_URL}api/v1/admin/coupon/create`,
+    edit: (id) => `${API_BASE_URL}api/v1/admin/coupon/${id}`,
+    delete: (id) => `${API_BASE_URL}api/v1/admin/coupon/${id}`,
   },
 };

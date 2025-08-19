@@ -128,7 +128,9 @@ const DialogProductPrice = (props) => {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  placeholder={`Enter ${valueKey === "price_charge" ? "Platform Charges" : "Price"}`}
+                  placeholder={`Enter ${
+                    valueKey === "price_charge" ? "Platform Charges" : "Price"
+                  }`}
                   autoFocus
                   onChange={onChange}
                   id="price"
@@ -173,17 +175,7 @@ const DialogProductPrice = (props) => {
         >
           Update {valueKey === "price_charge" ? "Platform Charges" : "Price"}
         </LoadingButton>
-        <Button
-          variant="outlined"
-          onClick={toggle}
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-              borderColor: "inherit",
-              color: "#31AD52",
-            },
-          }}
-        >
+        <Button variant="outlined" onClick={toggle}>
           Cancel
         </Button>
       </DialogActions>

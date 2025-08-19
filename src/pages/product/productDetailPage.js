@@ -9,6 +9,11 @@ import {
   Divider,
   IconButton,
   Avatar,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -28,20 +33,26 @@ import {
   AccountBalance,
   Payment,
   LocationOn,
-  ShoppingCart,
+  Email,
+  Phone,
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
 import { axiosInstance } from "../../network/adapter";
 import { ApiEndPoints, MEDIA_URL } from "../../network/endpoints";
-import { toastError } from "src/utils/utils";
+import { toastError, toastSuccess } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
+import { LoadingButton } from "@mui/lab";
+import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [statusValue, setStatusValue] = useState("");
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError] = useState("");
 
   // Helper function to format chip text
   const formatChipText = (text) => {
@@ -53,6 +64,7 @@ const ProductDetailPage = () => {
       .get(ApiEndPoints.PRODUCT.getById(id))
       .then((response) => {
         setProductData(response.data.data.product[0]);
+        setStatusValue(response.data.data.product[0]?.status || "");
       })
       .catch((error) => {
         toastError(error);
@@ -62,12 +74,40 @@ const ProductDetailPage = () => {
       });
   }, [id]);
 
+  const handleUpdateStatus = (e) => {
+    e?.preventDefault();
+    if (!statusValue || statusValue === " ") {
+      setStatusError("Please select a status.");
+      return;
+    }
+    setStatusError("");
+    const payload = new FormData();
+    payload.append("status", statusValue);
+    setStatusLoading(true);
+    axiosInstance
+      .patch(ApiEndPoints.PRODUCT.edit(productData.id), payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => res.data)
+      .then((res) => {
+        toastSuccess(res.message || "Status updated successfully");
+        setProductData((prev) =>
+          prev ? { ...prev, status: statusValue } : prev
+        );
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => setStatusLoading(false));
+  };
+
   const DetailItem = ({
     icon,
     label,
     value,
     isChip = false,
     chipColor = "default",
+    noCapitalize = false,
   }) => (
     <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
       <Box sx={{ mr: 2, mt: 0.5, color: "text.secondary" }}>{icon}</Box>
@@ -85,7 +125,10 @@ const ProductDetailPage = () => {
         ) : (
           <Typography
             variant="body1"
-            sx={{ wordBreak: "break-all", textTransform: "capitalize" }}
+            sx={{
+              wordBreak: "break-all",
+              textTransform: noCapitalize ? "none" : "capitalize",
+            }}
           >
             {value}
           </Typography>
@@ -135,6 +178,74 @@ const ProductDetailPage = () => {
               }
               size="small"
             />
+
+            {/* Update Status Inline */}
+            {/* Status Update Section */}
+            <PermissionGuard permissionName="product" action="write">
+              <Card
+                variant="outlined"
+                sx={{
+                  mt: 3,
+                  borderRadius: 2,
+                  borderColor: "divider",
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600, mb: 1 }}
+                  >
+                    Update Product Status
+                  </Typography>
+                  <Box
+                    component="form"
+                    id="status-form"
+                    onSubmit={handleUpdateStatus}
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", sm: "row" },
+                      gap: 2,
+                      alignItems: { xs: "stretch", sm: "flex-end" },
+                    }}
+                  >
+                    <FormControl fullWidth size="small">
+                      <TextField
+                        select
+                        fullWidth
+                        id="status"
+                        name="status"
+                        size="small"
+                        value={statusValue}
+                        onChange={(e) => setStatusValue(e.target.value)}
+                        error={Boolean(statusError)}
+                      >
+                        <MenuItem value="" disabled>
+                          Select Status
+                        </MenuItem>
+                        <MenuItem value="pending">⏳ Pending</MenuItem>
+                        <MenuItem value="approved">✅ Approve</MenuItem>
+                        <MenuItem value="rejected">❌ Reject</MenuItem>
+                      </TextField>
+                      {statusError && (
+                        <FormHelperText sx={{ color: "error.main" }}>
+                          {statusError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+
+                    <LoadingButton
+                      size="medium"
+                      type="submit"
+                      form="status-form"
+                      variant="contained"
+                      loading={statusLoading}
+                    >
+                      Update
+                    </LoadingButton>
+                  </Box>
+                </CardContent>
+              </Card>
+            </PermissionGuard>
           </Box>
 
           {/* Product Images Section */}
@@ -178,13 +289,7 @@ const ProductDetailPage = () => {
                 value={productData.brand}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                icon={<Person />}
-                label="User ID"
-                value={productData.user_id}
-              />
-            </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<Category />}
@@ -230,13 +335,7 @@ const ProductDetailPage = () => {
                 value={productData.barcode}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                icon={<Notes />}
-                label="Description"
-                value={productData.description}
-              />
-            </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<Straighten />}
@@ -279,7 +378,11 @@ const ProductDetailPage = () => {
               <DetailItem
                 icon={<Verified />}
                 label="Product Activity Status"
-                value={productData.product_activity_status || "-"}
+                value={
+                  productData.product_activity_status
+                    ? formatChipText(productData.product_activity_status)
+                    : "-"
+                }
                 isChip={!!productData.product_activity_status}
                 chipColor="default"
               />
@@ -290,7 +393,9 @@ const ProductDetailPage = () => {
                 label="Payment Completed"
                 value={productData.is_payment_completed ? "Yes" : "No"}
                 isChip={true}
-                chipColor={productData.is_payment_completed ? "success" : "warning"}
+                chipColor={
+                  productData.is_payment_completed ? "success" : "warning"
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -311,7 +416,248 @@ const ProductDetailPage = () => {
                 )}
               />
             </Grid>
+            <Grid size={{ xs: 12 }}>
+              <DetailItem
+                icon={<Notes />}
+                label="Description"
+                value={productData.description}
+              />
+            </Grid>
           </Grid>
+
+          {/* Seller (Product User) Details */}
+          {(productData.product_user || productData.user_id) && (
+            <>
+              <Divider sx={{ my: 4 }} />
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                Seller Details
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Avatar
+                      src={
+                        productData.product_user?.profile_picture
+                          ? `${MEDIA_URL}${productData.product_user.profile_picture}`
+                          : undefined
+                      }
+                      alt={productData.product_user?.full_name || "Seller"}
+                      sx={{ width: 48, height: 48, mr: 2 }}
+                    />
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Full Name
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{ textTransform: "capitalize" }}
+                      >
+                        {productData.product_user?.full_name || "-"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Email />}
+                    label="Email"
+                    value={productData.product_user?.email || "-"}
+                    noCapitalize
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Phone />}
+                    label="Phone"
+                    value={
+                      productData.product_user
+                        ? `${productData.product_user.country_code || ""} ${
+                            productData.product_user.phone_number || "-"
+                          }`.trim()
+                        : "-"
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Address"
+                    value={productData.product_user?.address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Country"
+                    value={productData.product_user?.country || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="State"
+                    value={productData.product_user?.state || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="City"
+                    value={productData.product_user?.city || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Pincode"
+                    value={productData.product_user?.pincode || "-"}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
+
+          {/* Buyer Details */}
+          {productData.buyer_user && (
+            <>
+              <Divider sx={{ my: 4 }} />
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                Buyer Details
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Person />}
+                    label="Full Name"
+                    value={productData.buyer_user?.full_name || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Email />}
+                    label="Email"
+                    value={productData.buyer_user?.email || "-"}
+                    noCapitalize
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Phone />}
+                    label="Phone"
+                    value={
+                      productData.buyer_user
+                        ? `${productData.buyer_user.country_code || ""} ${
+                            productData.buyer_user.phone_number || "-"
+                          }`.trim()
+                        : "-"
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Address"
+                    value={productData.buyer_user?.address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Country"
+                    value={productData.buyer_user?.country || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="State"
+                    value={productData.buyer_user?.state || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="City"
+                    value={productData.buyer_user?.city || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Pincode"
+                    value={productData.buyer_user?.pincode || "-"}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
+
+          {/* Buyer Address */}
+          {productData.buyer_address && (
+            <>
+              <Divider sx={{ my: 4 }} />
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                Buyer Address
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Person />}
+                    label="Full Name"
+                    value={productData.buyer_address?.full_name || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<Phone />}
+                    label="Phone"
+                    value={
+                      productData.buyer_address
+                        ? `${productData.buyer_address.country_code || ""} ${
+                            productData.buyer_address.phone_number || "-"
+                          }`.trim()
+                        : "-"
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Address"
+                    value={productData.buyer_address?.address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="City"
+                    value={productData.buyer_address?.city || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="State"
+                    value={productData.buyer_address?.state || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Country"
+                    value={productData.buyer_address?.country || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Pincode"
+                    value={productData.buyer_address?.pincode || "-"}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
         </CardContent>
       </Card>
     </Box>

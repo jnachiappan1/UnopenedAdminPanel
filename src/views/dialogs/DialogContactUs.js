@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -60,10 +59,7 @@ const DialogContactUs = (props) => {
 
     // Only PATCH API call for admin response
     axiosInstance
-      .patch(
-        ApiEndPoints.CONTACT_US.respond(dataToEdit.id),
-        payload
-      )
+      .patch(ApiEndPoints.CONTACT_US.respond(dataToEdit.id), payload)
       .then((response) => response.data)
       .then((response) => {
         onSuccess();
@@ -103,7 +99,11 @@ const DialogContactUs = (props) => {
       >
         <form id="contact-response-form" onSubmit={handleSubmit(onSubmit)}>
           <FormControl fullWidth>
-            <FormLabel required htmlFor="admin_response" error={Boolean(errors.admin_response)}>
+            <FormLabel
+              required
+              htmlFor="admin_response"
+              error={Boolean(errors.admin_response)}
+            >
               Admin Response
             </FormLabel>
             <Controller
@@ -140,17 +140,7 @@ const DialogContactUs = (props) => {
         >
           Send Response
         </LoadingButton>
-        <Button
-          variant="outlined"
-          onClick={toggle}
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-              borderColor: "inherit",
-              color: "#31AD52",
-            },
-          }}
-        >
+        <Button variant="outlined" onClick={toggle}>
           Cancel
         </Button>
       </DialogActions>
