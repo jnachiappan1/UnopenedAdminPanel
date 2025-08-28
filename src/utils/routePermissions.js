@@ -16,6 +16,12 @@ export const ROUTE_PERMISSION_MAP = {
   "/category": {
     pattern: "category",
   },
+  "/coupon": {
+    pattern: "coupon",
+  },
+  "/cashout-fees": {
+    pattern: "cashout fees",
+  },
   "/permission": {
     pattern: "permission",
     relatedRoutes: [],

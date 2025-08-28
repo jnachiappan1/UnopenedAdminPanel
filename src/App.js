@@ -38,6 +38,7 @@ const ProductDetailPage = React.lazy(() =>
 );
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
 const CouponPage = React.lazy(() => import("./pages/coupon"));
+const CashOutFeesPage = React.lazy(() => import("./pages/cashout-fees"));
 const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
@@ -172,6 +173,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <CouponPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cashout-fees"
+                element={
+                  <ProtectedRoute>
+                    <CashOutFeesPage />
                   </ProtectedRoute>
                 }
               />
