@@ -14,6 +14,10 @@ import {
   FormHelperText,
   TextField,
   MenuItem,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import {
   ArrowBack,
@@ -37,6 +41,7 @@ import {
   Phone,
   LocalShipping,
   QrCode2,
+  Close,
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
@@ -50,15 +55,65 @@ import PermissionGuard from "src/views/common/auth/PermissionGuard";
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Add CSS animation for spinner
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [statusValue, setStatusValue] = useState("");
   const [statusLoading, setStatusLoading] = useState(false);
   const [statusError, setStatusError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageLoadingStates, setImageLoadingStates] = useState({});
+  const [imageErrorStates, setImageErrorStates] = useState({});
 
   // Helper function to format chip text
   const formatChipText = (text) => {
     return text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
+  // Handle image click to open modal
+  const handleImageClick = (image) => {
+    // Only open modal if image is not in error state
+    if (!imageErrorStates[image.id]) {
+      setSelectedImage(image);
+      setImageModalOpen(true);
+    }
+  };
+
+  // Handle modal close
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+    setSelectedImage(null);
+  };
+
+  // Handle image load start
+  const handleImageLoadStart = (imageId) => {
+    setImageLoadingStates(prev => ({ ...prev, [imageId]: true }));
+    setImageErrorStates(prev => ({ ...prev, [imageId]: false }));
+  };
+
+  // Handle image load success
+  const handleImageLoadSuccess = (imageId) => {
+    setImageLoadingStates(prev => ({ ...prev, [imageId]: false }));
+    setImageErrorStates(prev => ({ ...prev, [imageId]: false }));
+  };
+
+  // Handle image load error
+  const handleImageLoadError = (imageId) => {
+    setImageLoadingStates(prev => ({ ...prev, [imageId]: false }));
+    setImageErrorStates(prev => ({ ...prev, [imageId]: true }));
   };
 
   useEffect(() => {
@@ -259,13 +314,92 @@ const ProductDetailPage = () => {
                 </Typography>
                 <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
                   {productData?.product_image.map((image, index) => (
-                    <Avatar
+                    <Box
                       key={image.id}
-                      src={`${MEDIA_URL}${image.image}`}
-                      alt={`Product Image ${index + 1}`}
-                      sx={{ width: 100, height: 100 }}
-                      variant="rounded"
-                    />
+                      sx={{
+                        width: 120,
+                        height: 120,
+                        cursor: imageErrorStates[image.id] ? "not-allowed" : "pointer",
+                        borderRadius: 2,
+                        overflow: "hidden",
+                        border: "2px solid #e0e0e0",
+                        transition: "all 0.3s ease-in-out",
+                        position: "relative",
+                        opacity: imageErrorStates[image.id] ? 0.6 : 1,
+                        "&:hover": {
+                          transform: imageErrorStates[image.id] ? "none" : "scale(1.05)",
+                          boxShadow: imageErrorStates[image.id] ? "none" : "0 8px 25px rgba(0,0,0,0.15)",
+                        },
+                      }}
+                      onClick={() => handleImageClick(image)}
+                    >
+                      {/* Loading State */}
+                      {imageLoadingStates[image.id] && (
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "#f8f9fa",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: 20,
+                              height: 20,
+                              border: "2px solid #e0e0e0",
+                              borderTop: "2px solid #1976d2",
+                              borderRadius: "50%",
+                              animation: "spin 1s linear infinite",
+                            }}
+                          />
+                        </Box>
+                      )}
+
+                      {/* Image */}
+                      {!imageErrorStates[image.id] && (
+                        <Box
+                          component="img"
+                          src={`${MEDIA_URL}${image.image}`}
+                          alt={`Product Image ${index + 1}`}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            display: imageLoadingStates[image.id] ? "none" : "block",
+                          }}
+                          onLoadStart={() => handleImageLoadStart(image.id)}
+                          onLoad={() => handleImageLoadSuccess(image.id)}
+                          onError={() => handleImageLoadError(image.id)}
+                        />
+                      )}
+
+                      {/* Error State */}
+                      {imageErrorStates[image.id] && (
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "#f8f9fa",
+                            color: "#666",
+                            fontSize: "0.75rem",
+                            textAlign: "center",
+                            padding: 1,
+                          }}
+                        >
+                          <Box>
+                            <Box sx={{ fontSize: "1.5rem", mb: 0.5 }}>📷</Box>
+                            <Box>Image {index + 1}</Box>
+                            <Box sx={{ fontSize: "0.7rem", opacity: 0.7 }}>Not Available</Box>
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
                   ))}
                 </Box>
                 <Divider sx={{ mb: 3 }} />
@@ -676,6 +810,172 @@ const ProductDetailPage = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Image Modal Dialog */}
+      <Dialog
+        open={imageModalOpen}
+        onClose={handleCloseImageModal}
+        maxWidth={false}
+        fullWidth
+        PaperProps={{
+          sx: {
+            maxWidth: "95vw",
+            maxHeight: "95vh",
+            width: "auto",
+            height: "auto",
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
+            backdropFilter: "blur(10px)",
+            borderRadius: 2,
+            overflow: "hidden",
+            position: "relative",
+          },
+        }}
+        sx={{
+          "& .MuiDialog-paper": {
+            margin: 2,
+          },
+        }}
+      >
+        <DialogContent
+          sx={{
+            p: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "60vh",
+            position: "relative",
+          }}
+        >
+          {selectedImage && (
+            <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+              {/* Loading State */}
+              {imageLoadingStates[selectedImage.id] && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    borderRadius: 1,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      border: "3px solid rgba(255, 255, 255, 0.3)",
+                      borderTop: "3px solid white",
+                      borderRadius: "50%",
+                      animation: "spin 1s linear infinite",
+                    }}
+                  />
+                </Box>
+              )}
+
+              {/* Image */}
+              {!imageErrorStates[selectedImage.id] && (
+                <Box
+                  component="img"
+                  src={`${MEDIA_URL}${selectedImage.image}`}
+                  alt="Product Image"
+                  sx={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    width: "auto",
+                    height: "auto",
+                    objectFit: "contain",
+                    borderRadius: 1,
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+                    display: imageLoadingStates[selectedImage.id] ? "none" : "block",
+                  }}
+                  onLoadStart={() => handleImageLoadStart(selectedImage.id)}
+                  onLoad={() => handleImageLoadSuccess(selectedImage.id)}
+                  onError={() => handleImageLoadError(selectedImage.id)}
+                />
+              )}
+
+              {/* Error State */}
+              {imageErrorStates[selectedImage.id] && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    borderRadius: 1,
+                    color: "white",
+                    fontSize: "1.5rem",
+                    fontWeight: 500,
+                    backdropFilter: "blur(10px)",
+                    border: "2px dashed rgba(255, 255, 255, 0.3)",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
+                  <Box sx={{ fontSize: "4rem" }}>📷</Box>
+                  <Box>Image Not Available</Box>
+                  <Box sx={{ fontSize: "1rem", opacity: 0.7 }}>
+                    The image file could not be loaded
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          )}
+        </DialogContent>
+
+        {/* Close Button */}
+        <IconButton
+          onClick={handleCloseImageModal}
+          sx={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            width: 48,
+            height: 48,
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+            },
+            transition: "all 0.2s ease-in-out",
+          }}
+        >
+          <Close sx={{ fontSize: 24 }} />
+        </IconButton>
+
+        {/* Image Counter */}
+        {selectedImage && productData?.product_image && (
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 16,
+              left: "50%",
+              transform: "translateX(-50%)",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              color: "white",
+              px: 2,
+              py: 1,
+              borderRadius: 2,
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            {productData.product_image.findIndex(
+              (img) => img.id === selectedImage.id
+            ) + 1}{" "}
+            of {productData.product_image.length}
+          </Box>
+        )}
+      </Dialog>
     </Box>
   );
 };

@@ -148,7 +148,6 @@ const UserDropdown = (props) => {
                 sx={{ fontSize: "0.8rem", color: "text.disabled" }}
               >
                 {user?.email || ""}
-                {console.log(user)}
               </Typography>
             </Box>
           </Box>
