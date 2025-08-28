@@ -98,6 +98,24 @@ const DialogContactUs = (props) => {
         sx={{ pb: 8, px: { xs: 8, sm: 15 }, pt: { xs: 8, sm: 12.5 } }}
       >
         <form id="contact-response-form" onSubmit={handleSubmit(onSubmit)}>
+          {/* Original Message Display */}
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <FormLabel>Original Message</FormLabel>
+            <Typography
+              variant="body2"
+              sx={{
+                p: 2,
+                backgroundColor: (theme) => theme.palette.grey[100],
+                borderRadius: 1,
+                minHeight: 80,
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word'
+              }}
+            >
+              {dataToEdit?.message || "No message available"}
+            </Typography>
+          </FormControl>
+
           <FormControl fullWidth>
             <FormLabel
               required

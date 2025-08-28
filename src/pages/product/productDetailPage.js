@@ -35,6 +35,8 @@ import {
   LocationOn,
   Email,
   Phone,
+  LocalShipping,
+  QrCode2,
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import moment from "moment";
@@ -333,6 +335,20 @@ const ProductDetailPage = () => {
                 icon={<QrCode />}
                 label="Barcode"
                 value={productData.barcode}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LocalShipping />}
+                label="Shipment ID"
+                value={productData.shipment_id || "-"}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<QrCode2 />}
+                label="Tracking ID"
+                value={productData.tracking_id || "-"}
               />
             </Grid>
 
