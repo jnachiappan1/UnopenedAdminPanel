@@ -79,4 +79,9 @@ export const ApiEndPoints = {
     list: `${API_BASE_URL}api/v1/admin/cashout-fees`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/cashout-fees/${id}`,
   },
+  TRANSACTION: {
+    list: `${API_BASE_URL}api/v1/admin/transaction`,
+    getById: (id) => `${API_BASE_URL}api/v1/admin/transaction/${id}`,
+    delete: (id) => `${API_BASE_URL}api/v1/admin/transaction/${id}`,
+  },
 };

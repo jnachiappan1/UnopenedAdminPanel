@@ -15,7 +15,7 @@ import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
-
+import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 const navigation = () => {
   return [
     {
@@ -52,6 +52,11 @@ const navigation = () => {
       title: "Cashout Fees",
       icon: AttachMoneyOutlinedIcon,
       path: "/cashout-fees",
+    },
+    {
+      title: "Transactions",
+      icon: SwapHorizOutlinedIcon,
+      path: "/transactions",
     },
     {
       sectionTitle: "User Management",

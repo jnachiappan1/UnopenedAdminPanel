@@ -45,6 +45,8 @@ const SubAdminPage = React.lazy(() =>
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
 const CategoryPage = React.lazy(() => import("./pages/category"));
+const TransactionsPage = React.lazy(() => import("./pages/transactions"));
+const TransactionDetailPage = React.lazy(() => import("./pages/transactions/transactionDetail"));
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
@@ -245,6 +247,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <CategoryPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/transactions"
+                element={
+                  <ProtectedRoute>
+                    <TransactionsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/transactions/:id"
+                element={
+                  <ProtectedRoute>
+                    <TransactionDetailPage />
                   </ProtectedRoute>
                 }
               />
