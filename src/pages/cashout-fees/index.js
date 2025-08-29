@@ -95,7 +95,7 @@ const CashOutFeesPage = () => {
                       fontWeight="bold"
                       color="primary.main"
                     >
-                      ₹{feesData.cashout_fees || "0.00"}
+                      {feesData.cashout_fees || "0.00"}%
                     </Typography>
                   </Box>
                   <Chip
@@ -110,8 +110,8 @@ const CashOutFeesPage = () => {
                     textAlign="center"
                     sx={{ maxWidth: "400px" }}
                   >
-                    This is the current cashout fee charged to users. You can update this value using the
-                    button above.
+                    This is the current cashout fee charged to users. You can
+                    update this value using the button above.
                   </Typography>
                 </Box>
               ) : (
