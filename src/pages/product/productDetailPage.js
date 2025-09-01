@@ -489,8 +489,25 @@ const ProductDetailPage = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<Straighten />}
-                label="Dimensions"
-                value={productData.dimensions}
+                label="Length"
+                value={productData.length ? `${productData.length} cm` : "-"}
+                noCapitalize
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Straighten />}
+                label="Width"
+                value={productData.width ? `${productData.width} cm` : "-"}
+                noCapitalize
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Straighten />}
+                label="Height"
+                value={productData.height ? `${productData.height} cm` : "-"}
+                noCapitalize
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -498,6 +515,7 @@ const ProductDetailPage = () => {
                 icon={<LineWeight />}
                 label="Weight"
                 value={productData.weight}
+                noCapitalize
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>

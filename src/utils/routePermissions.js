@@ -47,6 +47,10 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "help support",
     relatedRoutes: [],
   },
+  "  /transactions": {
+    pattern: "transaction",
+    relatedRoutes: [],
+  },
 };
 
 export const PUBLIC_AUTHENTICATED_ROUTES = ["/401", "/404", "/", "/dashboard"];

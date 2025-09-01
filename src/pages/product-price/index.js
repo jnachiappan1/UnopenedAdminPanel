@@ -33,15 +33,15 @@ const ProductPricePage = () => {
 
   const fetchData = () => {
     setLoading(true);
-    
+
     // Fetch product price data
     const pricePromise = axiosInstance.get(ApiEndPoints.PRODUCT_PRICE.list);
-    
+
     // Fetch product price charges data
     const chargesPromise = axiosInstance.get(
       ApiEndPoints.PRODUCT_PRICE_CHARGES.list
     );
-    
+
     // Use Promise.all to fetch both simultaneously
     Promise.all([pricePromise, chargesPromise])
       .then(([priceResponse, chargesResponse]) => {
@@ -267,7 +267,7 @@ const ProductPricePage = () => {
           </Card>
         </Grid>
       </Grid>
-      
+
       {/* Single Dialog with conditional valueKey */}
       <DialogProductPrice
         mode={priceFormDialogMode}
