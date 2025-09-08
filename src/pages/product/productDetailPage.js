@@ -386,7 +386,9 @@ const ProductDetailPage = () => {
                               pointerEvents: "none",
                             }}
                             onLoadStart={() => handleImageLoadStart(image.id)}
-                            onLoadedData={() => handleImageLoadSuccess(image.id)}
+                            onLoadedData={() =>
+                              handleImageLoadSuccess(image.id)
+                            }
                             onError={() => handleImageLoadError(image.id)}
                           />
                         ) : (
@@ -406,8 +408,7 @@ const ProductDetailPage = () => {
                             onLoad={() => handleImageLoadSuccess(image.id)}
                             onError={() => handleImageLoadError(image.id)}
                           />
-                        ))
-                      }
+                        ))}
 
                       {/* Error State */}
                       {imageErrorStates[image.id] && (
@@ -800,7 +801,7 @@ const ProductDetailPage = () => {
             <>
               <Divider sx={{ my: 4 }} />
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                Buyer Address
+                Delivery Address
               </Typography>
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -950,7 +951,9 @@ const ProductDetailPage = () => {
                         : "block",
                     }}
                     onLoadStart={() => handleImageLoadStart(selectedImage.id)}
-                    onLoadedData={() => handleImageLoadSuccess(selectedImage.id)}
+                    onLoadedData={() =>
+                      handleImageLoadSuccess(selectedImage.id)
+                    }
                     onError={() => handleImageLoadError(selectedImage.id)}
                   />
                 ) : (
@@ -974,8 +977,7 @@ const ProductDetailPage = () => {
                     onLoad={() => handleImageLoadSuccess(selectedImage.id)}
                     onError={() => handleImageLoadError(selectedImage.id)}
                   />
-                ))
-              }
+                ))}
 
               {/* Error State */}
               {imageErrorStates[selectedImage.id] && (
