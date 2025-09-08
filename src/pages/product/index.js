@@ -20,6 +20,7 @@ import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
    const [productData, setProductData] = useState([]);
    const [search, setSearch] = useState("");
    const [status, setStatus] = useState("");
+   const [productStatus, setProductStatus] = useState("");
    const [totalCount, setTotalCount] = useState(0);
    const [currentPage, setCurrentPage] = useState(1);
    const [pageSize, setPageSize] = useState(
@@ -47,6 +48,7 @@ import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
        limit: pageSize,
        search: search,
        status: status,
+       product_status: productStatus,
      };
      axiosInstance
        .get(ApiEndPoints.PRODUCT.list, { params })
@@ -69,7 +71,7 @@ import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
        search: search,
        status: status,
      });
-   }, [currentPage, pageSize, search, status]);
+   }, [currentPage, pageSize, search, status, productStatus]);
  
    const handleSearchChange = (e) => {
      if (searchTimeoutRef.current) {
@@ -151,6 +153,27 @@ import DialogConfirmation from "src/views/dialogs/DialogConfirmation";
                    <MenuItem value={"All"}>All</MenuItem>
                    <MenuItem value={"approved"}>Approved</MenuItem>
                    <MenuItem value={"pending"}>Pending</MenuItem>
+                   <MenuItem value={"rejected"}>Rejected</MenuItem>
+                 </Select>
+                 <Select
+                   size="small"
+                   defaultValue={" "}
+                   sx={{ bgcolor: "#F7FBFF" }}
+                   onChange={(e) => {
+                     const selectedValue = e.target.value;
+                     setProductStatus(
+                       selectedValue === "All" ? "" : selectedValue
+                     );
+                   }}
+                 >
+                   <MenuItem disabled value={" "}>
+                     <em>Product Status</em>
+                   </MenuItem>
+                   <MenuItem value={"All"}>All</MenuItem>
+                   <MenuItem value={"active"}>Active</MenuItem>
+                   <MenuItem value={"sold"}>Sold</MenuItem>
+                   <MenuItem value={"in_review"}>In Review</MenuItem>
+                   <MenuItem value={"withdrawn"}>Withdrawn</MenuItem>
                    <MenuItem value={"rejected"}>Rejected</MenuItem>
                  </Select>
                  <TextField

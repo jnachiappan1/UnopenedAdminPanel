@@ -29,11 +29,28 @@ function Tableproduct({
     default: "#BDBDBD", // fallback grey
   };
 
+  const productStatusColors = {
+    active: "#4CAF50", // green
+    sold: "#9C27B0", // purple
+    in_review: "#2196F3", // blue
+    withdrawn: "#607D8B", // blue grey
+    rejected: "#F44336", // red
+    default: "#BDBDBD",
+  };
+
   const CustomChip = styled(Chip)(({ label }) => ({
     backgroundColor: `${statusColors[label] || statusColors.default}1e`, // light tint
     textTransform: "capitalize",
     color: statusColors[label] || statusColors.default,
     width: "100px",
+    fontWeight: 500,
+  }));
+
+  const ProductStatusChip = styled(Chip)(({ label }) => ({
+    backgroundColor: `${productStatusColors[label] || productStatusColors.default}1e`,
+    textTransform: "capitalize",
+    color: productStatusColors[label] || productStatusColors.default,
+    width: "120px",
     fontWeight: 500,
   }));
 
@@ -46,7 +63,8 @@ function Tableproduct({
       columns={[
         {
           field: "name",
-          minWidth: 250,
+          minWidth: 350,
+          flex: 1,
           sortable: false,
           headerName: "Name",
           renderCell: ({ row }) => (
@@ -58,6 +76,7 @@ function Tableproduct({
         {
           field: "brand",
           minWidth: 150,
+          flex: 0.5,
           sortable: false,
           headerName: "Brand",
           renderCell: ({ row }) => (
@@ -69,6 +88,7 @@ function Tableproduct({
         {
           field: "price",
           minWidth: 150,
+          flex: 0.5,
           sortable: false,
           headerName: "Price",
           renderCell: ({ row }) => (
@@ -80,6 +100,7 @@ function Tableproduct({
         {
           field: "msrp",
           minWidth: 150,
+          flex: 0.5,
           sortable: false,
           headerName: "MSRP",
           renderCell: ({ row }) => (
@@ -90,7 +111,7 @@ function Tableproduct({
         },
         {
           field: "updatedAt",
-          minWidth: 200,
+          minWidth: 180,
           flex: 0.5,
           sortable: false,
           headerName: "Created At ",
@@ -103,9 +124,20 @@ function Tableproduct({
         {
           field: "status",
           minWidth: 180,
+          flex: 0.1,
           sortable: false,
           headerName: "Status",
           renderCell: ({ row }) => <CustomChip label={row.status} />,
+        },
+        {
+          field: "product_status",
+          minWidth: 180,
+          flex: 0.1,
+          sortable: false,
+          headerName: "Product Status",
+          renderCell: ({ row }) => (
+            <ProductStatusChip label={row.product_status} />
+          ),
         },
         {
           field: "Actions",
@@ -118,9 +150,10 @@ function Tableproduct({
               <Button
                 size="small"
                 variant="outlined"
+                sx={{ width: "120px" }}
                 onClick={() => navigate(`/product/${row.id}`)}
               >
-                View & Update
+                {row.status === "pending" ? " View & Update" : " View Details"}
               </Button>
               <PermissionGuard permissionName="product" action="remove">
                 <IconButton

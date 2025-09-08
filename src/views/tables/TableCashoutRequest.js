@@ -36,7 +36,6 @@ function TableCashOutRequest({
     fontWeight: 500,
   }));
 
-  const navigate = useNavigate();
   return (
     <CustomDataGrid
       loading={loading}
@@ -44,8 +43,37 @@ function TableCashOutRequest({
       rows={rows}
       columns={[
         {
+          field: "full_name",
+          minWidth: 200,
+          flex: 1,
+          sortable: false,
+          headerName: "User Name",
+          renderCell: ({ row }) => (
+            <Typography
+              noWrap
+              variant="body2"
+              title={row.cashout_user?.full_name}
+            >
+              {row.cashout_user?.full_name}
+            </Typography>
+          ),
+        },
+        {
+          field: "email",
+          minWidth: 250,
+          flex: 1,
+          sortable: false,
+          headerName: "Email",
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.cashout_user?.email}>
+              {row.cashout_user?.email}
+            </Typography>
+          ),
+        },
+        {
           field: "type",
           minWidth: 200,
+          flex: 1,
           sortable: false,
           headerName: "Type",
           renderCell: ({ row }) => (
@@ -55,30 +83,25 @@ function TableCashOutRequest({
           ),
         },
         {
-          field: "venmo",
+          field: "cashoutId",
           minWidth: 180,
+          flex: 1,
           sortable: false,
-          headerName: "Venmo",
+          headerName: "Cashout ID",
           renderCell: ({ row }) => (
-            <Typography noWrap variant="body2" title={row.venmo}>
-              {row.venmo}
-            </Typography>
-          ),
-        },
-        {
-          field: "cash_app",
-          minWidth: 180,
-          sortable: false,
-          headerName: "Cash App",
-          renderCell: ({ row }) => (
-            <Typography noWrap variant="body2" title={row.cash_app}>
-              {row.cash_app}
+            <Typography
+              noWrap
+              variant="body2"
+              title={row.venmo || row.cash_app}
+            >
+              {row.venmo || row.cash_app}
             </Typography>
           ),
         },
         {
           field: "amount",
           minWidth: 180,
+          flex: 1,
           sortable: false,
           headerName: "Amount",
           renderCell: ({ row }) => (
@@ -87,17 +110,17 @@ function TableCashOutRequest({
             </Typography>
           ),
         },
-
         {
           field: "status",
           minWidth: 180,
+          flex: 0.1,
           sortable: false,
           headerName: "Status",
           renderCell: ({ row }) => <CustomChip label={row.status} />,
         },
         {
           field: "Actions",
-          flex: 0.1,
+          flex: 0,
           minWidth: 100,
           sortable: false,
           headerName: "Actions",
@@ -109,6 +132,7 @@ function TableCashOutRequest({
                   color="primary"
                   variant="outlined"
                   onClick={(e) => toggleEdit(e, row)}
+                  disabled={row.status === "pending" ? false : true}
                 >
                   <EditIcon />
                 </IconButton>
