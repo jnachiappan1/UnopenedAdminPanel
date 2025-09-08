@@ -54,8 +54,11 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "seller agreement",
     relatedRoutes: [],
   },
-
-  "  /transactions": {
+  "/order-transactions": {
+    pattern: "transaction",
+    relatedRoutes: [],
+  },
+  "/wallet-transactions": {
     pattern: "transaction",
     relatedRoutes: [],
   },

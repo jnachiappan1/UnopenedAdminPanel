@@ -49,7 +49,12 @@ const SubAdminPage = React.lazy(() =>
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
 const CategoryPage = React.lazy(() => import("./pages/category"));
-const TransactionsPage = React.lazy(() => import("./pages/transactions"));
+const OrderTransactionsPage = React.lazy(() =>
+  import("./pages/transactions/orderTransactions")
+);
+const WalletTransactionsPage = React.lazy(() =>
+  import("./pages/transactions/walletTransactions")
+);
 const TransactionDetailPage = React.lazy(() =>
   import("./pages/transactions/transactionDetail")
 );
@@ -273,10 +278,18 @@ function App() {
                 }
               />
               <Route
-                path="/transactions"
+                path="/order-transactions"
                 element={
                   <ProtectedRoute>
-                    <TransactionsPage />
+                    <OrderTransactionsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wallet-transactions"
+                element={
+                  <ProtectedRoute>
+                    <WalletTransactionsPage />
                   </ProtectedRoute>
                 }
               />

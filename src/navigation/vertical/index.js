@@ -18,6 +18,8 @@ import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 
 const navigation = () => {
   return [
@@ -65,6 +67,18 @@ const navigation = () => {
       title: "Transactions",
       icon: SwapHorizOutlinedIcon,
       path: "/transactions",
+      children: [
+        {
+          title: "Order Transactions",
+          icon: ShoppingCartOutlinedIcon,
+          path: "/order-transactions",
+        },
+        {
+          title: "Wallet Transactions",
+          icon: AccountBalanceOutlinedIcon,
+          path: "/wallet-transactions",
+        },
+      ],
     },
     {
       sectionTitle: "User Management",

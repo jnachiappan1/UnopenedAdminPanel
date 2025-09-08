@@ -26,12 +26,16 @@ function TableTransactions({
   const CustomChip = styled(Chip)(({ label }) => ({
     backgroundColor: statusColors[label] || "#8a8d931e",
     textTransform: "capitalize",
-    color: 
-      label === "success" ? "#45a200" : 
-      label === "failed" ? "#ff4d4f" : 
-      label === "initialized" ? "#faad14" : 
-      label === "inprogress" ? "#1890ff" : 
-      "#898b90",
+    color:
+      label === "success"
+        ? "#45a200"
+        : label === "failed"
+        ? "#ff4d4f"
+        : label === "initialized"
+        ? "#faad14"
+        : label === "inprogress"
+        ? "#1890ff"
+        : "#898b90",
     width: "100px",
   }));
 
@@ -91,7 +95,7 @@ function TableTransactions({
 
             return (
               <Typography noWrap variant="body2" title={formattedText}>
-                {formattedText}
+                {formattedText || "-"}
               </Typography>
             );
           },

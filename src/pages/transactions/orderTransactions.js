@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/hooks/useAuth";
 
-const TransactionsPage = () => {
+const OrderTransactionsPage = () => {
   const { userType } = useAuth();
   const searchTimeoutRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -26,6 +26,7 @@ const TransactionsPage = () => {
   const [pageSize, setPageSize] = useState(
     DefaultPaginationSettings.ROWS_PER_PAGE
   );
+  const [transactionType, setTransactionType] = useState("add_funds");
 
   const navigate = useNavigate();
 
@@ -44,6 +45,7 @@ const TransactionsPage = () => {
       limit: pageSize,
       search: search,
       status: status,
+      payment_transaction_type: transactionType,
     };
     axiosInstance
       .get(ApiEndPoints.TRANSACTION.list, { params })
@@ -66,7 +68,7 @@ const TransactionsPage = () => {
       search: search,
       status: status,
     });
-  }, [currentPage, pageSize, search, status]);
+  }, [currentPage, pageSize, search, status, transactionType]);
 
   const handleSearchChange = (e) => {
     if (searchTimeoutRef.current) {
@@ -83,7 +85,7 @@ const TransactionsPage = () => {
         <PageHeader
           title={
             <Typography variant="h5">
-              <Translations text="Transactions" />
+              <Translations text="Order Transactions" />
             </Typography>
           }
         />
@@ -125,6 +127,17 @@ const TransactionsPage = () => {
                     <MenuItem value={"intialized"}>Initialized</MenuItem>
                     <MenuItem value={"inprogress"}>In Progress</MenuItem>
                   </Select>
+
+                  <Select
+                    size="small"
+                    value={transactionType}
+                    sx={{ bgcolor: "#F7FBFF" }}
+                    onChange={(e) => setTransactionType(e.target.value)}
+                  >
+                    <MenuItem value={"add_funds"}>Add Funds</MenuItem>
+                    <MenuItem value={"cashout"}>Cashout</MenuItem>
+                  </Select>
+
                   <TextField
                     type="search"
                     size="small"
@@ -154,4 +167,4 @@ const TransactionsPage = () => {
   );
 };
 
-export default TransactionsPage;
+export default OrderTransactionsPage;

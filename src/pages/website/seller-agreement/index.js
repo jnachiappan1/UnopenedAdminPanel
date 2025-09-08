@@ -10,8 +10,6 @@ import FallbackSpinner from "src/@core/components/spinner";
 import { toastError } from "src/utils/utils";
 import Grid from "@mui/material/Grid2";
 import DialogLegalContent from "src/views/dialogs/DialogLegalContent";
-import { useAuth } from "src/hooks/useAuth";
-import { hasPermission } from "src/utils/permissions";
 import PermissionGuard from "src/views/common/auth/PermissionGuard";
 
 const SellerAgreementPage = () => {
