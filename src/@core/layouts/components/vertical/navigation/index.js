@@ -138,9 +138,8 @@ const Navigation = (props) => {
     <Drawer {...props}>
       {/* <Box
         sx={{
-          ...(afterVerticalNavMenuContentPosition === "fixed"
-            ? { flex: 1 }
-            : {}),
+          ...(afterVerticalNavMenuContentPosition === 'fixed' ? { flex: 1 } : {}),
+          backgroundColor: theme.palette.mode === 'light' ? '#F8F9FD' : '#202020'
         }}
       > */}
       <VerticalNavHeader {...props} />
@@ -152,14 +151,14 @@ const Navigation = (props) => {
         !beforeVerticalNavMenuContent) && (
         <StyledBoxForShadow
           ref={shadowRef}
-          sx={{ background: shadowBgColor() }}
+          // sx={{ background: shadowBgColor() }}
         />
       )}
       <Box
         sx={{
           position: "relative",
           overflow: "hidden",
-          // pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
+          pt: !navCollapsed || (navCollapsed && navHover) ? 4.5 : 1.25,
         }}
       >
         <ScrollWrapper
@@ -167,11 +166,7 @@ const Navigation = (props) => {
           {...(hidden
             ? {
                 onScroll: (container) => scrollMenu(container),
-                sx: {
-                  height: "100%",
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                },
+                sx: { height: "100%", overflowY: "auto", overflowX: "hidden" },
               }
             : {
                 options: { wheelPropagation: false },

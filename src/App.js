@@ -30,6 +30,9 @@ const PrivacyPolicyPage = React.lazy(() =>
   import("./pages/website/privacy-policy")
 );
 const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
+const SellerAgreementPage = React.lazy(() =>
+  import("./pages/website/seller-agreement")
+);
 const ContactUsPage = React.lazy(() => import("./pages/contact-us"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
@@ -39,6 +42,7 @@ const ProductDetailPage = React.lazy(() =>
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
 const CouponPage = React.lazy(() => import("./pages/coupon"));
 const CashOutFeesPage = React.lazy(() => import("./pages/cashout-fees"));
+const CashOutRequestPage = React.lazy(() => import("./pages/cashout-request"));
 const SubAdminPage = React.lazy(() =>
   import("./pages/RoleManagement/SubAdmin")
 );
@@ -46,7 +50,9 @@ const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
 const CategoryPage = React.lazy(() => import("./pages/category"));
 const TransactionsPage = React.lazy(() => import("./pages/transactions"));
-const TransactionDetailPage = React.lazy(() => import("./pages/transactions/transactionDetail"));
+const TransactionDetailPage = React.lazy(() =>
+  import("./pages/transactions/transactionDetail")
+);
 
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
@@ -139,6 +145,14 @@ function App() {
                 }
               />
               <Route
+                path="/seller-agreement"
+                element={
+                  <ProtectedRoute>
+                    <SellerAgreementPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/contact-us"
                 element={
                   <ProtectedRoute>
@@ -183,6 +197,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <CashOutFeesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cashout-requests"
+                element={
+                  <ProtectedRoute>
+                    <CashOutRequestPage />
                   </ProtectedRoute>
                 }
               />

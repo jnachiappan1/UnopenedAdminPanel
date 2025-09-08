@@ -16,6 +16,9 @@ import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
+import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+
 const navigation = () => {
   return [
     {
@@ -52,6 +55,11 @@ const navigation = () => {
       title: "Cashout Fees",
       icon: AttachMoneyOutlinedIcon,
       path: "/cashout-fees",
+    },
+    {
+      title: "Cashout Requests",
+      icon: AccountBalanceWalletOutlinedIcon,
+      path: "/cashout-requests",
     },
     {
       title: "Transactions",
@@ -103,6 +111,11 @@ const navigation = () => {
           title: "Help & Support",
           icon: HelpCenterOutlinedIcon,
           path: "/help-support",
+        },
+        {
+          title: "Seller Agreement",
+          icon: DescriptionOutlinedIcon,
+          path: "/seller-agreement",
         },
         {
           title: "Contact Us",

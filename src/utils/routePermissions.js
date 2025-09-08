@@ -22,6 +22,9 @@ export const ROUTE_PERMISSION_MAP = {
   "/cashout-fees": {
     pattern: "cashout fees",
   },
+  "/cashout-requests": {
+    pattern: "cashout requests",
+  },
   "/permission": {
     pattern: "permission",
     relatedRoutes: [],
@@ -47,6 +50,11 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "help support",
     relatedRoutes: [],
   },
+  "/seller-agreement": {
+    pattern: "seller agreement",
+    relatedRoutes: [],
+  },
+
   "  /transactions": {
     pattern: "transaction",
     relatedRoutes: [],
