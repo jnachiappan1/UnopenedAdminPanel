@@ -125,16 +125,16 @@ const PermissionsPage = () => {
               <Translations text="Permission" />
             </Typography>
           }
-          action={
-            <PermissionGuard permissionName="permission" action="add">
-              <Button
-                variant="contained"
-                onClick={(e) => togglecareerFormDialog(e, "add")}
-              >
-                Add Permission
-              </Button>
-            </PermissionGuard>
-          }
+          // action={
+          //   <PermissionGuard permissionName="permission" action="add">
+          //     <Button
+          //       variant="contained"
+          //       onClick={(e) => togglecareerFormDialog(e, "add")}
+          //     >
+          //       Add Permission
+          //     </Button>
+          //   </PermissionGuard>
+          // }
         />
         <Grid size={12}>
           <Card>

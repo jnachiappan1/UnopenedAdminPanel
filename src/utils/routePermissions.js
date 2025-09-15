@@ -16,6 +16,9 @@ export const ROUTE_PERMISSION_MAP = {
   "/category": {
     pattern: "category",
   },
+  "/contact-us": {
+    pattern: "contact us",
+  },
   "/coupon": {
     pattern: "coupon",
   },
@@ -37,7 +40,6 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "sub admin",
     relatedRoutes: [],
   },
-
   "/terms-and-conditions": {
     pattern: "terms and conditions",
     relatedRoutes: [],

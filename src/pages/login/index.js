@@ -41,14 +41,14 @@ const validationSchema = yup.object().shape({
     .required(FormValidationMessages.EMAIL.required),
   password: yup
     .string()
-    .min(
-      FormValidationMessages.PASSWORD.minLength,
-      FormValidationMessages.PASSWORD.minLengthErrorMessage
-    )
-    .matches(
-      FormValidationMessages.PASSWORD.pattern,
-      FormValidationMessages.PASSWORD.patternErrorMessage
-    )
+    // .min(
+    //   FormValidationMessages.PASSWORD.minLength,
+    //   FormValidationMessages.PASSWORD.minLengthErrorMessage
+    // )
+    // .matches(
+    //   FormValidationMessages.PASSWORD.pattern,
+    //   FormValidationMessages.PASSWORD.patternErrorMessage
+    // )
     .required(FormValidationMessages.PASSWORD.required),
 });
 

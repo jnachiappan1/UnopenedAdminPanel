@@ -42,6 +42,7 @@ const DialogCashOutFees = (props) => {
     resolver: yupResolver(validationSchema),
     mode: "onChange",
   });
+  console.log("dataToEdit", dataToEdit);
 
   useEffect(() => {
     if (open) {

@@ -37,36 +37,36 @@ function TablePermission({
             </Typography>
           ),
         },
-        {
-          field: "Actions",
-          flex: 0.1,
-          minWidth: 170,
-          sortable: false,
-          headerName: "Actions",
-          renderCell: ({ row }) => (
-            <Box display="flex" alignItems="center" gap="10px">
-              <PermissionGuard permissionName="permission" action="write">
-                <IconButton
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                  onClick={(e) => toggleEdit(e, "edit", row)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </PermissionGuard>
-              <PermissionGuard permissionName="permission" action="remove">
-                <IconButton
-                  size="small"
-                  color="primary"
-                  onClick={(e) => toggleDelete(e, row)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </PermissionGuard>
-            </Box>
-          ),
-        },
+        // {
+        //   field: "Actions",
+        //   flex: 0.1,
+        //   minWidth: 170,
+        //   sortable: false,
+        //   headerName: "Actions",
+        //   renderCell: ({ row }) => (
+        //     <Box display="flex" alignItems="center" gap="10px">
+        //       <PermissionGuard permissionName="permission" action="write">
+        //         <IconButton
+        //           size="small"
+        //           color="primary"
+        //           variant="outlined"
+        //           onClick={(e) => toggleEdit(e, "edit", row)}
+        //         >
+        //           <EditIcon />
+        //         </IconButton>
+        //       </PermissionGuard>
+        //       <PermissionGuard permissionName="permission" action="remove">
+        //         <IconButton
+        //           size="small"
+        //           color="primary"
+        //           onClick={(e) => toggleDelete(e, row)}
+        //         >
+        //           <DeleteIcon />
+        //         </IconButton>
+        //       </PermissionGuard>
+        //     </Box>
+        //   ),
+        // },
       ]}
       currentPage={currentPage}
       pageSize={pageSize}
