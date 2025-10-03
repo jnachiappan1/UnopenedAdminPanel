@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -38,23 +37,36 @@ function Tableproduct({
     default: "#BDBDBD",
   };
 
+  // ✅ CustomChip for general status
   const CustomChip = styled(Chip)(({ label }) => ({
-    backgroundColor: `${statusColors[label] || statusColors.default}1e`, // light tint
+    backgroundColor: `${statusColors[label] || statusColors.default}1e`,
     textTransform: "capitalize",
     color: statusColors[label] || statusColors.default,
     width: "100px",
     fontWeight: 500,
   }));
 
-  const ProductStatusChip = styled(Chip)(({ label }) => ({
-    backgroundColor: `${productStatusColors[label] || productStatusColors.default}1e`,
+  // ✅ ProductStatusChip uses raw `status` for colors
+  const ProductStatusChip = styled(Chip, {
+    shouldForwardProp: (prop) => prop !== "status", // don't pass `status` to DOM
+  })(({ status }) => ({
+    backgroundColor: `${
+      productStatusColors[status] || productStatusColors.default
+    }1e`,
     textTransform: "capitalize",
-    color: productStatusColors[label] || productStatusColors.default,
+    color: productStatusColors[status] || productStatusColors.default,
     width: "120px",
     fontWeight: 500,
   }));
 
   const navigate = useNavigate();
+
+  // ✅ Helper for formatting
+  const formatStatus = (status) =>
+    status
+      ? status.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+      : "";
+
   return (
     <CustomDataGrid
       loading={loading}
@@ -63,7 +75,7 @@ function Tableproduct({
       columns={[
         {
           field: "name",
-          minWidth: 350,
+          minWidth: 400,
           flex: 1,
           sortable: false,
           headerName: "Name",
@@ -114,10 +126,10 @@ function Tableproduct({
           minWidth: 180,
           flex: 0.5,
           sortable: false,
-          headerName: "Created At ",
+          headerName: "Created At",
           renderCell: ({ row }) => (
             <Typography noWrap variant="body2" title={row.updatedAt}>
-              {moment(row.updatedAt).format("DD-MM-YYYY HH:MM")}
+              {moment(row.updatedAt).format("DD-MM-YYYY HH:mm")}
             </Typography>
           ),
         },
@@ -135,9 +147,15 @@ function Tableproduct({
           flex: 0.1,
           sortable: false,
           headerName: "Product Status",
-          renderCell: ({ row }) => (
-            <ProductStatusChip label={row.product_status} />
-          ),
+          renderCell: ({ row }) => {
+            const statusKey = row.product_status;
+            return (
+              <ProductStatusChip
+                label={formatStatus(statusKey)} // nice label
+                status={statusKey} // raw key for color
+              />
+            );
+          },
         },
         {
           field: "Actions",
@@ -153,7 +171,7 @@ function Tableproduct({
                 sx={{ width: "120px" }}
                 onClick={() => navigate(`/product/${row.id}`)}
               >
-                {row.status === "pending" ? " View & Update" : " View Details"}
+                {row.status === "pending" ? "View & Update" : "View Details"}
               </Button>
               <PermissionGuard permissionName="product" action="remove">
                 <IconButton
