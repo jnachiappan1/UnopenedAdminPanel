@@ -1,6 +1,5 @@
-export const API_BASE_URL = "http://45.248.33.161:5019/";
+export const API_BASE_URL = "http://54.221.164.94/";
 export const MEDIA_URL = "https://minio.techreale.com/unoppened/";
-// export const API_BASE_URL = "http://192.168.29.37:3030/";
 
 export const ApiEndPoints = {
   AUTH: {
