@@ -157,7 +157,6 @@ const ProductDetailPage = () => {
       })
       .finally(() => setStatusLoading(false));
   };
-
   const DetailItem = ({
     icon,
     label,
@@ -165,6 +164,7 @@ const ProductDetailPage = () => {
     isChip = false,
     chipColor = "default",
     noCapitalize = false,
+    isHtml = false, // ✅ Add a flag to indicate HTML rendering
   }) => (
     <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
       <Box sx={{ mr: 2, mt: 0.5, color: "text.secondary" }}>{icon}</Box>
@@ -172,6 +172,7 @@ const ProductDetailPage = () => {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
           {label}
         </Typography>
+
         {isChip ? (
           <Chip
             label={value}
@@ -179,11 +180,19 @@ const ProductDetailPage = () => {
             size="small"
             variant="outlined"
           />
+        ) : isHtml ? (
+          // ✅ Render HTML safely using dangerouslySetInnerHTML
+          <Typography
+            variant="body1"
+            sx={{ wordBreak: "break-word" }}
+            component="div"
+            dangerouslySetInnerHTML={{ __html: value || "" }}
+          />
         ) : (
           <Typography
             variant="body1"
             sx={{
-              wordBreak: "break-all",
+              wordBreak: "break-word",
               textTransform: noCapitalize ? "none" : "capitalize",
             }}
           >
@@ -625,6 +634,7 @@ const ProductDetailPage = () => {
                 icon={<Notes />}
                 label="Description"
                 value={productData.description}
+                isHtml
               />
             </Grid>
           </Grid>
