@@ -85,7 +85,7 @@ const WalletTransactionsPage = () => {
         <PageHeader
           title={
             <Typography variant="h5">
-              <Translations text="Wallet Transactions" />
+              <Translations text="Order Transactions" />
             </Typography>
           }
         />

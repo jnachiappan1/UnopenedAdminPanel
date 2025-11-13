@@ -54,6 +54,7 @@ export const ApiEndPoints = {
     getById: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
     edit: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
     delete: (id) => `${API_BASE_URL}api/v1/admin/product/${id}`,
+    trackShipment: (id) => `${API_BASE_URL}api/v1/admin/product/track/${id}`,
   },
   PRODUCT_PRICE: {
     list: `${API_BASE_URL}api/v1/admin/product-price`,

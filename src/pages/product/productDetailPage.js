@@ -77,6 +77,7 @@ const ProductDetailPage = () => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [imageLoadingStates, setImageLoadingStates] = useState({});
   const [imageErrorStates, setImageErrorStates] = useState({});
+  const [trackShipmentLoading, setTrackShipmentLoading] = useState(false);
 
   // Helper function to format chip text
   const formatChipText = (text) => {
@@ -157,6 +158,31 @@ const ProductDetailPage = () => {
       })
       .finally(() => setStatusLoading(false));
   };
+
+  const handleTrackShipment = () => {
+    if (!productData?.shipment_id) {
+      toastError("Product ID not found");
+      return;
+    }
+    setTrackShipmentLoading(true);
+    axiosInstance
+      .get(ApiEndPoints.PRODUCT.trackShipment(productData?.shipment_id))
+      .then((response) => {
+        window.open(response.data.data.tracking.tracking_url, "_blank");
+        toastSuccess(
+          response.data.message || "Shipment tracking information retrieved successfully"
+        );
+        // You can handle the response data here if needed
+        // For example, display it in a dialog or update the UI
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setTrackShipmentLoading(false);
+      });
+  };
+
   const DetailItem = ({
     icon,
     label,
@@ -320,6 +346,8 @@ const ProductDetailPage = () => {
           {productData.product_image &&
             productData.product_image.length > 0 && (
               <>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Box>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                   Product Images
                 </Typography>
@@ -447,6 +475,20 @@ const ProductDetailPage = () => {
                     </Box>
                   ))}
                 </Box>
+                </Box>
+                {productData?.product_status==='sold' && <Box>
+                <LoadingButton
+                  variant="contained"
+                  color="primary"
+                  loading={trackShipmentLoading}
+                  onClick={handleTrackShipment}
+                >
+                  Track Shipment
+                </LoadingButton>
+              </Box>}
+              
+              </Box>
+               
                 <Divider sx={{ mb: 3 }} />
               </>
             )}
@@ -1027,20 +1069,23 @@ const ProductDetailPage = () => {
             position: "absolute",
             top: 16,
             right: 16,
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
             backdropFilter: "blur(10px)",
             color: "white",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            border: "2px solid rgba(255, 255, 255, 0.3)",
             width: 48,
             height: 48,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)",
+            zIndex: 10,
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              border: "2px solid rgba(255, 255, 255, 0.5)",
+              boxShadow: "0 6px 16px rgba(0, 0, 0, 0.5)",
             },
             transition: "all 0.2s ease-in-out",
           }}
         >
-          <Close sx={{ fontSize: 24 }} />
+          <Close sx={{ fontSize: 24, filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))" }} />
         </IconButton>
 
         {/* Image Counter */}

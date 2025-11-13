@@ -68,13 +68,13 @@ const navigation = () => {
       icon: SwapHorizOutlinedIcon,
       path: "/transactions",
       children: [
+        // {
+        //   title: "Order Transactions",
+        //   icon: ShoppingCartOutlinedIcon,
+        //   path: "/order-transactions",
+        // },
         {
           title: "Order Transactions",
-          icon: ShoppingCartOutlinedIcon,
-          path: "/order-transactions",
-        },
-        {
-          title: "Wallet Transactions",
           icon: AccountBalanceOutlinedIcon,
           path: "/wallet-transactions",
         },

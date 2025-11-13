@@ -64,22 +64,11 @@ function TableTransactions({
         {
           field: "amount",
           headerName: "Amount",
-          minWidth: 150,
+          minWidth: 180,
           flex: 1,
           renderCell: ({ row }) => (
             <Typography noWrap variant="body2" title={`$${row.amount}`}>
               ${row.amount}
-            </Typography>
-          ),
-        },
-        {
-          field: "wallet_amount",
-          headerName: "Wallet Amount",
-          minWidth: 150,
-          flex: 1,
-          renderCell: ({ row }) => (
-            <Typography noWrap variant="body2" title={`$${row.wallet_amount}`}>
-              ${row.wallet_amount}
             </Typography>
           ),
         },
