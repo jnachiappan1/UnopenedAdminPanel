@@ -60,7 +60,7 @@
     "eject": "react-scripts eject",
     "build:test": "react-scripts build",
     "uploadToS3:test": "aws s3 sync build/ s3://unopenedapp-admin",
-    "invalidateIndex:test": "aws cloudfront create-invalidation --distribution-id E208QRC1TJHEO8 --paths /index.html",
+    "invalidateIndex:test": "aws cloudfront create-invalidation --distribution-id E3G9A5IVFXV4L8 --paths /index.html",
     "deploy:test": "npm run clean && npm run build:test && npm run uploadToS3:test && npm run invalidateIndex:test"
   },
   "eslintConfig": {
