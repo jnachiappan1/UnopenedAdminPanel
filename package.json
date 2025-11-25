@@ -52,10 +52,16 @@
     "yup": "^1.6.1"
   },
   "scripts": {
+    "clean": "rimraf build",
+    "dev": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:test": "react-scripts build",
+    "uploadToS3:test": "aws s3 sync build/ s3://unopenedapp-admin",
+    "invalidateIndex:test": "aws cloudfront create-invalidation --distribution-id E208QRC1TJHEO8 --paths /index.html",
+    "deploy:test": "npm run clean && npm run build:test && npm run uploadToS3:test && npm run invalidateIndex:test"
   },
   "eslintConfig": {
     "extends": [
