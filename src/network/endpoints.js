@@ -1,5 +1,5 @@
 // export const API_BASE_URL = "http://45.248.33.161:5019/";
-export const API_BASE_URL = "http://13.222.176.76/";
+export const API_BASE_URL = "https://api.unopenedapp.com/";
 export const MEDIA_URL = "https://unopened-storage.s3.us-east-1.amazonaws.com";
 
 export const ApiEndPoints = {
