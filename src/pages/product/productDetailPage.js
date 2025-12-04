@@ -170,7 +170,8 @@ const ProductDetailPage = () => {
       .then((response) => {
         window.open(response.data.data.tracking.tracking_url, "_blank");
         toastSuccess(
-          response.data.message || "Shipment tracking information retrieved successfully"
+          response.data.message ||
+            "Shipment tracking information retrieved successfully"
         );
         // You can handle the response data here if needed
         // For example, display it in a dialog or update the UI
@@ -273,222 +274,238 @@ const ProductDetailPage = () => {
 
             {/* Update Status Inline */}
             {/* Status Update Section */}
-            {productData.status === "pending" && (
-              <PermissionGuard permissionName="product" action="write">
-                <Card
-                  variant="outlined"
-                  sx={{
-                    mt: 3,
-                    borderRadius: 2,
-                    borderColor: "divider",
-                  }}
-                >
-                  <CardContent>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ fontWeight: 600, mb: 1 }}
-                    >
-                      Update Product Status
-                    </Typography>
-                    <Box
-                      component="form"
-                      id="status-form"
-                      onSubmit={handleUpdateStatus}
-                      sx={{
-                        display: "flex",
-                        flexDirection: { xs: "column", sm: "row" },
-                        gap: 2,
-                        alignItems: { xs: "stretch", sm: "flex-end" },
-                      }}
-                    >
-                      <FormControl fullWidth size="small">
-                        <TextField
-                          select
-                          fullWidth
-                          id="status"
-                          name="status"
-                          size="small"
-                          value={statusValue}
-                          onChange={(e) => setStatusValue(e.target.value)}
-                          error={Boolean(statusError)}
-                        >
-                          <MenuItem value="" disabled>
-                            Select Status
-                          </MenuItem>
-                          <MenuItem value="pending">⏳ Pending</MenuItem>
-                          <MenuItem value="approved">✅ Approve</MenuItem>
-                          <MenuItem value="rejected">❌ Reject</MenuItem>
-                        </TextField>
-                        {statusError && (
-                          <FormHelperText sx={{ color: "error.main" }}>
-                            {statusError}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-
-                      <LoadingButton
-                        size="medium"
-                        type="submit"
-                        form="status-form"
-                        variant="contained"
-                        loading={statusLoading}
+            {productData.status === "pending" &&
+              productData.product_status !== "withdrawn" && (
+                <PermissionGuard permissionName="product" action="write">
+                  <Card
+                    variant="outlined"
+                    sx={{
+                      mt: 3,
+                      borderRadius: 2,
+                      borderColor: "divider",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: 600, mb: 1 }}
                       >
-                        Update
-                      </LoadingButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </PermissionGuard>
-            )}
+                        Update Product Status
+                      </Typography>
+                      <Box
+                        component="form"
+                        id="status-form"
+                        onSubmit={handleUpdateStatus}
+                        sx={{
+                          display: "flex",
+                          flexDirection: { xs: "column", sm: "row" },
+                          gap: 2,
+                          alignItems: { xs: "stretch", sm: "flex-end" },
+                        }}
+                      >
+                        <FormControl fullWidth size="small">
+                          <TextField
+                            select
+                            fullWidth
+                            id="status"
+                            name="status"
+                            size="small"
+                            value={statusValue}
+                            onChange={(e) => setStatusValue(e.target.value)}
+                            error={Boolean(statusError)}
+                          >
+                            <MenuItem value="" disabled>
+                              Select Status
+                            </MenuItem>
+                            <MenuItem value="pending">⏳ Pending</MenuItem>
+                            <MenuItem value="approved">✅ Approve</MenuItem>
+                            <MenuItem value="rejected">❌ Reject</MenuItem>
+                          </TextField>
+                          {statusError && (
+                            <FormHelperText sx={{ color: "error.main" }}>
+                              {statusError}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
+
+                        <LoadingButton
+                          size="medium"
+                          type="submit"
+                          form="status-form"
+                          variant="contained"
+                          loading={statusLoading}
+                        >
+                          Update
+                        </LoadingButton>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </PermissionGuard>
+              )}
           </Box>
 
           {/* Product Images Section */}
           {productData.product_image &&
             productData.product_image.length > 0 && (
               <>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Box>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                  Product Images
-                </Typography>
-                <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
-                  {productData?.product_image.map((image, index) => (
-                    <Box
-                      key={image.id}
-                      sx={{
-                        width: 120,
-                        height: 120,
-                        cursor: imageErrorStates[image.id]
-                          ? "not-allowed"
-                          : "pointer",
-                        borderRadius: 2,
-                        overflow: "hidden",
-                        border: "2px solid #e0e0e0",
-                        transition: "all 0.3s ease-in-out",
-                        position: "relative",
-                        opacity: imageErrorStates[image.id] ? 0.6 : 1,
-                        "&:hover": {
-                          transform: imageErrorStates[image.id]
-                            ? "none"
-                            : "scale(1.05)",
-                          boxShadow: imageErrorStates[image.id]
-                            ? "none"
-                            : "0 8px 25px rgba(0,0,0,0.15)",
-                        },
-                      }}
-                      onClick={() => handleImageClick(image)}
-                    >
-                      {/* Loading State */}
-                      {imageLoadingStates[image.id] && (
-                        <Box
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: "#f8f9fa",
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              width: 20,
-                              height: 20,
-                              border: "2px solid #e0e0e0",
-                              borderTop: "2px solid #1976d2",
-                              borderRadius: "50%",
-                              animation: "spin 1s linear infinite",
-                            }}
-                          />
-                        </Box>
-                      )}
-
-                      {/* Image */}
-                      {!imageErrorStates[image.id] &&
-                        (/\.(mp4|webm|ogg)$/i.test(
-                          (image?.image || "").toLowerCase()
-                        ) ? (
-                          <Box
-                            component="video"
-                            src={`${MEDIA_URL}${image.image}`}
-                            muted
-                            preload="metadata"
-                            sx={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              display: imageLoadingStates[image.id]
-                                ? "none"
-                                : "block",
-                              pointerEvents: "none",
-                            }}
-                            onLoadStart={() => handleImageLoadStart(image.id)}
-                            onLoadedData={() =>
-                              handleImageLoadSuccess(image.id)
-                            }
-                            onError={() => handleImageLoadError(image.id)}
-                          />
-                        ) : (
-                          <Box
-                            component="img"
-                            src={`${MEDIA_URL}${image.image}`}
-                            alt={`Product Image ${index + 1}`}
-                            sx={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              display: imageLoadingStates[image.id]
-                                ? "none"
-                                : "block",
-                            }}
-                            onLoadStart={() => handleImageLoadStart(image.id)}
-                            onLoad={() => handleImageLoadSuccess(image.id)}
-                            onError={() => handleImageLoadError(image.id)}
-                          />
-                        ))}
-
-                      {/* Error State */}
-                      {imageErrorStates[image.id] && (
-                        <Box
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: "#f8f9fa",
-                            color: "#666",
-                            fontSize: "0.75rem",
-                            textAlign: "center",
-                            padding: 1,
-                          }}
-                        >
-                          <Box>
-                            <Box sx={{ fontSize: "1.5rem", mb: 0.5 }}>📷</Box>
-                            <Box>Image {index + 1}</Box>
-                            <Box sx={{ fontSize: "0.7rem", opacity: 0.7 }}>
-                              Not Available
-                            </Box>
-                          </Box>
-                        </Box>
-                      )}
-                    </Box>
-                  ))}
-                </Box>
-                </Box>
-                {productData?.product_status==='sold' && <Box>
-                <LoadingButton
-                  variant="contained"
-                  color="primary"
-                  loading={trackShipmentLoading}
-                  onClick={handleTrackShipment}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  Track Shipment
-                </LoadingButton>
-              </Box>}
-              
-              </Box>
-               
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                      Product Images
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}
+                    >
+                      {productData?.product_image.map((image, index) => (
+                        <Box
+                          key={image.id}
+                          sx={{
+                            width: 120,
+                            height: 120,
+                            cursor: imageErrorStates[image.id]
+                              ? "not-allowed"
+                              : "pointer",
+                            borderRadius: 2,
+                            overflow: "hidden",
+                            border: "2px solid #e0e0e0",
+                            transition: "all 0.3s ease-in-out",
+                            position: "relative",
+                            opacity: imageErrorStates[image.id] ? 0.6 : 1,
+                            "&:hover": {
+                              transform: imageErrorStates[image.id]
+                                ? "none"
+                                : "scale(1.05)",
+                              boxShadow: imageErrorStates[image.id]
+                                ? "none"
+                                : "0 8px 25px rgba(0,0,0,0.15)",
+                            },
+                          }}
+                          onClick={() => handleImageClick(image)}
+                        >
+                          {/* Loading State */}
+                          {imageLoadingStates[image.id] && (
+                            <Box
+                              sx={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#f8f9fa",
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  width: 20,
+                                  height: 20,
+                                  border: "2px solid #e0e0e0",
+                                  borderTop: "2px solid #1976d2",
+                                  borderRadius: "50%",
+                                  animation: "spin 1s linear infinite",
+                                }}
+                              />
+                            </Box>
+                          )}
+
+                          {/* Image */}
+                          {!imageErrorStates[image.id] &&
+                            (/\.(mp4|webm|ogg)$/i.test(
+                              (image?.image || "").toLowerCase()
+                            ) ? (
+                              <Box
+                                component="video"
+                                src={`${MEDIA_URL}${image.image}`}
+                                muted
+                                preload="metadata"
+                                sx={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  display: imageLoadingStates[image.id]
+                                    ? "none"
+                                    : "block",
+                                  pointerEvents: "none",
+                                }}
+                                onLoadStart={() =>
+                                  handleImageLoadStart(image.id)
+                                }
+                                onLoadedData={() =>
+                                  handleImageLoadSuccess(image.id)
+                                }
+                                onError={() => handleImageLoadError(image.id)}
+                              />
+                            ) : (
+                              <Box
+                                component="img"
+                                src={`${MEDIA_URL}${image.image}`}
+                                alt={`Product Image ${index + 1}`}
+                                sx={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  display: imageLoadingStates[image.id]
+                                    ? "none"
+                                    : "block",
+                                }}
+                                onLoadStart={() =>
+                                  handleImageLoadStart(image.id)
+                                }
+                                onLoad={() => handleImageLoadSuccess(image.id)}
+                                onError={() => handleImageLoadError(image.id)}
+                              />
+                            ))}
+
+                          {/* Error State */}
+                          {imageErrorStates[image.id] && (
+                            <Box
+                              sx={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#f8f9fa",
+                                color: "#666",
+                                fontSize: "0.75rem",
+                                textAlign: "center",
+                                padding: 1,
+                              }}
+                            >
+                              <Box>
+                                <Box sx={{ fontSize: "1.5rem", mb: 0.5 }}>
+                                  📷
+                                </Box>
+                                <Box>Image {index + 1}</Box>
+                                <Box sx={{ fontSize: "0.7rem", opacity: 0.7 }}>
+                                  Not Available
+                                </Box>
+                              </Box>
+                            </Box>
+                          )}
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                  {productData?.product_status === "sold" && (
+                    <Box>
+                      <LoadingButton
+                        variant="contained"
+                        color="primary"
+                        loading={trackShipmentLoading}
+                        onClick={handleTrackShipment}
+                      >
+                        Track Shipment
+                      </LoadingButton>
+                    </Box>
+                  )}
+                </Box>
+
                 <Divider sx={{ mb: 3 }} />
               </>
             )}
@@ -1085,7 +1102,12 @@ const ProductDetailPage = () => {
             transition: "all 0.2s ease-in-out",
           }}
         >
-          <Close sx={{ fontSize: 24, filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))" }} />
+          <Close
+            sx={{
+              fontSize: 24,
+              filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
+            }}
+          />
         </IconButton>
 
         {/* Image Counter */}

@@ -171,7 +171,9 @@ function Tableproduct({
                 sx={{ width: "120px" }}
                 onClick={() => navigate(`/product/${row.id}`)}
               >
-                {row.status === "pending" ? "View & Update" : "View Details"}
+                {row.status === "pending" && row.product_status !== "withdrawn"
+                  ? "View & Update"
+                  : "View Details"}
               </Button>
               <PermissionGuard permissionName="product" action="remove">
                 <IconButton

@@ -63,8 +63,8 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: "admin@unopened.com",
-      password: "Admin@123",
+      email: "",
+      password: "",
     },
     resolver: yupResolver(validationSchema),
     mode: "onChange",
