@@ -131,8 +131,21 @@ const WalletTransactionsPage = () => {
                     size="small"
                     value={transactionType}
                     sx={{ bgcolor: "#F7FBFF" }}
+                    displayEmpty
+                    renderValue={(value) =>
+                      value ? (
+                        {
+                          buy_product: "Buy Product",
+                          wallet_funds: "Wallet Funds",
+                          wallet_buy_product_funds: "Wallet Buy Product Funds",
+                        }[value]
+                      ) : (
+                        "All"
+                      )
+                    }
                     onChange={(e) => setTransactionType(e.target.value)}
                   >
+                    <MenuItem value={""}>All</MenuItem>
                     <MenuItem value={"buy_product"}>Buy Product</MenuItem>
                     <MenuItem value={"wallet_funds"}>Wallet Funds</MenuItem>
                     <MenuItem value={"wallet_buy_product_funds"}>

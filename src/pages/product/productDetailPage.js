@@ -761,6 +761,13 @@ const ProductDetailPage = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
+                    label="Second Line Address"
+                    value={productData.product_user?.second_line_address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
                     label="Country"
                     value={productData.product_user?.country || "-"}
                   />

@@ -11,7 +11,7 @@ export function CleaveNumberInput(props) {
       options={{
         ...(prefix && { prefix: prefix }),
         numeral: true,
-        numeralThousandsGroupStyle: 'thousand',
+        numeralThousandsGroupStyle: 'none',
         numeralDecimalScale: 4,
         numeralPositiveOnly: true
       }}

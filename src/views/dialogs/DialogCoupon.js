@@ -45,6 +45,24 @@ const validationSchema = yup.object().shape({
     .number()
     .typeError("Discount Amount must be a number.")
     .min(0, "Discount Amount cannot be negative.")
+    .test(
+      "discount-less-than-minimum",
+      "Discount Amount must be less than Minimum Purchase Amount.",
+      function (value) {
+        const { minimum_purchase_amount } = this.parent;
+        if (
+          value === undefined ||
+          value === null ||
+          value === "" ||
+          minimum_purchase_amount === undefined ||
+          minimum_purchase_amount === null ||
+          minimum_purchase_amount === ""
+        ) {
+          return true; // Handled by other validators (e.g., required)
+        }
+        return Number(value) < Number(minimum_purchase_amount);
+      }
+    )
     .required("Discount Amount is required."),
   applicable_user: yup
     .string()
