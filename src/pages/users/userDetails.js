@@ -183,6 +183,13 @@ const UserDetailPage = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<LocationOn />}
+                label="Second Line Address"
+                value={userData.second_line_address || "-"}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<LocationOn />}
                 label="City, State"
                 value={`${userData.city}, ${userData.state}`}
               />

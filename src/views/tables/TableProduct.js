@@ -122,6 +122,18 @@ function Tableproduct({
           ),
         },
         {
+          field: "order_id",
+          minWidth: 160,
+          flex: 0.4,
+          sortable: false,
+          headerName: "Order ID",
+          renderCell: ({ row }) => (
+            <Typography noWrap variant="body2" title={row.order_id}>
+              {row.order_id || "-"}
+            </Typography>
+          ),
+        },
+        {
           field: "updatedAt",
           minWidth: 180,
           flex: 0.5,

@@ -589,6 +589,14 @@ const ProductDetailPage = () => {
                 value={productData.tracking_id || "-"}
               />
             </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                icon={<Tag />}
+                label="Order ID"
+                value={productData.order_id || "-"}
+                noCapitalize
+              />
+            </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
@@ -843,6 +851,13 @@ const ProductDetailPage = () => {
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
+                    label="Second Line Address"
+                    value={productData.buyer_user?.second_line_address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
                     label="Country"
                     value={productData.buyer_user?.country || "-"}
                   />
@@ -900,11 +915,18 @@ const ProductDetailPage = () => {
                     }
                   />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Address"
                     value={productData.buyer_address?.address || "-"}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Second Line Address"
+                    value={productData.buyer_address?.second_line_address || "-"}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
