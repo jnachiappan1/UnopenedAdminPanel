@@ -26,7 +26,7 @@ const WalletTransactionsPage = () => {
   const [pageSize, setPageSize] = useState(
     DefaultPaginationSettings.ROWS_PER_PAGE
   );
-  const [transactionType, setTransactionType] = useState("buy_product");
+  const [transactionType, setTransactionType] = useState("");
 
   const navigate = useNavigate();
 
