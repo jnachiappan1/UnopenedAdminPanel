@@ -82,7 +82,7 @@ function TableUsers({
           headerName: "Country",
           renderCell: ({ row }) => (
             <Typography noWrap variant="body2" title={row.country}>
-              {row.country}
+              {row?.address?.country || "-"}
             </Typography>
           ),
         },

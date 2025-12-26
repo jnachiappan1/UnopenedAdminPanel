@@ -20,21 +20,21 @@ import {
   VerifiedUser,
   Tag,
 } from "@mui/icons-material";
+import Grid from "@mui/material/Grid2";
+
 import { axiosInstance } from "../../network/adapter";
 import { ApiEndPoints, MEDIA_URL } from "../../network/endpoints";
 import { toastError } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
-import Grid from "@mui/material/Grid2";
+
 const UserDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Helper function to format chip text
-  const formatChipText = (text) => {
-    return text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-  };
+  const formatChipText = (text = "") =>
+    text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
   useEffect(() => {
     axiosInstance
@@ -42,12 +42,8 @@ const UserDetailPage = () => {
       .then((response) => {
         setUserData(response.data.data.user);
       })
-      .catch((error) => {
-        toastError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((error) => toastError(error))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const getInitials = (name = "") =>
@@ -59,6 +55,9 @@ const UserDetailPage = () => {
 
   if (loading) return <FallbackSpinner />;
   if (!userData) return <Typography>No user found.</Typography>;
+
+  // ✅ NEW: address is now nested
+  const address = userData.address || {};
 
   const DetailItem = ({
     icon,
@@ -81,10 +80,7 @@ const UserDetailPage = () => {
             variant="outlined"
           />
         ) : (
-          <Typography
-            variant="body1"
-            sx={{ wordBreak: "break-all", textTransform: "capitalize" }}
-          >
+          <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
             {value}
           </Typography>
         )}
@@ -94,23 +90,21 @@ const UserDetailPage = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Box sx={{ mb: 5, display: "flex", alignItems: "center", gap: "10px" }}>
+      {/* Header */}
+      <Box sx={{ mb: 5, display: "flex", alignItems: "center", gap: 1 }}>
         <IconButton
           size="small"
-          sx={{
-            border: "2px solid",
-            borderColor: "primary.main",
-          }}
+          sx={{ border: "2px solid", borderColor: "primary.main" }}
           onClick={() => navigate(-1)}
         >
           <ArrowBack sx={{ color: "primary.main" }} fontSize="small" />
         </IconButton>
-        <Typography varient="h6">User Details</Typography>
+        <Typography variant="h6">User Details</Typography>
       </Box>
 
       <Card elevation={1}>
         <CardContent sx={{ p: 4 }}>
-          {/* User Profile Section */}
+          {/* Profile */}
           <Box sx={{ mb: 4, display: "flex", alignItems: "center", gap: 2 }}>
             <Avatar
               sx={{
@@ -120,17 +114,20 @@ const UserDetailPage = () => {
                 color: "grey.600",
                 fontSize: "2rem",
                 fontWeight: 600,
-                mb: 2,
               }}
-              src={`${MEDIA_URL}${userData?.profile_picture}` || ""}
+              src={
+                userData.profile_picture
+                  ? `${MEDIA_URL}${userData.profile_picture}`
+                  : ""
+              }
             >
               {getInitials(userData.full_name)}
             </Avatar>
+
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
                 {userData.full_name}
               </Typography>
-
               <Chip
                 label={formatChipText(userData.status)}
                 color={userData.status === "active" ? "success" : "error"}
@@ -141,7 +138,7 @@ const UserDetailPage = () => {
 
           <Divider sx={{ mb: 3 }} />
 
-          {/* Details Section */}
+          {/* Details */}
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
             Details
           </Typography>
@@ -150,6 +147,7 @@ const UserDetailPage = () => {
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem icon={<Tag />} label="User ID" value={userData.id} />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<Person />}
@@ -165,11 +163,14 @@ const UserDetailPage = () => {
                 value={userData.email}
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<Phone />}
                 label="Phone"
-                value={`${userData.country_code} ${userData.phone_number}`}
+                value={`${address.country_code || userData.country_code} ${
+                  address.phone_number || userData.phone_number
+                }`}
               />
             </Grid>
 
@@ -177,21 +178,23 @@ const UserDetailPage = () => {
               <DetailItem
                 icon={<LocationOn />}
                 label="Address"
-                value={userData.address}
+                value={address.address || "-"}
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<LocationOn />}
                 label="Second Line Address"
-                value={userData.second_line_address || "-"}
+                value={address.second_line_address || "-"}
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<LocationOn />}
                 label="City, State"
-                value={`${userData.city}, ${userData.state}`}
+                value={`${address.city || "-"}, ${address.state || "-"}`}
               />
             </Grid>
 
@@ -199,14 +202,15 @@ const UserDetailPage = () => {
               <DetailItem
                 icon={<Public />}
                 label="Country"
-                value={userData.country}
+                value={address.country || "-"}
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<LocationOn />}
                 label="Pincode"
-                value={userData.pincode}
+                value={address.pincode || "-"}
               />
             </Grid>
 
@@ -215,16 +219,16 @@ const UserDetailPage = () => {
                 icon={<Person />}
                 label="Gender"
                 value={formatChipText(userData.gender)}
-                isChip={true}
-                chipColor="default"
+                isChip
               />
             </Grid>
+
             <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 icon={<VerifiedUser />}
                 label="Account Verified"
                 value={userData.verify_account ? "Verified" : "Not Verified"}
-                isChip={true}
+                isChip
                 chipColor={userData.verify_account ? "success" : "error"}
               />
             </Grid>

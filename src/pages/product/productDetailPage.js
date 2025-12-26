@@ -83,6 +83,10 @@ const ProductDetailPage = () => {
   const formatChipText = (text) => {
     return text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
+  const sellerDefaultAddress =
+    productData?.product_user?.address_user?.find(
+      (addr) => addr.is_default_address === true
+    ) || null;
 
   // Handle image click to open modal
   const handleImageClick = (image) => {
@@ -713,7 +717,9 @@ const ProductDetailPage = () => {
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
                 Seller Details
               </Typography>
+
               <Grid container spacing={2}>
+                {/* Basic Info */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                     <Avatar
@@ -722,7 +728,6 @@ const ProductDetailPage = () => {
                           ? `${MEDIA_URL}${productData.product_user.profile_picture}`
                           : undefined
                       }
-                      alt={productData.product_user?.full_name || "Seller"}
                       sx={{ width: 48, height: 48, mr: 2 }}
                     />
                     <Box>
@@ -738,6 +743,7 @@ const ProductDetailPage = () => {
                     </Box>
                   </Box>
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<Email />}
@@ -746,6 +752,7 @@ const ProductDetailPage = () => {
                     noCapitalize
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<Phone />}
@@ -759,46 +766,53 @@ const ProductDetailPage = () => {
                     }
                   />
                 </Grid>
+
+                {/* Address Info (DEFAULT ADDRESS ONLY) */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Address"
-                    value={productData.product_user?.address || "-"}
+                    value={sellerDefaultAddress?.address || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Second Line Address"
-                    value={productData.product_user?.second_line_address || "-"}
+                    value={sellerDefaultAddress?.second_line_address || "-"}
                   />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <DetailItem
-                    icon={<LocationOn />}
-                    label="Country"
-                    value={productData.product_user?.country || "-"}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <DetailItem
-                    icon={<LocationOn />}
-                    label="State"
-                    value={productData.product_user?.state || "-"}
-                  />
-                </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="City"
-                    value={productData.product_user?.city || "-"}
+                    value={sellerDefaultAddress?.city || "-"}
                   />
                 </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="State"
+                    value={sellerDefaultAddress?.state || "-"}
+                  />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <DetailItem
+                    icon={<LocationOn />}
+                    label="Country"
+                    value={sellerDefaultAddress?.country || "-"}
+                  />
+                </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Pincode"
-                    value={productData.product_user?.pincode || "-"}
+                    value={sellerDefaultAddress?.pincode || "-"}
                   />
                 </Grid>
               </Grid>
@@ -806,13 +820,15 @@ const ProductDetailPage = () => {
           )}
 
           {/* Buyer Details */}
-          {productData.buyer_user && (
+          {productData?.buyer_user || productData?.buyer_address ? (
             <>
               <Divider sx={{ my: 4 }} />
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
                 Buyer Details
               </Typography>
+
               <Grid container spacing={2}>
+                {/* User Info */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<Person />}
@@ -820,6 +836,7 @@ const ProductDetailPage = () => {
                     value={productData.buyer_user?.full_name || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<Email />}
@@ -828,6 +845,7 @@ const ProductDetailPage = () => {
                     noCapitalize
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<Phone />}
@@ -841,51 +859,60 @@ const ProductDetailPage = () => {
                     }
                   />
                 </Grid>
+
+                {/* Address Info */}
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Address"
-                    value={productData.buyer_user?.address || "-"}
+                    value={productData.buyer_address?.address || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Second Line Address"
-                    value={productData.buyer_user?.second_line_address || "-"}
+                    value={
+                      productData.buyer_address?.second_line_address || "-"
+                    }
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Country"
-                    value={productData.buyer_user?.country || "-"}
+                    value={productData.buyer_address?.country || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="State"
-                    value={productData.buyer_user?.state || "-"}
+                    value={productData.buyer_address?.state || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="City"
-                    value={productData.buyer_user?.city || "-"}
+                    value={productData.buyer_address?.city || "-"}
                   />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <DetailItem
                     icon={<LocationOn />}
                     label="Pincode"
-                    value={productData.buyer_user?.pincode || "-"}
+                    value={productData.buyer_address?.pincode || "-"}
                   />
                 </Grid>
               </Grid>
             </>
-          )}
+          ) : null}
 
           {/* Buyer Address */}
           {productData.buyer_address && (
@@ -926,7 +953,9 @@ const ProductDetailPage = () => {
                   <DetailItem
                     icon={<LocationOn />}
                     label="Second Line Address"
-                    value={productData.buyer_address?.second_line_address || "-"}
+                    value={
+                      productData.buyer_address?.second_line_address || "-"
+                    }
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
