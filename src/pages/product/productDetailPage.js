@@ -51,6 +51,7 @@ import { toastError, toastSuccess } from "src/utils/utils";
 import FallbackSpinner from "src/@core/components/spinner";
 import { LoadingButton } from "@mui/lab";
 import PermissionGuard from "src/views/common/auth/PermissionGuard";
+import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -78,6 +79,9 @@ const ProductDetailPage = () => {
   const [imageLoadingStates, setImageLoadingStates] = useState({});
   const [imageErrorStates, setImageErrorStates] = useState({});
   const [trackShipmentLoading, setTrackShipmentLoading] = useState(false);
+  const [note, setNote] = useState("");
+  const [adminNote, setAdminNote] = useState("");
+
 
   // Helper function to format chip text
   const formatChipText = (text) => {
@@ -135,33 +139,80 @@ const ProductDetailPage = () => {
         setLoading(false);
       });
   }, [id]);
-
+  useEffect(() => {
+    if (statusValue !== "approved" && statusValue !== "rejected") {
+      setNote("");
+    }
+  }, [statusValue]);
+  useEffect(() => {
+    if (productData?.note) {
+      setAdminNote(productData.note);
+    }
+  }, [productData]);
   const handleUpdateStatus = (e) => {
     e?.preventDefault();
-    if (!statusValue || statusValue === " ") {
+  
+    // 🔹 Status validation
+    if (!statusValue || statusValue.trim() === "") {
       setStatusError("Please select a status.");
       return;
     }
+  
+    // 🔹 Require note when rejected (recommended)
+    if (statusValue === "rejected" && !note.trim()) {
+      toastError("Rejection reason is required");
+      return;
+    }
+  
     setStatusError("");
+  
+    // 🔹 Prepare payload
     const payload = new FormData();
     payload.append("status", statusValue);
+  
+    if (statusValue === "approved" || statusValue === "rejected") {
+      payload.append("note", note.trim());
+    }
+  
     setStatusLoading(true);
+  
     axiosInstance
       .patch(ApiEndPoints.PRODUCT.edit(productData.id), payload, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((res) => res.data)
+      .then((response) => response.data)
       .then((res) => {
         toastSuccess(res.message || "Status updated successfully");
+  
+        const updatedProduct = res.data.product;
+  
+        // ✅ update product details in UI
         setProductData((prev) =>
-          prev ? { ...prev, status: statusValue } : prev
+          prev
+            ? {
+                ...prev,
+                status: updatedProduct.status,
+                product_status: updatedProduct.product_status,
+                note: updatedProduct.note,
+                updatedAt: updatedProduct.updatedAt,
+              }
+            : prev
         );
+  
+        // ✅ store admin note separately if needed
+        setAdminNote(updatedProduct.note || "");
+  
+        // ✅ reset local note input
+        setNote("");
       })
       .catch((error) => {
         toastError(error);
       })
-      .finally(() => setStatusLoading(false));
+      .finally(() => {
+        setStatusLoading(false);
+      });
   };
+  
 
   const handleTrackShipment = () => {
     if (!productData?.shipment_id) {
@@ -262,6 +313,13 @@ const ProductDetailPage = () => {
             >
               {productData.name}
             </Typography>
+            <Box  sx={{
+    display: "flex",
+    alignItems: "center",
+    gap: 1.5,
+    flexWrap: "wrap",
+    mt: 1,
+  }}>
             <Chip
               label={formatChipText(productData.status)}
               color={productData.status === "approved" ? "success" : "warning"}
@@ -275,6 +333,44 @@ const ProductDetailPage = () => {
               }
               size="small"
             />
+
+            </Box>
+{/* ✅ Admin Note */}
+{productData.note && (
+  <Box
+    sx={{
+      mt: 3,
+      p: 2,
+      borderRadius: 2,
+      backgroundColor: "grey.50",
+      border: "1px solid",
+      borderColor: "divider",
+    }}
+  >
+    {/* Title */}
+    <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, mb: 0.5 }}>
+      <FeedbackOutlinedIcon fontSize="small" color="action" />
+      <Typography
+        variant="subtitle2"
+        sx={{ fontWeight: 600, color: "text.primary" }}
+      >
+         Feedback
+      </Typography>
+    </Box>
+
+    {/* Content */}
+    <Typography
+      variant="body2"
+      sx={{
+        color: "text.secondary",
+        wordBreak: "break-word",
+        pl: 3, // aligns text nicely under title
+      }}
+    >
+      {adminNote}
+    </Typography>
+  </Box>
+)}
 
             {/* Update Status Inline */}
             {/* Status Update Section */}
@@ -342,10 +438,32 @@ const ProductDetailPage = () => {
                           Update
                         </LoadingButton>
                       </Box>
+                      {(statusValue === "approved" || statusValue === "rejected") && (
+  <FormControl fullWidth size="small" sx={{mt:3}}>
+    <FormLabel sx={{ mb: 1 }}>
+     Feedback
+    </FormLabel>
+
+    <TextField
+      multiline
+      rows={3}
+      size="small"
+      placeholder={
+        statusValue === "approved"
+          ? "Add approval note (optional)"
+          : "Add rejection reason"
+      }
+      value={note}
+      onChange={(e) => setNote(e.target.value)}
+    />
+  </FormControl>
+)}
+
                     </CardContent>
                   </Card>
                 </PermissionGuard>
               )}
+              
           </Box>
 
           {/* Product Images Section */}
