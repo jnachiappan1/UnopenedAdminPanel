@@ -78,6 +78,7 @@ function TableContactUs({
                   size="small"
                   color="primary"
                   variant="outlined"
+                  disabled={row.status === "resolved"}
                   onClick={(e) => toggleEdit(e, "edit", row)}
                 >
                   <ReplyOutlinedIcon />
