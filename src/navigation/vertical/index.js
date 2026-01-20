@@ -63,6 +63,7 @@ const navigation = () => {
       icon: AccountBalanceWalletOutlinedIcon,
       path: "/cashout-requests",
     },
+
     {
       title: "Transactions",
       icon: SwapHorizOutlinedIcon,
@@ -79,6 +80,11 @@ const navigation = () => {
           path: "/wallet-transactions",
         },
       ],
+    },
+    {
+      title: "Support",
+      icon: ContactSupportIcon,
+      path: "/contact-us",
     },
     {
       sectionTitle: "User Management",
@@ -130,11 +136,6 @@ const navigation = () => {
           title: "Seller Agreement",
           icon: DescriptionOutlinedIcon,
           path: "/seller-agreement",
-        },
-        {
-          title: "Contact Us",
-          icon: ContactSupportIcon,
-          path: "/contact-us",
         },
       ],
     },

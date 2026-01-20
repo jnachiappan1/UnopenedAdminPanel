@@ -17,7 +17,7 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "category",
   },
   "/contact-us": {
-    pattern: "contact us",
+    pattern: "support",
   },
   "/coupon": {
     pattern: "coupon",
@@ -77,7 +77,7 @@ export const PUBLIC_AUTHENTICATED_ROUTES = ["/401", "/404", "/", "/dashboard"];
 export const checkRouteAccess = (path, permissions) => {
   // First check for exact route matches
   const basePath = Object.keys(ROUTE_PERMISSION_MAP).find(
-    (route) => path === route || path.startsWith(route + "/")
+    (route) => path === route || path.startsWith(route + "/"),
   );
 
   if (basePath) {
@@ -170,7 +170,7 @@ export const getAccessibleRoutes = (permissions, userType) => {
  */
 export const isPublicRoute = (path) => {
   return PUBLIC_AUTHENTICATED_ROUTES.some(
-    (route) => path === route || path.startsWith(route + "/")
+    (route) => path === route || path.startsWith(route + "/"),
   );
 };
 
@@ -182,7 +182,7 @@ export const isPublicRoute = (path) => {
  */
 export const getRoutePermission = (path, permissions) => {
   const basePath = Object.keys(ROUTE_PERMISSION_MAP).find(
-    (route) => path === route || path.startsWith(route + "/")
+    (route) => path === route || path.startsWith(route + "/"),
   );
 
   if (basePath) {
