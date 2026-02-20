@@ -2,6 +2,10 @@
   "name": "nmp-admin-panel-web",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "minimatch": "^10.2.1",
+    "nth-check": "^2.0.1"
+  },
   "dependencies": {
     "@casl/ability": "^6.7.2",
     "@casl/react": "^4.0.0",
