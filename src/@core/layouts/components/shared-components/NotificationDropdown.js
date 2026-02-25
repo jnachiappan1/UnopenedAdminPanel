@@ -228,7 +228,7 @@ const NotificationDropdown = (props) => {
               </Typography>
             </Box>
           ) : (
-            notificationData.map((notification, index) => (
+            notificationData.slice(0, 5).map((notification, index) => (
               <MenuItem
                 key={index}
                 onClick={() => {
