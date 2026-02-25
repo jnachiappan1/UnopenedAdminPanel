@@ -14,6 +14,7 @@ This project is a Create React App application used by admins to manage:
 - Cashout fees and cashout requests
 - Transactions
 - Contact/support tickets
+- Notifications (unread count with dropdown preview)
 - Role, permission, and sub-admin access control
 - Website legal content (Terms, Privacy Policy, Help & Support, Seller Agreement)
 
@@ -87,7 +88,7 @@ Current target values in `package.json`:
 src/
   @core/                Core layout/theme/components
   configs/              App configuration (theme, auth, i18n)
-  context/              React contexts
+  context/              React contexts (Auth, Notification)
   hooks/                Custom hooks
   layouts/              Layout wrappers and UI shell
   navigation/           Sidebar/top nav definitions
@@ -95,6 +96,17 @@ src/
   pages/                Route pages
   views/                Shared dialogs/tables/components
 ```
+
+## Features
+
+### Notifications
+- Notification system with unread count badge
+- Dropdown preview showing latest 5 unread notifications
+- Full notifications page with custom scrollbar
+- Visual indicators (red dot) for unread notifications
+- Mark individual or all notifications as read
+- Shared notification state using React Context
+- Fetches notifications on component mount and after user actions
 
 ## Important Configuration Notes
 
@@ -109,3 +121,4 @@ src/
 
 - This repository currently does not include a committed `.env` workflow for API host configuration.
 - If you need environment-based API switching (local/staging/prod), move `API_BASE_URL` to environment variables.
+- Notifications are fetched via REST API on mount and after user actions. For real-time updates, consider implementing WebSocket or polling.
