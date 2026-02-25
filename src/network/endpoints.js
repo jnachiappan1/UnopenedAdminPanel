@@ -13,6 +13,12 @@ export const ApiEndPoints = {
   DASHBOARD: {
     count: `${API_BASE_URL}api/v1/admin/dashboard/count`,
   },
+  NOTIFICATIONS: {
+    list: `${API_BASE_URL}api/v1/admin/notification`,
+    read: (id) => `${API_BASE_URL}api/v1/admin/notification/${id}`,
+    markAllRead: () =>
+      `${API_BASE_URL}api/v1/admin/notification/:notification_id`,
+  },
   LEGAL_CONTENT: {
     list: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,
     edit: (type) => `${API_BASE_URL}api/v1/admin/legalcontent/${type}`,

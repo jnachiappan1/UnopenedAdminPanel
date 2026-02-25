@@ -20,45 +20,45 @@ const ForgotPassword = React.lazy(() => import("./pages/login/forgotpassword"));
 const Page401 = React.lazy(() => import("./pages/401"));
 const Page404 = React.lazy(() => import("./pages/404"));
 
-const Permission = React.lazy(() =>
-  import("./pages/RoleManagement/Permissions")
+const Permission = React.lazy(
+  () => import("./pages/RoleManagement/Permissions"),
 );
-const TermsAndConditionPage = React.lazy(() =>
-  import("./pages/website/terms-and-condition")
+const TermsAndConditionPage = React.lazy(
+  () => import("./pages/website/terms-and-condition"),
 );
-const PrivacyPolicyPage = React.lazy(() =>
-  import("./pages/website/privacy-policy")
+const PrivacyPolicyPage = React.lazy(
+  () => import("./pages/website/privacy-policy"),
 );
 const HelpSupporPage = React.lazy(() => import("./pages/website/help-support"));
-const SellerAgreementPage = React.lazy(() =>
-  import("./pages/website/seller-agreement")
+const SellerAgreementPage = React.lazy(
+  () => import("./pages/website/seller-agreement"),
 );
 const ContactUsPage = React.lazy(() => import("./pages/contact-us"));
 const UsersPage = React.lazy(() => import("./pages/users"));
 const ProductPage = React.lazy(() => import("./pages/product"));
-const ProductDetailPage = React.lazy(() =>
-  import("./pages/product/productDetailPage")
+const ProductDetailPage = React.lazy(
+  () => import("./pages/product/productDetailPage"),
 );
 const ProductPricePage = React.lazy(() => import("./pages/product-price"));
 const CouponPage = React.lazy(() => import("./pages/coupon"));
 const CashOutFeesPage = React.lazy(() => import("./pages/cashout-fees"));
 const CashOutRequestPage = React.lazy(() => import("./pages/cashout-request"));
-const SubAdminPage = React.lazy(() =>
-  import("./pages/RoleManagement/SubAdmin")
+const SubAdminPage = React.lazy(
+  () => import("./pages/RoleManagement/SubAdmin"),
 );
 const RolesPage = React.lazy(() => import("./pages/RoleManagement/Roles"));
 const UserDetailPage = React.lazy(() => import("./pages/users/userDetails"));
 const CategoryPage = React.lazy(() => import("./pages/category"));
-const OrderTransactionsPage = React.lazy(() =>
-  import("./pages/transactions/orderTransactions")
+const OrderTransactionsPage = React.lazy(
+  () => import("./pages/transactions/orderTransactions"),
 );
-const WalletTransactionsPage = React.lazy(() =>
-  import("./pages/transactions/walletTransactions")
+const WalletTransactionsPage = React.lazy(
+  () => import("./pages/transactions/walletTransactions"),
 );
-const TransactionDetailPage = React.lazy(() =>
-  import("./pages/transactions/transactionDetail")
+const TransactionDetailPage = React.lazy(
+  () => import("./pages/transactions/transactionDetail"),
 );
-
+const NotificationPage = React.lazy(() => import("./pages/notifications"));
 const Guard = ({ children, authGuard, guestGuard }) => {
   if (guestGuard) {
     return <GuestGuard fallback={<FallbackSpinner />}>{children}</GuestGuard>;
@@ -298,6 +298,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TransactionDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <ProtectedRoute>
+                    <NotificationPage />
                   </ProtectedRoute>
                 }
               />

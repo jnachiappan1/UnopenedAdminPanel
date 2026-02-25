@@ -1,226 +1,316 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from "react";
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import { styled } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import MuiMenu from '@mui/material/Menu'
-import MuiMenuItem from '@mui/material/MenuItem'
-import Typography from '@mui/material/Typography'
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import { styled } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import MuiMenu from "@mui/material/Menu";
+import MuiMenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 
 // ** Icons Imports
-import BellOutline from 'mdi-material-ui/BellOutline'
+import BellOutline from "mdi-material-ui/BellOutline";
 
 // ** Third Party Components
-import PerfectScrollbarComponent from 'react-perfect-scrollbar'
+import PerfectScrollbarComponent from "react-perfect-scrollbar";
 
 // ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
-
+import CustomChip from "src/@core/components/mui/chip";
+import CustomAvatar from "src/@core/components/mui/avatar";
+import { useNavigate } from "react-router-dom";
+import { ApiEndPoints } from "src/network/endpoints";
+import { toastError } from "src/utils/utils";
+import { axiosInstance } from "src/network/adapter";
+import moment from "moment/moment";
+import { Badge } from "@mui/material";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 // ** Styled Menu component
 const Menu = styled(MuiMenu)(({ theme }) => ({
-  '& .MuiMenu-paper': {
+  "& .MuiMenu-paper": {
     width: 380,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginTop: theme.spacing(4),
-    [theme.breakpoints.down('sm')]: {
-      width: '100%'
-    }
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
   },
-  '& .MuiMenu-list': {
-    padding: 0
-  }
-}))
+  "& .MuiMenu-list": {
+    padding: 0,
+  },
+}));
 
 // ** Styled MenuItem component
 const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   paddingTop: theme.spacing(3),
   paddingBottom: theme.spacing(3),
-  borderBottom: `1px solid ${theme.palette.divider}`
-}))
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
 
 const styles = {
   maxHeight: 349,
-  '& .MuiMenuItem-root:last-of-type': {
-    border: 0
-  }
-}
+  "& .MuiMenuItem-root:last-of-type": {
+    border: 0,
+  },
+};
 
 // ** Styled PerfectScrollbar component
 const PerfectScrollbar = styled(PerfectScrollbarComponent)({
-  ...styles
-})
+  ...styles,
+});
 
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)({
-  width: '2.375rem',
-  height: '2.375rem',
-  fontSize: '1.125rem'
-})
+  width: "2.375rem",
+  height: "2.375rem",
+  fontSize: "1.125rem",
+});
 
 // ** Styled component for the title in MenuItems
 const MenuItemTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  flex: '1 1 100%',
-  overflow: 'hidden',
-  fontSize: '0.875rem',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  marginBottom: theme.spacing(0.75)
-}))
+  flex: "1 1 100%",
+  overflow: "hidden",
+  fontSize: "0.875rem",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  marginBottom: theme.spacing(0.75),
+}));
 
 // ** Styled component for the subtitle in MenuItems
 const MenuItemSubtitle = styled(Typography)({
-  flex: '1 1 100%',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis'
-})
+  flex: "1 1 100%",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+});
 
-const NotificationDropdown = props => {
+const NotificationDropdown = (props) => {
   // ** Props
-  const { settings } = props
+  const { settings } = props;
 
   // ** States
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // ** Hook
-  const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
+  const hidden = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   // ** Vars
-  const { direction } = settings
+  const { direction } = settings;
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [notificationData, setNotificationData] = useState([]);
 
-  const handleDropdownOpen = event => {
-    setAnchorEl(event.currentTarget)
-  }
+  const handleDropdownOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleDropdownClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
+  const fetchData = () => {
+    setLoading(true);
+    axiosInstance
+      .get(ApiEndPoints.NOTIFICATIONS.list, {
+        params: {
+          isRead: "unread",
+        },
+      })
+      .then((response) => {
+        setNotificationData(response.data.data.notification);
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onSubmit = (id) => {
+    setLoading(true);
+    axiosInstance
+      .patch(ApiEndPoints.NOTIFICATIONS.read(id))
+      .then((response) => {
+        fetchData();
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  const markAllAsRead = () => {
+    setLoading(true);
+    axiosInstance
+      .patch(
+        ApiEndPoints.NOTIFICATIONS.markAllRead(),
+        {}, // empty body
+        {
+          params: {
+            all_read: true, // query param in config
+          },
+        },
+      )
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        toastError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const ScrollWrapper = ({ children }) => {
     if (hidden) {
-      return <Box sx={{ ...styles, overflowY: 'auto', overflowX: 'hidden' }}>{children}</Box>
+      return (
+        <Box sx={{ ...styles, overflowY: "auto", overflowX: "hidden" }}>
+          {children}
+        </Box>
+      );
     } else {
       return (
-        <PerfectScrollbar options={{ wheelPropagation: false, suppressScrollX: true }}>{children}</PerfectScrollbar>
-      )
+        <PerfectScrollbar
+          options={{ wheelPropagation: false, suppressScrollX: true }}
+        >
+          {children}
+        </PerfectScrollbar>
+      );
     }
-  }
+  };
 
   return (
     <Fragment>
-      <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu'>
-        <BellOutline />
+      <IconButton
+        color="inherit"
+        aria-haspopup="true"
+        onClick={handleDropdownOpen}
+        aria-controls="customized-menu"
+      >
+        <Badge badgeContent={notificationData.length} color="secondary">
+          <NotificationsActiveIcon />
+        </Badge>
       </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleDropdownClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: direction === 'ltr' ? 'right' : 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: direction === 'ltr' ? 'right' : 'left' }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: direction === "ltr" ? "right" : "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: direction === "ltr" ? "right" : "left",
+        }}
       >
         <MenuItem disableRipple>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
             <Typography sx={{ fontWeight: 600 }}>Notifications</Typography>
             <CustomChip
-              skin='light'
-              size='small'
-              label='8 New'
-              color='primary'
-              sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
+              skin="light"
+              size="small"
+              label={`${notificationData.length} New`}
+              color="primary"
+              sx={{
+                height: 20,
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                borderRadius: "10px",
+              }}
             />
           </Box>
         </MenuItem>
         <ScrollWrapper>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar alt='Flora' src='/images/avatars/4.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Congratulation Flora! 🎉</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>Won the monthly best seller badge</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                Today
+          {notificationData.length === 0 ? (
+            <Box sx={{ p: 2, textAlign: "center" }}>
+              <Typography variant="body2" color="secondary">
+                No notifications yet
               </Typography>
             </Box>
-          </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar skin='light'>VU</Avatar>
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>New user registered.</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>5 hours ago</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                Yesterday
-              </Typography>
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar alt='message' src='/images/avatars/5.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>New message received 👋🏻</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>You have 10 unread messages</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                11 Aug
-              </Typography>
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <img width={38} height={38} alt='paypal' src='/images/misc/paypal.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Paypal</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>Received Payment</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                25 May
-              </Typography>
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar alt='order' src='/images/avatars/3.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Revised Order 📦</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>New order revised from john</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                19 Mar
-              </Typography>
-            </Box>
-          </MenuItem>
-          <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <img width={38} height={38} alt='chart' src='/images/misc/chart.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Finance report has been generated</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>25 hrs ago</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                27 Dec
-              </Typography>
-            </Box>
-          </MenuItem>
+          ) : (
+            notificationData.map((notification, index) => (
+              <MenuItem
+                key={index}
+                onClick={() => {
+                  onSubmit(notification.id);
+                  handleDropdownClose();
+                }}
+              >
+                <Box
+                  sx={{ width: "100%", display: "flex", alignItems: "center" }}
+                >
+                  <Avatar
+                    alt={notification.title}
+                    src="/images/avatars/4.png"
+                  />
+                  <Box
+                    sx={{
+                      mx: 4,
+                      flex: "1 1",
+                      display: "flex",
+                      overflow: "hidden",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <MenuItemTitle>{notification.title}</MenuItemTitle>
+                    <MenuItemSubtitle variant="body2">
+                      {notification.body}
+                    </MenuItemSubtitle>
+                  </Box>
+                  <Typography variant="caption" sx={{ color: "text.disabled" }}>
+                    {moment(notification.createdAt).format("DD-MM-YYYY")}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))
+          )}
         </ScrollWrapper>
-        <MenuItem
-          disableRipple
-          sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
-        >
-          <Button fullWidth variant='contained' onClick={handleDropdownClose}>
-            Read All Notifications
-          </Button>
-        </MenuItem>
+        {notificationData.length > 0 && (
+          <MenuItem
+            disableRipple
+            sx={{
+              py: 3.5,
+              borderBottom: 0,
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                markAllAsRead(); // 🔥 API call
+                handleDropdownClose();
+                navigate("/notifications");
+              }}
+              sx={{
+                textDecoration: "none",
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              Read All Notifications
+            </Button>
+          </MenuItem>
+        )}
       </Menu>
     </Fragment>
-  )
-}
+  );
+};
 
-export default NotificationDropdown
+export default NotificationDropdown;

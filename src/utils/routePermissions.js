@@ -64,6 +64,10 @@ export const ROUTE_PERMISSION_MAP = {
     pattern: "transaction",
     relatedRoutes: [],
   },
+  "/notifications": {
+    pattern: "notification",
+    relatedRoutes: [],
+  },
 };
 
 export const PUBLIC_AUTHENTICATED_ROUTES = ["/401", "/404", "/", "/dashboard"];
