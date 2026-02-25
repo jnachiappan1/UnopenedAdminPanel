@@ -27,6 +27,7 @@ import { axiosInstance } from "src/network/adapter";
 import moment from "moment/moment";
 import { Badge } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import { useNotification } from "src/context/NotificationContext";
 // ** Styled Menu component
 const Menu = styled(MuiMenu)(({ theme }) => ({
   "& .MuiMenu-paper": {
@@ -102,6 +103,7 @@ const NotificationDropdown = (props) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
+  const { unreadCount, setUnreadCount } = useNotification();
 
   const handleDropdownOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -119,7 +121,10 @@ const NotificationDropdown = (props) => {
         },
       })
       .then((response) => {
-        setNotificationData(response.data.data.notification);
+        const notifications = response.data.data.notification;
+        setNotificationData(notifications);
+        const count = notifications.filter(n => !n.isRead).length;
+        setUnreadCount(count);
       })
       .catch((error) => {
         toastError(error);
@@ -138,28 +143,6 @@ const NotificationDropdown = (props) => {
     axiosInstance
       .patch(ApiEndPoints.NOTIFICATIONS.read(id))
       .then((response) => {
-        fetchData();
-      })
-      .catch((error) => {
-        toastError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-  const markAllAsRead = () => {
-    setLoading(true);
-    axiosInstance
-      .patch(
-        ApiEndPoints.NOTIFICATIONS.markAllRead(),
-        {}, // empty body
-        {
-          params: {
-            all_read: true, // query param in config
-          },
-        },
-      )
-      .then(() => {
         fetchData();
       })
       .catch((error) => {
@@ -196,7 +179,7 @@ const NotificationDropdown = (props) => {
         onClick={handleDropdownOpen}
         aria-controls="customized-menu"
       >
-        <Badge badgeContent={notificationData.length} color="secondary">
+        <Badge badgeContent={unreadCount} color="secondary">
           <NotificationsActiveIcon />
         </Badge>
       </IconButton>
@@ -226,7 +209,7 @@ const NotificationDropdown = (props) => {
             <CustomChip
               skin="light"
               size="small"
-              label={`${notificationData.length} New`}
+              label={`${unreadCount} New`}
               color="primary"
               sx={{
                 height: 20,
@@ -256,10 +239,26 @@ const NotificationDropdown = (props) => {
                 <Box
                   sx={{ width: "100%", display: "flex", alignItems: "center" }}
                 >
-                  <Avatar
-                    alt={notification.title}
-                    src="/images/avatars/4.png"
-                  />
+                  <Box sx={{ position: 'relative' }}>
+                    <Avatar
+                      alt={notification.title}
+                      src="/images/avatars/4.png"
+                    />
+                    {!notification.isRead && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          bgcolor: 'error.main',
+                          border: '2px solid white',
+                        }}
+                      />
+                    )}
+                  </Box>
                   <Box
                     sx={{
                       mx: 4,
@@ -294,7 +293,6 @@ const NotificationDropdown = (props) => {
             <Button
               variant="contained"
               onClick={() => {
-                markAllAsRead(); // 🔥 API call
                 handleDropdownClose();
                 navigate("/notifications");
               }}
@@ -304,7 +302,7 @@ const NotificationDropdown = (props) => {
                 textAlign: "center",
               }}
             >
-              Read All Notifications
+              View All Notifications
             </Button>
           </MenuItem>
         )}

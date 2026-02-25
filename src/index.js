@@ -17,6 +17,7 @@ import { createEmotionCache } from "src/@core/utils/create-emotion-cache";
 
 // ** Contexts
 import { AuthProvider } from "src/context/AuthContext";
+import { NotificationProvider } from "src/context/NotificationContext";
 import {
   SettingsConsumer,
   SettingsProvider,
@@ -46,13 +47,15 @@ root.render(
               return (
                 <ThemeComponent settings={settings}>
                   <AuthProvider>
-                    <App />
-                    <ReactHotToast>
+                    <NotificationProvider>
+                      <App />
+                      <ReactHotToast>
                         <Toaster
                           position={settings.toastPosition}
                           toastOptions={{ className: "react-hot-toast" }}
                         />
                       </ReactHotToast>
+                    </NotificationProvider>
                   </AuthProvider>
                 </ThemeComponent>
               );

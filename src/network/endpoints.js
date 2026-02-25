@@ -1,4 +1,5 @@
 export const API_BASE_URL = "https://api.unopenedapp.com/";
+
 export const MEDIA_URL = "https://unopened-storage.s3.us-east-1.amazonaws.com";
 
 export const ApiEndPoints = {
